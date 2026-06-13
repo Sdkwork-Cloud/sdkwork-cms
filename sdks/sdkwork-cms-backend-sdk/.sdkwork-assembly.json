@@ -1,0 +1,49 @@
+{
+  "workspace": "sdkwork-cms-backend-sdk",
+  "title": "SDKWork CMS Backend API SDK",
+  "apiVersion": "0.1.0",
+  "openapiVersion": "3.1.2",
+  "authoritySpec": "../../apis/backend-api/content/cms-backend-api.openapi.json",
+  "generationInputSpec": "openapi/sdkwork-cms-backend-api.sdkgen.yaml",
+  "derivedSpecs": {
+    "default": "openapi/sdkwork-cms-backend-api.openapi.json"
+  },
+  "sdkOwner": "sdkwork-cms",
+  "apiAuthority": "sdkwork-cms.backend",
+  "sdkFamily": "sdkwork-cms-backend-sdk",
+  "sdkDependencies": [
+    {
+      "workspace": "sdkwork-appbase-backend-sdk",
+      "role": "iam-admin-context",
+      "required": true,
+      "dependencyMode": "consumer-sdk",
+      "apiPrefix": "/backend/v3/api",
+      "apiAuthority": "sdkwork-appbase-backend-api",
+      "generatedTransportImportPolicy": "forbidden"
+    },
+    {
+      "workspace": "../sdkwork-drive/sdks/sdkwork-drive-backend-sdk",
+      "role": "media-governance",
+      "required": true,
+      "dependencyMode": "consumer-sdk",
+      "apiPrefix": "/backend/v3/api",
+      "generatedTransportImportPolicy": "forbidden"
+    },
+    {
+      "workspace": "../sdkwork-search/sdks/sdkwork-search-backend-sdk",
+      "role": "search-rebuild-and-ranking",
+      "required": false,
+      "dependencyMode": "consumer-sdk",
+      "apiPrefix": "/backend/v3/api",
+      "generatedTransportImportPolicy": "forbidden"
+    }
+  ],
+  "dependencyApiExports": [],
+  "discoverySurface": {
+    "sdkTarget": "typescript",
+    "apiPrefix": "/backend/v3/api/cms",
+    "schemaUrl": "/backend/v3/api/cms/openapi.json",
+    "generatedProtocols": ["http-openapi"],
+    "manualTransports": []
+  }
+}

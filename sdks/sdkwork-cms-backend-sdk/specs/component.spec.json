@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.component.spec",
+  "component": {
+    "name": "sdkwork-cms-backend-sdk",
+    "displayName": "SDKWork CMS Backend SDK",
+    "version": "0.1.0",
+    "type": "sdk-family",
+    "root": "sdkwork-cms/sdks/sdkwork-cms-backend-sdk",
+    "domain": "content",
+    "capability": "cms",
+    "surface": "backend-api",
+    "languages": ["typescript"],
+    "generated": false,
+    "manifests": [".sdkwork-assembly.json"]
+  },
+  "canonicalSpecs": [
+    { "file": "COMPONENT_SPEC.md", "path": "../../../sdkwork-specs/COMPONENT_SPEC.md", "purpose": "Component-local contract and discovery rules." },
+    { "file": "CODE_STYLE_SPEC.md", "path": "../../../sdkwork-specs/CODE_STYLE_SPEC.md", "purpose": "Authored source and generated code boundaries." },
+    { "file": "NAMING_SPEC.md", "path": "../../../sdkwork-specs/NAMING_SPEC.md", "purpose": "SDK family naming." },
+    { "file": "TYPESCRIPT_CODE_SPEC.md", "path": "../../../sdkwork-specs/TYPESCRIPT_CODE_SPEC.md", "purpose": "TypeScript SDK facade rules." },
+    { "file": "SDK_SPEC.md", "path": "../../../sdkwork-specs/SDK_SPEC.md", "purpose": "SDK generation and integration." },
+    { "file": "SDK_WORKSPACE_GENERATION_SPEC.md", "path": "../../../sdkwork-specs/SDK_WORKSPACE_GENERATION_SPEC.md", "purpose": "SDK workspace placement." },
+    { "file": "API_SPEC.md", "path": "../../../sdkwork-specs/API_SPEC.md", "purpose": "OpenAPI authority rules." }
+  ],
+  "contracts": {
+    "publicExports": ["."],
+    "runtimeEntrypoints": [],
+    "routeManifest": null,
+    "sdkClients": ["CmsBackendClient"],
+    "sdkDependencies": [
+      { "workspace": "sdkwork-appbase-backend-sdk", "role": "iam-admin-context", "required": true, "dependencyMode": "consumer-sdk", "apiPrefix": "/backend/v3/api", "apiAuthority": "sdkwork-appbase-backend-api", "generatedTransportImportPolicy": "forbidden" },
+      { "workspace": "../sdkwork-drive/sdks/sdkwork-drive-backend-sdk", "role": "media-governance", "required": true, "dependencyMode": "consumer-sdk", "apiPrefix": "/backend/v3/api", "generatedTransportImportPolicy": "forbidden" },
+      { "workspace": "../sdkwork-search/sdks/sdkwork-search-backend-sdk", "role": "search-rebuild-and-ranking", "required": false, "dependencyMode": "consumer-sdk", "apiPrefix": "/backend/v3/api", "generatedTransportImportPolicy": "forbidden" }
+    ],
+    "dependencyApiExports": [],
+    "dependencyApiSurfaces": [],
+    "events": [],
+    "configKeys": ["CMS_BACKEND_API_BASE_URL"]
+  },
+  "verification": {
+    "commands": ["powershell -NoProfile -Command \"Get-Content sdks/sdkwork-cms-backend-sdk/.sdkwork-assembly.json -Raw | ConvertFrom-Json | Out-Null\""]
+  }
+}

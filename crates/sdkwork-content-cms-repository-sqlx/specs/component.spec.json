@@ -1,0 +1,38 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.component.spec",
+  "component": {
+    "name": "sdkwork-content-cms-repository-sqlx",
+    "displayName": "SDKWork Content CMS SQLx Repository",
+    "version": "0.1.0",
+    "type": "rust-crate",
+    "root": "sdkwork-cms/crates/sdkwork-content-cms-repository-sqlx",
+    "domain": "content",
+    "capability": "cms",
+    "surface": "backend-service",
+    "languages": ["rust", "sql"],
+    "generated": false,
+    "manifests": ["Cargo.toml", "migrations/0001_cms_v1_foundation.sql"]
+  },
+  "canonicalSpecs": [
+    { "file": "CODE_STYLE_SPEC.md", "path": "../../../sdkwork-specs/CODE_STYLE_SPEC.md", "purpose": "Shared code structure." },
+    { "file": "NAMING_SPEC.md", "path": "../../../sdkwork-specs/NAMING_SPEC.md", "purpose": "Crate and table naming." },
+    { "file": "RUST_CODE_SPEC.md", "path": "../../../sdkwork-specs/RUST_CODE_SPEC.md", "purpose": "Rust repository crate layout." },
+    { "file": "DATABASE_SPEC.md", "path": "../../../sdkwork-specs/DATABASE_SPEC.md", "purpose": "Database contract." }
+  ],
+  "contracts": {
+    "publicExports": ["crate"],
+    "runtimeEntrypoints": [],
+    "routeManifest": null,
+    "sdkClients": [],
+    "sdkDependencies": [],
+    "dependencyApiExports": [],
+    "dependencyApiSurfaces": [],
+    "events": [],
+    "configKeys": ["CMS_DATABASE_URL"]
+  },
+  "verification": {
+    "commands": ["cargo test -p sdkwork-content-cms-repository-sqlx"]
+  }
+}
+

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.component.spec",
+  "component": {
+    "name": "sdkwork-router-cms-open-api",
+    "displayName": "SDKWork CMS Open API Router",
+    "version": "0.1.0",
+    "type": "rust-route-crate",
+    "root": "sdkwork-cms/crates/sdkwork-router-cms-open-api",
+    "domain": "content",
+    "capability": "cms",
+    "surface": "open-api",
+    "languages": ["rust"],
+    "generated": false,
+    "manifests": ["Cargo.toml"]
+  },
+  "canonicalSpecs": [
+    { "file": "CODE_STYLE_SPEC.md", "path": "../../../sdkwork-specs/CODE_STYLE_SPEC.md", "purpose": "Shared code structure." },
+    { "file": "NAMING_SPEC.md", "path": "../../../sdkwork-specs/NAMING_SPEC.md", "purpose": "Route crate naming." },
+    { "file": "RUST_CODE_SPEC.md", "path": "../../../sdkwork-specs/RUST_CODE_SPEC.md", "purpose": "Rust route crate layout." },
+    { "file": "API_SPEC.md", "path": "../../../sdkwork-specs/API_SPEC.md", "purpose": "OpenAPI and route contract." },
+    { "file": "SDK_WORKSPACE_GENERATION_SPEC.md", "path": "../../../sdkwork-specs/SDK_WORKSPACE_GENERATION_SPEC.md", "purpose": "Route manifest materialization." }
+  ],
+  "contracts": {
+    "publicExports": ["crate::manifest::cms_open_api_manifest"],
+    "runtimeEntrypoints": ["crate::routes::build_sdkwork_cms_open_api_router"],
+    "routeManifest": "src/manifest.rs#cms_open_api_manifest",
+    "routeHandlers": [
+      "src/handlers/entries.rs",
+      "src/handlers/pages.rs",
+      "src/handlers/feeds.rs"
+    ],
+    "dtoModules": [
+      "src/dto/request.rs",
+      "src/dto/response.rs"
+    ],
+    "sdkClients": [],
+    "sdkDependencies": [],
+    "dependencyApiExports": [],
+    "dependencyApiSurfaces": [],
+    "events": [],
+    "configKeys": []
+  },
+  "verification": {
+    "commands": ["cargo test -p sdkwork-router-cms-open-api"]
+  }
+}

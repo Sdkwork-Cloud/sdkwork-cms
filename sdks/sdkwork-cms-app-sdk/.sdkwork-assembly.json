@@ -1,0 +1,41 @@
+{
+  "workspace": "sdkwork-cms-app-sdk",
+  "title": "SDKWork CMS App API SDK",
+  "apiVersion": "0.1.0",
+  "openapiVersion": "3.1.2",
+  "authoritySpec": "../../apis/app-api/content/cms-app-api.openapi.json",
+  "generationInputSpec": "openapi/sdkwork-cms-app-api.sdkgen.yaml",
+  "derivedSpecs": {
+    "default": "openapi/sdkwork-cms-app-api.openapi.json"
+  },
+  "sdkOwner": "sdkwork-cms",
+  "apiAuthority": "sdkwork-cms.app",
+  "sdkFamily": "sdkwork-cms-app-sdk",
+  "sdkDependencies": [
+    {
+      "workspace": "sdkwork-appbase-app-sdk",
+      "role": "iam-login-context",
+      "required": true,
+      "dependencyMode": "consumer-sdk",
+      "apiPrefix": "/app/v3/api",
+      "apiAuthority": "sdkwork-appbase-app-api",
+      "generatedTransportImportPolicy": "forbidden"
+    },
+    {
+      "workspace": "../sdkwork-drive/sdks/sdkwork-drive-app-sdk",
+      "role": "media-upload",
+      "required": true,
+      "dependencyMode": "consumer-sdk",
+      "apiPrefix": "/app/v3/api",
+      "generatedTransportImportPolicy": "forbidden"
+    }
+  ],
+  "dependencyApiExports": [],
+  "discoverySurface": {
+    "sdkTarget": "typescript",
+    "apiPrefix": "/app/v3/api/cms",
+    "schemaUrl": "/app/v3/api/cms/openapi.json",
+    "generatedProtocols": ["http-openapi"],
+    "manualTransports": []
+  }
+}

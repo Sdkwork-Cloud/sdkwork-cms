@@ -1,0 +1,3358 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.database.column-registry",
+  "owner": "sdkwork-cms",
+  "domain": "content",
+  "capability": "cms",
+  "migration": "crates/sdkwork-content-cms-repository-sqlx/migrations/0001_cms_v1_foundation.sql",
+  "tableCount": 22,
+  "generatedFrom": "crates/sdkwork-content-cms-repository-sqlx/migrations/0001_cms_v1_foundation.sql",
+  "tables": [
+    {
+      "name": "cms_site",
+      "purpose": "CMS site/workspace boundary for locale, domain, delivery, and publish settings.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "data_scope",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "SDKWork data visibility scope used by authorization filters."
+        },
+        {
+          "name": "code",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": true,
+          "purpose": "Stable business code unique within the documented scope."
+        },
+        {
+          "name": "name",
+          "logicalType": "string",
+          "dbType": "VARCHAR(256)",
+          "required": true,
+          "purpose": "Human-readable display name."
+        },
+        {
+          "name": "description",
+          "logicalType": "text",
+          "dbType": "TEXT",
+          "required": false,
+          "purpose": "Optional human-readable description."
+        },
+        {
+          "name": "default_locale",
+          "logicalType": "string",
+          "dbType": "VARCHAR(32)",
+          "required": true,
+          "purpose": "default_locale stores cms_site business data used by the CMS service contract."
+        },
+        {
+          "name": "default_channel_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "Default CMS channel for site delivery."
+        },
+        {
+          "name": "domain_config_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "domain_config_json stores structured cms_site metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "locale_config_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "locale_config_json stores structured cms_site metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "settings_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "Settings JSON; high-frequency query fields must stay in dedicated columns."
+        },
+        {
+          "name": "publish_config_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "publish_config_json stores structured cms_site metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        },
+        {
+          "name": "deleted_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "UTC soft-delete timestamp."
+        },
+        {
+          "name": "deleted_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "IAM user id that soft-deleted the row."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_site."
+    },
+    {
+      "name": "cms_channel",
+      "purpose": "Delivery channel such as web, app, h5, mini_program, rss, or api.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "code",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": true,
+          "purpose": "Stable business code unique within the documented scope."
+        },
+        {
+          "name": "name",
+          "logicalType": "string",
+          "dbType": "VARCHAR(256)",
+          "required": true,
+          "purpose": "Human-readable display name."
+        },
+        {
+          "name": "channel_kind",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "channel_kind classifies the row by a stable business kind."
+        },
+        {
+          "name": "delivery_config_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "delivery_config_json stores structured cms_channel metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "visibility_config_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "visibility_config_json stores structured cms_channel metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "sort_order",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Deterministic ordering value within the owning scope."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        },
+        {
+          "name": "deleted_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "UTC soft-delete timestamp."
+        },
+        {
+          "name": "deleted_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "IAM user id that soft-deleted the row."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_channel."
+    },
+    {
+      "name": "cms_content_type",
+      "purpose": "Content model definition for entries, pages, banners, notices, topics, and other content kinds.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "code",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": true,
+          "purpose": "Stable business code unique within the documented scope."
+        },
+        {
+          "name": "name",
+          "logicalType": "string",
+          "dbType": "VARCHAR(256)",
+          "required": true,
+          "purpose": "Human-readable display name."
+        },
+        {
+          "name": "content_kind",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "content_kind classifies the row by a stable business kind."
+        },
+        {
+          "name": "description",
+          "logicalType": "text",
+          "dbType": "TEXT",
+          "required": false,
+          "purpose": "Optional human-readable description."
+        },
+        {
+          "name": "icon",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": false,
+          "purpose": "icon stores cms_content_type business data used by the CMS service contract."
+        },
+        {
+          "name": "schema_version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "schema_version stores a numeric business value used by cms_content_type."
+        },
+        {
+          "name": "workflow_config_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "workflow_config_json stores structured cms_content_type metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "default_body_format",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "default_body_format stores cms_content_type business data used by the CMS service contract."
+        },
+        {
+          "name": "settings_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "Settings JSON; high-frequency query fields must stay in dedicated columns."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        },
+        {
+          "name": "deleted_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "UTC soft-delete timestamp."
+        },
+        {
+          "name": "deleted_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "IAM user id that soft-deleted the row."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_content_type."
+    },
+    {
+      "name": "cms_content_field",
+      "purpose": "Content model field definition with validation, options, indexing flags, and UI configuration.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "content_type_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS content type id used for schema validation."
+        },
+        {
+          "name": "code",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": true,
+          "purpose": "Stable business code unique within the documented scope."
+        },
+        {
+          "name": "name",
+          "logicalType": "string",
+          "dbType": "VARCHAR(256)",
+          "required": true,
+          "purpose": "Human-readable display name."
+        },
+        {
+          "name": "field_kind",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "field_kind classifies the row by a stable business kind."
+        },
+        {
+          "name": "required",
+          "logicalType": "boolean",
+          "dbType": "BOOLEAN",
+          "required": true,
+          "purpose": "required stores a boolean feature flag or state marker."
+        },
+        {
+          "name": "localized",
+          "logicalType": "boolean",
+          "dbType": "BOOLEAN",
+          "required": true,
+          "purpose": "localized stores a boolean feature flag or state marker."
+        },
+        {
+          "name": "multiple",
+          "logicalType": "boolean",
+          "dbType": "BOOLEAN",
+          "required": true,
+          "purpose": "multiple stores a boolean feature flag or state marker."
+        },
+        {
+          "name": "searchable",
+          "logicalType": "boolean",
+          "dbType": "BOOLEAN",
+          "required": true,
+          "purpose": "searchable stores a boolean feature flag or state marker."
+        },
+        {
+          "name": "filterable",
+          "logicalType": "boolean",
+          "dbType": "BOOLEAN",
+          "required": true,
+          "purpose": "filterable stores a boolean feature flag or state marker."
+        },
+        {
+          "name": "sortable",
+          "logicalType": "boolean",
+          "dbType": "BOOLEAN",
+          "required": true,
+          "purpose": "sortable stores a boolean feature flag or state marker."
+        },
+        {
+          "name": "validation_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "validation_json stores structured cms_content_field metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "options_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "options_json stores structured cms_content_field metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "ui_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "ui_json stores structured cms_content_field metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "default_value_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "default_value_json stores structured cms_content_field metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "sort_order",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Deterministic ordering value within the owning scope."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        },
+        {
+          "name": "deleted_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "UTC soft-delete timestamp."
+        },
+        {
+          "name": "deleted_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "IAM user id that soft-deleted the row."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_content_field."
+    },
+    {
+      "name": "cms_taxonomy",
+      "purpose": "Taxonomy group such as category, tag, topic, or audience.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "code",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": true,
+          "purpose": "Stable business code unique within the documented scope."
+        },
+        {
+          "name": "name",
+          "logicalType": "string",
+          "dbType": "VARCHAR(256)",
+          "required": true,
+          "purpose": "Human-readable display name."
+        },
+        {
+          "name": "taxonomy_kind",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "taxonomy_kind classifies the row by a stable business kind."
+        },
+        {
+          "name": "description",
+          "logicalType": "text",
+          "dbType": "TEXT",
+          "required": false,
+          "purpose": "Optional human-readable description."
+        },
+        {
+          "name": "settings_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "Settings JSON; high-frequency query fields must stay in dedicated columns."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        },
+        {
+          "name": "deleted_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "UTC soft-delete timestamp."
+        },
+        {
+          "name": "deleted_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "IAM user id that soft-deleted the row."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_taxonomy."
+    },
+    {
+      "name": "cms_taxonomy_term",
+      "purpose": "Taxonomy term tree with slug, path, level, sort, SEO, and lifecycle state.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "taxonomy_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS taxonomy id used for taxonomy term and entry-term relations."
+        },
+        {
+          "name": "parent_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "Parent node id for tree hierarchy."
+        },
+        {
+          "name": "code",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": true,
+          "purpose": "Stable business code unique within the documented scope."
+        },
+        {
+          "name": "slug",
+          "logicalType": "string",
+          "dbType": "VARCHAR(256)",
+          "required": true,
+          "purpose": "URL-safe slug used for route or content resolution."
+        },
+        {
+          "name": "name",
+          "logicalType": "string",
+          "dbType": "VARCHAR(256)",
+          "required": true,
+          "purpose": "Human-readable display name."
+        },
+        {
+          "name": "description",
+          "logicalType": "text",
+          "dbType": "TEXT",
+          "required": false,
+          "purpose": "Optional human-readable description."
+        },
+        {
+          "name": "path",
+          "logicalType": "string",
+          "dbType": "VARCHAR(1024)",
+          "required": true,
+          "purpose": "Stable route path or tree path used for lookups."
+        },
+        {
+          "name": "level_no",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "level_no stores a numeric business value used by cms_taxonomy_term."
+        },
+        {
+          "name": "sort_order",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Deterministic ordering value within the owning scope."
+        },
+        {
+          "name": "seo_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "SEO metadata JSON; non-queryable details only."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        },
+        {
+          "name": "deleted_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "UTC soft-delete timestamp."
+        },
+        {
+          "name": "deleted_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "IAM user id that soft-deleted the row."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_taxonomy_term."
+    },
+    {
+      "name": "cms_entry",
+      "purpose": "CMS content entry aggregate root with list, route, publication, author, and scheduling fields.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "content_type_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS content type id used for schema validation."
+        },
+        {
+          "name": "channel_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "CMS channel id used for delivery segmentation."
+        },
+        {
+          "name": "primary_locale",
+          "logicalType": "string",
+          "dbType": "VARCHAR(32)",
+          "required": true,
+          "purpose": "Primary locale for a translation group."
+        },
+        {
+          "name": "locale",
+          "logicalType": "string",
+          "dbType": "VARCHAR(32)",
+          "required": true,
+          "purpose": "Locale code for localized content or delivery resolution."
+        },
+        {
+          "name": "translation_group_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "translation_group_id stores a numeric business value used by cms_entry."
+        },
+        {
+          "name": "title",
+          "logicalType": "string",
+          "dbType": "VARCHAR(512)",
+          "required": true,
+          "purpose": "Human-readable title used for authoring and delivery."
+        },
+        {
+          "name": "slug",
+          "logicalType": "string",
+          "dbType": "VARCHAR(512)",
+          "required": true,
+          "purpose": "URL-safe slug used for route or content resolution."
+        },
+        {
+          "name": "summary",
+          "logicalType": "text",
+          "dbType": "TEXT",
+          "required": false,
+          "purpose": "summary stores cms_entry business data used by the CMS service contract."
+        },
+        {
+          "name": "author_user_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "author_user_id stores a numeric business value used by cms_entry."
+        },
+        {
+          "name": "owner_user_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "owner_user_id stores a numeric business value used by cms_entry."
+        },
+        {
+          "name": "entry_status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "entry_status stores a lifecycle state enum; see database design docs."
+        },
+        {
+          "name": "publication_status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "publication_status stores a lifecycle state enum; see database design docs."
+        },
+        {
+          "name": "current_version_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "Current mutable/draft version pointer."
+        },
+        {
+          "name": "published_version_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "Published entry version pointer."
+        },
+        {
+          "name": "first_published_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "first_published_at stores a UTC lifecycle timestamp."
+        },
+        {
+          "name": "published_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "published_at stores a UTC lifecycle timestamp."
+        },
+        {
+          "name": "scheduled_publish_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "scheduled_publish_at stores a UTC lifecycle timestamp."
+        },
+        {
+          "name": "scheduled_unpublish_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "scheduled_unpublish_at stores a UTC lifecycle timestamp."
+        },
+        {
+          "name": "seo_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "SEO metadata JSON; non-queryable details only."
+        },
+        {
+          "name": "extra_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "Extension JSON for low-frequency metadata only."
+        },
+        {
+          "name": "data_scope",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "SDKWork data visibility scope used by authorization filters."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        },
+        {
+          "name": "deleted_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "UTC soft-delete timestamp."
+        },
+        {
+          "name": "deleted_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "IAM user id that soft-deleted the row."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_entry."
+    },
+    {
+      "name": "cms_entry_body",
+      "purpose": "Entry body projection for rich text, markdown, html, block tree, plain text, checksum, and reading metadata.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "entry_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS entry id used for entry aggregate relations."
+        },
+        {
+          "name": "locale",
+          "logicalType": "string",
+          "dbType": "VARCHAR(32)",
+          "required": true,
+          "purpose": "Locale code for localized content or delivery resolution."
+        },
+        {
+          "name": "body_format",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "body_format stores cms_entry_body business data used by the CMS service contract."
+        },
+        {
+          "name": "body_text",
+          "logicalType": "text",
+          "dbType": "TEXT",
+          "required": false,
+          "purpose": "body_text stores cms_entry_body business data used by the CMS service contract."
+        },
+        {
+          "name": "body_html",
+          "logicalType": "text",
+          "dbType": "TEXT",
+          "required": false,
+          "purpose": "body_html stores cms_entry_body business data used by the CMS service contract."
+        },
+        {
+          "name": "block_tree_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "block_tree_json stores structured cms_entry_body metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "plain_text",
+          "logicalType": "text",
+          "dbType": "TEXT",
+          "required": false,
+          "purpose": "plain_text stores cms_entry_body business data used by the CMS service contract."
+        },
+        {
+          "name": "checksum",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": false,
+          "purpose": "Payload checksum for snapshot identity and drift detection."
+        },
+        {
+          "name": "word_count",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "word_count stores a bounded count used by query or delivery logic."
+        },
+        {
+          "name": "reading_time_seconds",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "reading_time_seconds stores a numeric business value used by cms_entry_body."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_entry_body."
+    },
+    {
+      "name": "cms_entry_field_value",
+      "purpose": "Normalized dynamic field values for filtering, sorting, search projection, and schema-driven editing.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "entry_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS entry id used for entry aggregate relations."
+        },
+        {
+          "name": "field_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS content field id used for dynamic field value mapping."
+        },
+        {
+          "name": "locale",
+          "logicalType": "string",
+          "dbType": "VARCHAR(32)",
+          "required": true,
+          "purpose": "Locale code for localized content or delivery resolution."
+        },
+        {
+          "name": "value_text",
+          "logicalType": "text",
+          "dbType": "TEXT",
+          "required": false,
+          "purpose": "value_text stores cms_entry_field_value business data used by the CMS service contract."
+        },
+        {
+          "name": "value_number",
+          "logicalType": "decimal",
+          "dbType": "NUMERIC(30, 8)",
+          "required": false,
+          "purpose": "value_number stores a numeric business value used by cms_entry_field_value."
+        },
+        {
+          "name": "value_boolean",
+          "logicalType": "boolean",
+          "dbType": "BOOLEAN",
+          "required": false,
+          "purpose": "value_boolean stores a boolean feature flag or state marker."
+        },
+        {
+          "name": "value_datetime",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "value_datetime stores cms_entry_field_value business data used by the CMS service contract."
+        },
+        {
+          "name": "value_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "value_json stores structured cms_entry_field_value metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "value_ref_type",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": false,
+          "purpose": "value_ref_type classifies the related aggregate or resource type."
+        },
+        {
+          "name": "value_ref_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "value_ref_id stores a numeric business value used by cms_entry_field_value."
+        },
+        {
+          "name": "search_text",
+          "logicalType": "text",
+          "dbType": "TEXT",
+          "required": false,
+          "purpose": "search_text stores cms_entry_field_value business data used by the CMS service contract."
+        },
+        {
+          "name": "sort_order",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Deterministic ordering value within the owning scope."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_entry_field_value."
+    },
+    {
+      "name": "cms_entry_version",
+      "purpose": "Immutable entry version snapshot for history, publishing, rollback, diffing, and audit.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "entry_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS entry id used for entry aggregate relations."
+        },
+        {
+          "name": "version_no",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "version_no stores a numeric business value used by cms_entry_version."
+        },
+        {
+          "name": "version_kind",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "version_kind classifies the row by a stable business kind."
+        },
+        {
+          "name": "title_snapshot",
+          "logicalType": "string",
+          "dbType": "VARCHAR(512)",
+          "required": true,
+          "purpose": "title_snapshot stores cms_entry_version business data used by the CMS service contract."
+        },
+        {
+          "name": "schema_snapshot_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "schema_snapshot_json stores structured cms_entry_version metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "content_snapshot_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "content_snapshot_json stores structured cms_entry_version metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "media_snapshot_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "media_snapshot_json stores structured cms_entry_version metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "term_snapshot_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "term_snapshot_json stores structured cms_entry_version metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "checksum",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": false,
+          "purpose": "Payload checksum for snapshot identity and drift detection."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_entry_version."
+    },
+    {
+      "name": "cms_entry_media",
+      "purpose": "Entry-to-media relation storing Drive/MediaResource references, role, alt text, caption, sort, and media snapshot.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "entry_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS entry id used for entry aggregate relations."
+        },
+        {
+          "name": "field_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "CMS content field id used for dynamic field value mapping."
+        },
+        {
+          "name": "media_role",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "media_role stores cms_entry_media business data used by the CMS service contract."
+        },
+        {
+          "name": "drive_space_id",
+          "logicalType": "int64",
+          "dbType": "VARCHAR(64)",
+          "required": false,
+          "purpose": "drive_space_id stores a numeric business value used by cms_entry_media."
+        },
+        {
+          "name": "drive_node_id",
+          "logicalType": "int64",
+          "dbType": "VARCHAR(64)",
+          "required": false,
+          "purpose": "drive_node_id stores a numeric business value used by cms_entry_media."
+        },
+        {
+          "name": "drive_uri",
+          "logicalType": "string",
+          "dbType": "VARCHAR(512)",
+          "required": false,
+          "purpose": "drive_uri stores an external URL/URI reference after validation."
+        },
+        {
+          "name": "media_resource_id",
+          "logicalType": "int64",
+          "dbType": "VARCHAR(128)",
+          "required": false,
+          "purpose": "media_resource_id stores a numeric business value used by cms_entry_media."
+        },
+        {
+          "name": "media_snapshot_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "media_snapshot_json stores structured cms_entry_media metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "alt_text",
+          "logicalType": "string",
+          "dbType": "VARCHAR(512)",
+          "required": false,
+          "purpose": "alt_text stores cms_entry_media business data used by the CMS service contract."
+        },
+        {
+          "name": "caption",
+          "logicalType": "string",
+          "dbType": "VARCHAR(1024)",
+          "required": false,
+          "purpose": "caption stores cms_entry_media business data used by the CMS service contract."
+        },
+        {
+          "name": "sort_order",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Deterministic ordering value within the owning scope."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_entry_media."
+    },
+    {
+      "name": "cms_entry_term",
+      "purpose": "Entry-to-taxonomy term relation for categories, tags, topics, audiences, and feed rules.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "entry_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS entry id used for entry aggregate relations."
+        },
+        {
+          "name": "taxonomy_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS taxonomy id used for taxonomy term and entry-term relations."
+        },
+        {
+          "name": "term_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS taxonomy term id used for entry classification."
+        },
+        {
+          "name": "sort_order",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Deterministic ordering value within the owning scope."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_entry_term."
+    },
+    {
+      "name": "cms_page",
+      "purpose": "CMS page route, SEO, template, status, and published snapshot pointer.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "channel_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "CMS channel id used for delivery segmentation."
+        },
+        {
+          "name": "locale",
+          "logicalType": "string",
+          "dbType": "VARCHAR(32)",
+          "required": true,
+          "purpose": "Locale code for localized content or delivery resolution."
+        },
+        {
+          "name": "parent_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "Parent node id for tree hierarchy."
+        },
+        {
+          "name": "path",
+          "logicalType": "string",
+          "dbType": "VARCHAR(1024)",
+          "required": true,
+          "purpose": "Stable route path or tree path used for lookups."
+        },
+        {
+          "name": "slug",
+          "logicalType": "string",
+          "dbType": "VARCHAR(512)",
+          "required": true,
+          "purpose": "URL-safe slug used for route or content resolution."
+        },
+        {
+          "name": "title",
+          "logicalType": "string",
+          "dbType": "VARCHAR(512)",
+          "required": true,
+          "purpose": "Human-readable title used for authoring and delivery."
+        },
+        {
+          "name": "page_kind",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "page_kind classifies the row by a stable business kind."
+        },
+        {
+          "name": "template_code",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": false,
+          "purpose": "template_code stores cms_page business data used by the CMS service contract."
+        },
+        {
+          "name": "publication_status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "publication_status stores a lifecycle state enum; see database design docs."
+        },
+        {
+          "name": "published_snapshot_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "Pointer to the current published snapshot for delivery reads."
+        },
+        {
+          "name": "seo_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "SEO metadata JSON; non-queryable details only."
+        },
+        {
+          "name": "settings_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "Settings JSON; high-frequency query fields must stay in dedicated columns."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        },
+        {
+          "name": "deleted_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "UTC soft-delete timestamp."
+        },
+        {
+          "name": "deleted_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "IAM user id that soft-deleted the row."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_page."
+    },
+    {
+      "name": "cms_page_block",
+      "purpose": "Page composition block with slot, block kind, references, config, sort, and tree position.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "page_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS page id used for page composition relations."
+        },
+        {
+          "name": "parent_block_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "Parent page block id for nested page composition."
+        },
+        {
+          "name": "slot_code",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": true,
+          "purpose": "slot_code stores cms_page_block business data used by the CMS service contract."
+        },
+        {
+          "name": "block_code",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": true,
+          "purpose": "block_code stores cms_page_block business data used by the CMS service contract."
+        },
+        {
+          "name": "block_kind",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "block_kind classifies the row by a stable business kind."
+        },
+        {
+          "name": "ref_type",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": false,
+          "purpose": "ref_type classifies the related aggregate or resource type."
+        },
+        {
+          "name": "ref_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "ref_id stores a numeric business value used by cms_page_block."
+        },
+        {
+          "name": "config_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "Block configuration JSON; high-frequency references remain dedicated columns."
+        },
+        {
+          "name": "sort_order",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Deterministic ordering value within the owning scope."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_page_block."
+    },
+    {
+      "name": "cms_publish_snapshot",
+      "purpose": "Unified published snapshot for entries, pages, feeds, and future publishable owners.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "owner_type",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "owner_type classifies the related aggregate or resource type."
+        },
+        {
+          "name": "owner_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "owner_id stores a numeric business value used by cms_publish_snapshot."
+        },
+        {
+          "name": "version_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "Version id used to bind a publish snapshot to source content."
+        },
+        {
+          "name": "channel_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "CMS channel id used for delivery segmentation."
+        },
+        {
+          "name": "locale",
+          "logicalType": "string",
+          "dbType": "VARCHAR(32)",
+          "required": true,
+          "purpose": "Locale code for localized content or delivery resolution."
+        },
+        {
+          "name": "snapshot_version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "snapshot_version stores a numeric business value used by cms_publish_snapshot."
+        },
+        {
+          "name": "snapshot_payload_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "snapshot_payload_json stores structured cms_publish_snapshot metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "cache_tags_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "cache_tags_json stores structured cms_publish_snapshot metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "checksum",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": false,
+          "purpose": "Payload checksum for snapshot identity and drift detection."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "published_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "published_at stores a UTC lifecycle timestamp."
+        },
+        {
+          "name": "published_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "published_by stores an IAM user id for audit attribution."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_publish_snapshot."
+    },
+    {
+      "name": "cms_feed",
+      "purpose": "Feed definition for curated, rule, hybrid, search-assisted, recommendation-assisted, rss, and channel feeds.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "channel_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "CMS channel id used for delivery segmentation."
+        },
+        {
+          "name": "code",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": true,
+          "purpose": "Stable business code unique within the documented scope."
+        },
+        {
+          "name": "name",
+          "logicalType": "string",
+          "dbType": "VARCHAR(256)",
+          "required": true,
+          "purpose": "Human-readable display name."
+        },
+        {
+          "name": "feed_kind",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "feed_kind classifies the row by a stable business kind."
+        },
+        {
+          "name": "locale",
+          "logicalType": "string",
+          "dbType": "VARCHAR(32)",
+          "required": true,
+          "purpose": "Locale code for localized content or delivery resolution."
+        },
+        {
+          "name": "default_page_size",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "default_page_size stores a numeric business value used by cms_feed."
+        },
+        {
+          "name": "ranking_profile_ref",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": false,
+          "purpose": "ranking_profile_ref stores a reference to a dependency-owned capability."
+        },
+        {
+          "name": "rule_config_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "rule_config_json stores structured cms_feed metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "published_snapshot_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "Pointer to the current published snapshot for delivery reads."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        },
+        {
+          "name": "deleted_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "UTC soft-delete timestamp."
+        },
+        {
+          "name": "deleted_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "IAM user id that soft-deleted the row."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_feed."
+    },
+    {
+      "name": "cms_feed_rule",
+      "purpose": "Feed automation rule selecting entries by content type, taxonomy, query, condition JSON, sort JSON, and limit.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "feed_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS feed id used for feed rules, items, and snapshots."
+        },
+        {
+          "name": "rule_kind",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "rule_kind classifies the row by a stable business kind."
+        },
+        {
+          "name": "content_type_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "CMS content type id used for schema validation."
+        },
+        {
+          "name": "taxonomy_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "CMS taxonomy id used for taxonomy term and entry-term relations."
+        },
+        {
+          "name": "taxonomy_term_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "taxonomy_term_id stores a numeric business value used by cms_feed_rule."
+        },
+        {
+          "name": "q",
+          "logicalType": "string",
+          "dbType": "VARCHAR(512)",
+          "required": false,
+          "purpose": "q stores cms_feed_rule business data used by the CMS service contract."
+        },
+        {
+          "name": "condition_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "condition_json stores structured cms_feed_rule metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "sort_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "sort_json stores structured cms_feed_rule metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "limit_count",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "limit_count stores a bounded count used by query or delivery logic."
+        },
+        {
+          "name": "enabled",
+          "logicalType": "boolean",
+          "dbType": "BOOLEAN",
+          "required": true,
+          "purpose": "enabled stores a boolean feature flag or state marker."
+        },
+        {
+          "name": "sort_order",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Deterministic ordering value within the owning scope."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_feed_rule."
+    },
+    {
+      "name": "cms_feed_item",
+      "purpose": "Manually curated feed item supporting entry/page/external targets, pinning, fixed position, operator copy, media, and validity window.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "feed_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS feed id used for feed rules, items, and snapshots."
+        },
+        {
+          "name": "entry_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "CMS entry id used for entry aggregate relations."
+        },
+        {
+          "name": "page_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "CMS page id used for page composition relations."
+        },
+        {
+          "name": "external_url",
+          "logicalType": "string",
+          "dbType": "VARCHAR(2048)",
+          "required": false,
+          "purpose": "external_url stores an external URL/URI reference after validation."
+        },
+        {
+          "name": "item_kind",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "item_kind classifies the row by a stable business kind."
+        },
+        {
+          "name": "position_no",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": false,
+          "purpose": "position_no stores a numeric business value used by cms_feed_item."
+        },
+        {
+          "name": "pinned",
+          "logicalType": "boolean",
+          "dbType": "BOOLEAN",
+          "required": true,
+          "purpose": "pinned stores a boolean feature flag or state marker."
+        },
+        {
+          "name": "operator_title",
+          "logicalType": "string",
+          "dbType": "VARCHAR(512)",
+          "required": false,
+          "purpose": "operator_title stores cms_feed_item business data used by the CMS service contract."
+        },
+        {
+          "name": "operator_summary",
+          "logicalType": "text",
+          "dbType": "TEXT",
+          "required": false,
+          "purpose": "operator_summary stores cms_feed_item business data used by the CMS service contract."
+        },
+        {
+          "name": "operator_media_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "operator_media_json stores structured cms_feed_item metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "starts_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "starts_at stores a UTC lifecycle timestamp."
+        },
+        {
+          "name": "ends_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "ends_at stores a UTC lifecycle timestamp."
+        },
+        {
+          "name": "sort_order",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Deterministic ordering value within the owning scope."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        },
+        {
+          "name": "created_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that created the row."
+        },
+        {
+          "name": "updated_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM user id that last updated the row."
+        },
+        {
+          "name": "version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Optimistic lock version for concurrent updates."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_feed_item."
+    },
+    {
+      "name": "cms_feed_snapshot",
+      "purpose": "Published feed item snapshot for stable app/open delivery.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "feed_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "CMS feed id used for feed rules, items, and snapshots."
+        },
+        {
+          "name": "publish_snapshot_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "Related unified publish snapshot id."
+        },
+        {
+          "name": "snapshot_version",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "snapshot_version stores a numeric business value used by cms_feed_snapshot."
+        },
+        {
+          "name": "item_count",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "item_count stores a bounded count used by query or delivery logic."
+        },
+        {
+          "name": "items_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "items_json stores structured cms_feed_snapshot metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "rule_summary_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "rule_summary_json stores structured cms_feed_snapshot metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "checksum",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": false,
+          "purpose": "Payload checksum for snapshot identity and drift detection."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "published_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "published_at stores a UTC lifecycle timestamp."
+        },
+        {
+          "name": "published_by",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "published_by stores an IAM user id for audit attribution."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_feed_snapshot."
+    },
+    {
+      "name": "cms_audit_log",
+      "purpose": "CMS business audit log for model, content, page, feed, publish, rollback, outbox, and operator actions.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "actor_user_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "actor_user_id stores a numeric business value used by cms_audit_log."
+        },
+        {
+          "name": "action",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": true,
+          "purpose": "action stores cms_audit_log business data used by the CMS service contract."
+        },
+        {
+          "name": "resource_type",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "resource_type classifies the related aggregate or resource type."
+        },
+        {
+          "name": "resource_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "resource_id stores a numeric business value used by cms_audit_log."
+        },
+        {
+          "name": "resource_uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": false,
+          "purpose": "resource_uuid stores cms_audit_log business data used by the CMS service contract."
+        },
+        {
+          "name": "before_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "before_json stores structured cms_audit_log metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "after_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "after_json stores structured cms_audit_log metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "metadata_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "metadata_json stores structured cms_audit_log metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "request_id",
+          "logicalType": "int64",
+          "dbType": "VARCHAR(128)",
+          "required": false,
+          "purpose": "Server-owned request correlation id."
+        },
+        {
+          "name": "trace_id",
+          "logicalType": "int64",
+          "dbType": "VARCHAR(128)",
+          "required": false,
+          "purpose": "Distributed tracing correlation id."
+        },
+        {
+          "name": "ip_address",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": false,
+          "purpose": "ip_address stores cms_audit_log business data used by the CMS service contract."
+        },
+        {
+          "name": "user_agent",
+          "logicalType": "string",
+          "dbType": "VARCHAR(512)",
+          "required": false,
+          "purpose": "user_agent stores cms_audit_log business data used by the CMS service contract."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_audit_log."
+    },
+    {
+      "name": "cms_outbox_event",
+      "purpose": "Durable outbox event table for search sync, cache invalidation, notification, webhook, scheduler, sitemap/RSS projection, and automation.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "site_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "CMS site id that anchors site-scoped ownership and queries."
+        },
+        {
+          "name": "aggregate_type",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "aggregate_type classifies the related aggregate or resource type."
+        },
+        {
+          "name": "aggregate_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "aggregate_id stores a numeric business value used by cms_outbox_event."
+        },
+        {
+          "name": "event_type",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": true,
+          "purpose": "event_type classifies the related aggregate or resource type."
+        },
+        {
+          "name": "event_version",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "event_version stores a numeric business value used by cms_outbox_event."
+        },
+        {
+          "name": "payload_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "payload_json stores structured cms_outbox_event metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "headers_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": true,
+          "purpose": "headers_json stores structured cms_outbox_event metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "attempt_count",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "attempt_count stores a bounded count used by query or delivery logic."
+        },
+        {
+          "name": "next_attempt_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "next_attempt_at stores a UTC lifecycle timestamp."
+        },
+        {
+          "name": "published_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "published_at stores a UTC lifecycle timestamp."
+        },
+        {
+          "name": "error_message",
+          "logicalType": "text",
+          "dbType": "TEXT",
+          "required": false,
+          "purpose": "error_message stores cms_outbox_event business data used by the CMS service contract."
+        },
+        {
+          "name": "request_id",
+          "logicalType": "int64",
+          "dbType": "VARCHAR(128)",
+          "required": false,
+          "purpose": "Server-owned request correlation id."
+        },
+        {
+          "name": "trace_id",
+          "logicalType": "int64",
+          "dbType": "VARCHAR(128)",
+          "required": false,
+          "purpose": "Distributed tracing correlation id."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_outbox_event."
+    },
+    {
+      "name": "cms_idempotency_key",
+      "purpose": "Idempotent command record for create, publish, rollback, retry, import, and other repeatable commands.",
+      "columns": [
+        {
+          "name": "id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "Internal int64 primary key; API/SDK must serialize as string."
+        },
+        {
+          "name": "uuid",
+          "logicalType": "public_id",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "Stable external identifier for APIs, SDKs, imports, and audit references."
+        },
+        {
+          "name": "tenant_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM tenant id used for mandatory tenant isolation."
+        },
+        {
+          "name": "organization_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "IAM organization id used for organization-scoped data visibility."
+        },
+        {
+          "name": "principal_type",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": true,
+          "purpose": "principal_type classifies the related aggregate or resource type."
+        },
+        {
+          "name": "principal_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": true,
+          "purpose": "principal_id stores a numeric business value used by cms_idempotency_key."
+        },
+        {
+          "name": "idempotency_key",
+          "logicalType": "string",
+          "dbType": "VARCHAR(256)",
+          "required": true,
+          "purpose": "idempotency_key stores cms_idempotency_key business data used by the CMS service contract."
+        },
+        {
+          "name": "method",
+          "logicalType": "string",
+          "dbType": "VARCHAR(16)",
+          "required": true,
+          "purpose": "method stores cms_idempotency_key business data used by the CMS service contract."
+        },
+        {
+          "name": "path",
+          "logicalType": "string",
+          "dbType": "VARCHAR(1024)",
+          "required": true,
+          "purpose": "Stable route path or tree path used for lookups."
+        },
+        {
+          "name": "payload_hash",
+          "logicalType": "string",
+          "dbType": "VARCHAR(128)",
+          "required": true,
+          "purpose": "payload_hash stores cms_idempotency_key business data used by the CMS service contract."
+        },
+        {
+          "name": "response_status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": false,
+          "purpose": "response_status stores a lifecycle state enum; see database design docs."
+        },
+        {
+          "name": "response_body_json",
+          "logicalType": "json",
+          "dbType": "JSONB",
+          "required": false,
+          "purpose": "response_body_json stores structured cms_idempotency_key metadata; query-critical fields must remain in dedicated columns."
+        },
+        {
+          "name": "resource_type",
+          "logicalType": "string",
+          "dbType": "VARCHAR(64)",
+          "required": false,
+          "purpose": "resource_type classifies the related aggregate or resource type."
+        },
+        {
+          "name": "resource_id",
+          "logicalType": "int64",
+          "dbType": "BIGINT",
+          "required": false,
+          "purpose": "resource_id stores a numeric business value used by cms_idempotency_key."
+        },
+        {
+          "name": "status",
+          "logicalType": "int32",
+          "dbType": "INTEGER",
+          "required": true,
+          "purpose": "Business lifecycle status; see status contract in database design docs."
+        },
+        {
+          "name": "locked_until",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": false,
+          "purpose": "locked_until stores cms_idempotency_key business data used by the CMS service contract."
+        },
+        {
+          "name": "expires_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "expires_at stores a UTC lifecycle timestamp."
+        },
+        {
+          "name": "created_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC creation timestamp."
+        },
+        {
+          "name": "updated_at",
+          "logicalType": "instant",
+          "dbType": "TIMESTAMPTZ",
+          "required": true,
+          "purpose": "UTC update timestamp."
+        }
+      ],
+      "implementationStatus": "Repository row mapping, write predicates, and query tests implemented for cms_idempotency_key."
+    }
+  ]
+}

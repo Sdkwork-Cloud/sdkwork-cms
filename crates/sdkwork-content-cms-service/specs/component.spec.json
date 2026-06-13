@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.component.spec",
+  "component": {
+    "name": "sdkwork-content-cms-service",
+    "displayName": "SDKWork Content CMS Service",
+    "version": "0.1.0",
+    "type": "web-backend-service",
+    "root": "sdkwork-cms/crates/sdkwork-content-cms-service",
+    "domain": "content",
+    "capability": "cms",
+    "surface": "backend-service",
+    "languages": ["rust"],
+    "generated": false,
+    "manifests": ["Cargo.toml"]
+  },
+  "canonicalSpecs": [
+    { "file": "CODE_STYLE_SPEC.md", "path": "../../../sdkwork-specs/CODE_STYLE_SPEC.md", "purpose": "Shared code structure." },
+    { "file": "NAMING_SPEC.md", "path": "../../../sdkwork-specs/NAMING_SPEC.md", "purpose": "Crate and capability naming." },
+    { "file": "RUST_CODE_SPEC.md", "path": "../../../sdkwork-specs/RUST_CODE_SPEC.md", "purpose": "Rust service crate layout." },
+    { "file": "WEB_BACKEND_SPEC.md", "path": "../../../sdkwork-specs/WEB_BACKEND_SPEC.md", "purpose": "Service/use-case boundary." },
+    { "file": "DATABASE_SPEC.md", "path": "../../../sdkwork-specs/DATABASE_SPEC.md", "purpose": "Persistence contract boundary." }
+  ],
+  "contracts": {
+    "publicExports": ["crate"],
+    "runtimeEntrypoints": [],
+    "routeManifest": null,
+    "sdkClients": [],
+    "sdkDependencies": [
+      { "workspace": "sdkwork-appbase-app-sdk", "role": "iam-context", "required": true, "dependencyMode": "consumer-sdk", "apiPrefix": "/app/v3/api", "apiAuthority": "sdkwork-appbase-app-api", "generatedTransportImportPolicy": "forbidden" },
+      { "workspace": "../sdkwork-drive/sdks/sdkwork-drive-app-sdk", "role": "media-upload-reference", "required": true, "dependencyMode": "consumer-sdk", "apiPrefix": "/app/v3/api", "generatedTransportImportPolicy": "forbidden" },
+      { "workspace": "../sdkwork-search/sdks/sdkwork-search-sdk", "role": "search-sync", "required": false, "dependencyMode": "consumer-sdk", "apiPrefix": "/search/v3/api", "generatedTransportImportPolicy": "forbidden" },
+      { "workspace": "../sdkwork-messaging/sdks/sdkwork-messaging-backend-sdk", "role": "workflow-notification", "required": false, "dependencyMode": "consumer-sdk", "apiPrefix": "/backend/v3/api", "generatedTransportImportPolicy": "forbidden" },
+      { "workspace": "../sdkwork-comments/sdks/sdkwork-comments-sdk", "role": "engagement-summary", "required": false, "dependencyMode": "consumer-sdk", "apiPrefix": "/comments/v3/api", "generatedTransportImportPolicy": "forbidden" }
+    ],
+    "dependencyApiExports": [],
+    "dependencyApiSurfaces": [],
+    "events": [
+      "cms.entry.created",
+      "cms.entry.updated",
+      "cms.entry.published",
+      "cms.entry.unpublished",
+      "cms.entry.rolled_back",
+      "cms.page.published",
+      "cms.feed.published",
+      "cms.search.sync_requested",
+      "cms.cache.invalidate_requested",
+      "cms.webhook.delivery_requested",
+      "cms.notification.requested",
+      "cms.sitemap.projection_requested",
+      "cms.rss.projection_requested"
+    ],
+    "configKeys": []
+  },
+  "verification": {
+    "commands": ["cargo test -p sdkwork-content-cms-service"]
+  }
+}

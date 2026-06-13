@@ -1,0 +1,13 @@
+target/
+node_modules/
+dist/
+coverage/
+.env
+.env.*
+!.env.example
+.sdkwork/local/
+.sdkwork/tmp/
+.sdkwork/cache/
+.sdkwork/secrets/
+*.local.*
+

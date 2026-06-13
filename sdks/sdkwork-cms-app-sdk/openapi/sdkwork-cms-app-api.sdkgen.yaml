@@ -1,0 +1,27 @@
+schemaVersion: 1
+kind: sdkwork.sdkgen.input
+sdkFamily: sdkwork-cms-app-sdk
+apiAuthority: sdkwork-cms.app
+sdkOwner: sdkwork-cms
+inputSpec: sdkwork-cms-app-api.openapi.json
+output: ../sdkwork-cms-app-sdk-typescript/generated/server-openapi
+language: typescript
+sdkName: sdkwork-cms-app-sdk
+packageName: "@sdkwork/cms-app-sdk"
+standardProfile: sdkwork-v3
+sdkDependencies:
+  - workspace: ../sdkwork-appbase/sdks/sdkwork-appbase-app-sdk
+    role: iam-login-context
+    required: true
+    dependencyMode: consumer-sdk
+    apiPrefix: /app/v3/api
+    generatedTransportImportPolicy: forbidden
+  - workspace: ../sdkwork-drive/sdks/sdkwork-drive-app-sdk
+    role: media-upload
+    required: true
+    dependencyMode: consumer-sdk
+    apiPrefix: /app/v3/api
+    generatedTransportImportPolicy: forbidden
+dependencyApiExports: []
+# TODO: Generate with ../sdkwork-sdk-generator/bin/sdkgen.js after OpenAPI review.
+

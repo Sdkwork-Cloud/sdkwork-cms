@@ -1,0 +1,15 @@
+schemaVersion: 1
+kind: sdkwork.sdkgen.input
+sdkFamily: sdkwork-cms-sdk
+apiAuthority: sdkwork-cms.open
+sdkOwner: sdkwork-cms
+inputSpec: sdkwork-cms-open-api.openapi.json
+output: ../sdkwork-cms-sdk-typescript/generated/server-openapi
+language: typescript
+sdkName: sdkwork-cms-sdk
+packageName: "@sdkwork/cms-sdk"
+standardProfile: sdkwork-v3
+sdkDependencies: []
+dependencyApiExports: []
+# TODO: Generate with ../sdkwork-sdk-generator/bin/sdkgen.js after OpenAPI review.
+

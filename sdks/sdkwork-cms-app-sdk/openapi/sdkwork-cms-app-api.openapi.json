@@ -1,0 +1,295 @@
+{
+  "openapi": "3.1.2",
+  "info": {
+    "title": "SDKWork CMS App API",
+    "version": "1.0.0",
+    "x-sdkwork-owner": "sdkwork-cms",
+    "x-sdkwork-api-authority": "sdkwork-cms.app"
+  },
+  "servers": [
+    {
+      "url": "http://127.0.0.1:18080"
+    }
+  ],
+  "tags": [
+    {
+      "name": "cms",
+      "description": "CMS app delivery API.",
+      "x-sdk-nested-resource-surface": true
+    }
+  ],
+  "paths": {
+    "/app/v3/api/cms/sites/{siteCode}/bootstrap": {
+      "get": {
+        "tags": ["cms"],
+        "summary": "Retrieve CMS delivery bootstrap for a site",
+        "operationId": "cms.delivery.bootstrap.retrieve",
+        "parameters": [
+          { "name": "siteCode", "in": "path", "required": true, "schema": { "type": "string", "maxLength": 128 } },
+          { "$ref": "#/components/parameters/ChannelCode" },
+          { "$ref": "#/components/parameters/Locale" }
+        ],
+        "responses": { "200": { "$ref": "#/components/responses/CmsDeliveryBootstrapOk" }, "400": { "$ref": "#/components/responses/Problem" }, "404": { "$ref": "#/components/responses/Problem" } },
+        "security": [],
+        "x-sdkwork-owner": "sdkwork-cms",
+        "x-sdkwork-api-authority": "sdkwork-cms.app",
+        "x-sdkwork-domain": "content",
+        "x-sdkwork-resource": "cms.delivery.bootstrap",
+        "x-sdkwork-auth-mode": "anonymous",
+        "x-sdkwork-public": true
+      }
+    },
+    "/app/v3/api/cms/sites/{siteCode}/entries:resolve": {
+      "get": {
+        "tags": ["cms"],
+        "summary": "Resolve a published CMS entry by slug for app delivery",
+        "operationId": "cms.delivery.entries.resolve",
+        "parameters": [
+          { "name": "siteCode", "in": "path", "required": true, "schema": { "type": "string", "maxLength": 128 } },
+          { "$ref": "#/components/parameters/ChannelCode" },
+          { "$ref": "#/components/parameters/Locale" },
+          { "name": "slug", "in": "query", "required": true, "schema": { "type": "string", "maxLength": 512 } },
+          { "name": "previewToken", "in": "query", "required": false, "schema": { "type": "string", "maxLength": 512 } }
+        ],
+        "responses": { "200": { "$ref": "#/components/responses/CmsEntryOk" }, "400": { "$ref": "#/components/responses/Problem" }, "404": { "$ref": "#/components/responses/Problem" } },
+        "security": [],
+        "x-sdkwork-owner": "sdkwork-cms",
+        "x-sdkwork-api-authority": "sdkwork-cms.app",
+        "x-sdkwork-domain": "content",
+        "x-sdkwork-resource": "cms.delivery.entries",
+        "x-sdkwork-auth-mode": "anonymous",
+        "x-sdkwork-public": true
+      }
+    },
+    "/app/v3/api/cms/entries/{entryId}": {
+      "get": {
+        "tags": ["cms"],
+        "summary": "Retrieve a published CMS entry for app delivery",
+        "operationId": "cms.delivery.entries.retrieve",
+        "parameters": [
+          { "name": "entryId", "in": "path", "required": true, "schema": { "type": "string", "format": "int64", "x-sdkwork-int64-string": true } },
+          { "name": "previewToken", "in": "query", "required": false, "schema": { "type": "string", "maxLength": 512 } }
+        ],
+        "responses": { "200": { "$ref": "#/components/responses/CmsEntryOk" }, "400": { "$ref": "#/components/responses/Problem" }, "404": { "$ref": "#/components/responses/Problem" } },
+        "security": [],
+        "x-sdkwork-owner": "sdkwork-cms",
+        "x-sdkwork-api-authority": "sdkwork-cms.app",
+        "x-sdkwork-domain": "content",
+        "x-sdkwork-resource": "cms.delivery.entries",
+        "x-sdkwork-auth-mode": "anonymous",
+        "x-sdkwork-public": true
+      }
+    },
+    "/app/v3/api/cms/sites/{siteCode}/pages:resolve": {
+      "get": {
+        "tags": ["cms"],
+        "summary": "Resolve a CMS page by path for app delivery",
+        "operationId": "cms.delivery.pages.resolve",
+        "parameters": [
+          { "name": "siteCode", "in": "path", "required": true, "schema": { "type": "string", "maxLength": 128 } },
+          { "$ref": "#/components/parameters/ChannelCode" },
+          { "$ref": "#/components/parameters/Locale" },
+          { "name": "path", "in": "query", "required": true, "schema": { "type": "string", "maxLength": 1024 } },
+          { "name": "previewToken", "in": "query", "required": false, "schema": { "type": "string", "maxLength": 512 } }
+        ],
+        "responses": { "200": { "$ref": "#/components/responses/CmsPageOk" }, "400": { "$ref": "#/components/responses/Problem" }, "404": { "$ref": "#/components/responses/Problem" } },
+        "security": [],
+        "x-sdkwork-owner": "sdkwork-cms",
+        "x-sdkwork-api-authority": "sdkwork-cms.app",
+        "x-sdkwork-domain": "content",
+        "x-sdkwork-resource": "cms.delivery.pages",
+        "x-sdkwork-auth-mode": "anonymous",
+        "x-sdkwork-public": true
+      }
+    },
+    "/app/v3/api/cms/sites/{siteCode}/feeds/{feedCode}/items": {
+      "get": {
+        "tags": ["cms"],
+        "summary": "List CMS feed items for app delivery",
+        "operationId": "cms.delivery.feeds.items.list",
+        "parameters": [
+          { "name": "siteCode", "in": "path", "required": true, "schema": { "type": "string", "maxLength": 128 } },
+          { "name": "feedCode", "in": "path", "required": true, "schema": { "type": "string", "maxLength": 128 } },
+          { "$ref": "#/components/parameters/ChannelCode" },
+          { "$ref": "#/components/parameters/Locale" },
+          { "$ref": "#/components/parameters/Cursor" },
+          { "$ref": "#/components/parameters/Limit" }
+        ],
+        "responses": { "200": { "$ref": "#/components/responses/CmsFeedItemPageOk" }, "400": { "$ref": "#/components/responses/Problem" }, "404": { "$ref": "#/components/responses/Problem" } },
+        "security": [],
+        "x-sdkwork-owner": "sdkwork-cms",
+        "x-sdkwork-api-authority": "sdkwork-cms.app",
+        "x-sdkwork-domain": "content",
+        "x-sdkwork-resource": "cms.delivery.feeds.items",
+        "x-sdkwork-auth-mode": "anonymous",
+        "x-sdkwork-public": true
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "AuthToken": { "type": "apiKey", "in": "header", "name": "Authorization" },
+      "AccessToken": { "type": "apiKey", "in": "header", "name": "Access-Token" }
+    },
+    "parameters": {
+      "ChannelCode": { "name": "channelCode", "in": "query", "required": false, "schema": { "type": "string", "maxLength": 128 } },
+      "Locale": { "name": "locale", "in": "query", "required": false, "schema": { "type": "string", "maxLength": 32, "default": "en-US" } },
+      "Cursor": { "name": "cursor", "in": "query", "required": false, "schema": { "type": "string", "maxLength": 512 } },
+      "Limit": { "name": "limit", "in": "query", "required": false, "schema": { "type": "integer", "format": "int32", "minimum": 1, "maximum": 100, "default": 20 } }
+    },
+    "responses": {
+      "CmsDeliveryBootstrapOk": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CmsDeliveryBootstrap" } } } },
+      "CmsEntryOk": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CmsEntry" } } } },
+      "CmsPageOk": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CmsPage" } } } },
+      "CmsFeedItemPageOk": { "description": "OK", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CmsFeedItemPage" } } } },
+      "Problem": { "description": "Problem detail", "content": { "application/problem+json": { "schema": { "$ref": "#/components/schemas/ProblemDetail" } } } }
+    },
+    "schemas": {
+      "CmsDeliveryBootstrap": {
+        "type": "object",
+        "required": ["siteCode", "locale", "channels"],
+        "additionalProperties": false,
+        "properties": {
+          "siteCode": { "type": "string" },
+          "locale": { "type": "string" },
+          "defaultChannelCode": { "type": "string" },
+          "channels": { "type": "array", "items": { "$ref": "#/components/schemas/CmsChannel" } },
+          "settings": { "type": "object", "additionalProperties": true }
+        }
+      },
+      "CmsChannel": {
+        "type": "object",
+        "required": ["code", "name", "channelKind"],
+        "additionalProperties": false,
+        "properties": {
+          "code": { "type": "string" },
+          "name": { "type": "string" },
+          "channelKind": { "type": "string" },
+          "deliveryConfig": { "type": "object", "additionalProperties": true }
+        }
+      },
+      "CmsEntry": {
+        "type": "object",
+        "required": ["id", "uuid", "siteId", "contentTypeCode", "title", "slug", "locale", "publicationStatus"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "format": "int64", "x-sdkwork-int64-string": true },
+          "uuid": { "type": "string" },
+          "siteId": { "type": "string", "format": "int64", "x-sdkwork-int64-string": true },
+          "contentTypeCode": { "type": "string" },
+          "channelCode": { "type": "string" },
+          "title": { "type": "string" },
+          "slug": { "type": "string" },
+          "summary": { "type": "string" },
+          "locale": { "type": "string" },
+          "bodyFormat": { "type": "string" },
+          "bodyText": { "type": "string" },
+          "bodyHtml": { "type": "string" },
+          "blocks": { "type": "object", "additionalProperties": true },
+          "fields": { "type": "object", "additionalProperties": true },
+          "media": { "type": "array", "items": { "$ref": "#/components/schemas/CmsMediaRef" } },
+          "terms": { "type": "array", "items": { "$ref": "#/components/schemas/CmsTermRef" } },
+          "seo": { "type": "object", "additionalProperties": true },
+          "publicationStatus": { "type": "string" },
+          "publishedAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "CmsPage": {
+        "type": "object",
+        "required": ["id", "siteId", "path", "title", "locale", "blocks"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "format": "int64", "x-sdkwork-int64-string": true },
+          "siteId": { "type": "string", "format": "int64", "x-sdkwork-int64-string": true },
+          "channelCode": { "type": "string" },
+          "locale": { "type": "string" },
+          "path": { "type": "string" },
+          "title": { "type": "string" },
+          "seo": { "type": "object", "additionalProperties": true },
+          "blocks": { "type": "array", "items": { "$ref": "#/components/schemas/CmsPageBlock" } },
+          "publishedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "CmsPageBlock": {
+        "type": "object",
+        "required": ["id", "slotCode", "blockKind", "sortOrder", "config"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "format": "int64", "x-sdkwork-int64-string": true },
+          "slotCode": { "type": "string" },
+          "blockCode": { "type": "string" },
+          "blockKind": { "type": "string" },
+          "refType": { "type": "string" },
+          "refId": { "type": "string", "format": "int64", "x-sdkwork-int64-string": true },
+          "config": { "type": "object", "additionalProperties": true },
+          "sortOrder": { "type": "integer", "format": "int32" }
+        }
+      },
+      "CmsFeedItem": {
+        "type": "object",
+        "required": ["id", "itemKind", "sortOrder"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "format": "int64", "x-sdkwork-int64-string": true },
+          "itemKind": { "type": "string" },
+          "entry": { "$ref": "#/components/schemas/CmsEntry" },
+          "page": { "$ref": "#/components/schemas/CmsPage" },
+          "externalUrl": { "type": "string" },
+          "operatorTitle": { "type": "string" },
+          "operatorSummary": { "type": "string" },
+          "operatorMedia": { "type": "object", "additionalProperties": true },
+          "pinned": { "type": "boolean" },
+          "sortOrder": { "type": "integer", "format": "int32" }
+        }
+      },
+      "CmsFeedItemPage": {
+        "type": "object",
+        "required": ["items"],
+        "additionalProperties": false,
+        "properties": {
+          "items": { "type": "array", "items": { "$ref": "#/components/schemas/CmsFeedItem" } },
+          "nextCursor": { "type": "string" },
+          "snapshotId": { "type": "string", "format": "int64", "x-sdkwork-int64-string": true }
+        }
+      },
+      "CmsMediaRef": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "role": { "type": "string" },
+          "driveUri": { "type": "string" },
+          "mediaResourceId": { "type": "string" },
+          "altText": { "type": "string" },
+          "caption": { "type": "string" },
+          "snapshot": { "type": "object", "additionalProperties": true }
+        }
+      },
+      "CmsTermRef": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "taxonomyCode": { "type": "string" },
+          "termCode": { "type": "string" },
+          "slug": { "type": "string" },
+          "name": { "type": "string" }
+        }
+      },
+      "ProblemDetail": {
+        "type": "object",
+        "required": ["type", "title", "status"],
+        "additionalProperties": true,
+        "properties": {
+          "type": { "type": "string" },
+          "title": { "type": "string" },
+          "status": { "type": "integer", "format": "int32" },
+          "detail": { "type": "string" },
+          "instance": { "type": "string" },
+          "requestId": { "type": "string" },
+          "code": { "type": "string" }
+        }
+      }
+    }
+  }
+}
+

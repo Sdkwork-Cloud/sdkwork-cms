@@ -1,0 +1,277 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.permission.registry",
+  "owner": "sdkwork-cms",
+  "domain": "content",
+  "capability": "cms",
+  "scope": "backend-api",
+  "permissionCount": 22,
+  "permissions": [
+    {
+      "code": "cms.site.read",
+      "resource": "cms.sites",
+      "action": "read",
+      "tenantScope": "tenant",
+      "dataScope": "organization",
+      "description": "Read CMS site metadata and site-level management lists.",
+      "operationIds": ["cms.sites.list", "cms.sites.retrieve"],
+      "implementationStatus": "Enforce tenant, organization, and site visibility before returning site metadata. - Implemented."
+    },
+    {
+      "code": "cms.site.manage",
+      "resource": "cms.sites",
+      "action": "manage",
+      "tenantScope": "tenant",
+      "dataScope": "organization",
+      "description": "Create, update, and soft-delete CMS sites.",
+      "operationIds": ["cms.sites.create", "cms.sites.update", "cms.sites.delete"],
+      "implementationStatus": "Require site administration permission and write cms_audit_log on every mutation. - Implemented."
+    },
+    {
+      "code": "cms.channel.read",
+      "resource": "cms.channels",
+      "action": "read",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Read publishing channels for a CMS site.",
+      "operationIds": ["cms.channels.list"],
+      "implementationStatus": "Filter channels by tenant, organization, and site membership. - Implemented."
+    },
+    {
+      "code": "cms.channel.manage",
+      "resource": "cms.channels",
+      "action": "manage",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Create, update, and delete CMS publishing channels.",
+      "operationIds": ["cms.channels.create", "cms.channels.update", "cms.channels.delete"],
+      "implementationStatus": "Validate site ownership and enforce channel code uniqueness per site. - Implemented."
+    },
+    {
+      "code": "cms.content_type.read",
+      "resource": "cms.contentTypes",
+      "action": "read",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Read content type definitions and field schemas.",
+      "operationIds": ["cms.contentTypes.list", "cms.contentTypes.retrieve", "cms.contentFields.list"],
+      "implementationStatus": "Return only active, site-scoped schemas visible to the caller. - Implemented."
+    },
+    {
+      "code": "cms.content_type.manage",
+      "resource": "cms.contentTypes",
+      "action": "manage",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Manage content type and content field schemas.",
+      "operationIds": [
+        "cms.contentTypes.create",
+        "cms.contentTypes.update",
+        "cms.contentTypes.delete",
+        "cms.contentFields.create",
+        "cms.contentFields.update",
+        "cms.contentFields.delete"
+      ],
+      "implementationStatus": "Validate schema evolution compatibility before mutating type or field definitions. - Implemented."
+    },
+    {
+      "code": "cms.taxonomy.read",
+      "resource": "cms.taxonomies",
+      "action": "read",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Read taxonomies and taxonomy terms.",
+      "operationIds": ["cms.taxonomies.list", "cms.taxonomyTerms.list"],
+      "implementationStatus": "Filter taxonomy trees by tenant, organization, site, and deleted status. - Implemented."
+    },
+    {
+      "code": "cms.taxonomy.manage",
+      "resource": "cms.taxonomies",
+      "action": "manage",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Create, update, and delete taxonomy structures.",
+      "operationIds": [
+        "cms.taxonomies.create",
+        "cms.taxonomies.update",
+        "cms.taxonomies.delete",
+        "cms.taxonomyTerms.create",
+        "cms.taxonomyTerms.update",
+        "cms.taxonomyTerms.delete"
+      ],
+      "implementationStatus": "Recalculate taxonomy term paths and audit tree mutations in one transaction. - Implemented."
+    },
+    {
+      "code": "cms.entry.read",
+      "resource": "cms.entries",
+      "action": "read",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Read draft and management views of CMS entries.",
+      "operationIds": [
+        "cms.entries.management.list",
+        "cms.entries.management.retrieve",
+        "cms.entries.media.list",
+        "cms.entries.versions.list"
+      ],
+      "implementationStatus": "Apply site/channel/status filters and hide unpublished fields when caller lacks review scope. - Implemented."
+    },
+    {
+      "code": "cms.entry.create",
+      "resource": "cms.entries",
+      "action": "create",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Create CMS entries.",
+      "operationIds": ["cms.entries.create"],
+      "implementationStatus": "Validate content type, channel, author identity, and idempotency before insert. - Implemented."
+    },
+    {
+      "code": "cms.entry.update",
+      "resource": "cms.entries",
+      "action": "update",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Update CMS entry metadata, body, field values, media, and terms.",
+      "operationIds": [
+        "cms.entries.update",
+        "cms.entries.body.update",
+        "cms.entries.fields.replace",
+        "cms.entries.media.attach",
+        "cms.entries.media.delete",
+        "cms.entries.terms.replace"
+      ],
+      "implementationStatus": "Enforce optimistic version checks and write entry versions on content-changing updates. - Implemented."
+    },
+    {
+      "code": "cms.entry.delete",
+      "resource": "cms.entries",
+      "action": "delete",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Soft-delete CMS entries.",
+      "operationIds": ["cms.entries.delete"],
+      "implementationStatus": "Soft-delete entry aggregates and emit cache/search invalidation through outbox. - Implemented."
+    },
+    {
+      "code": "cms.entry.publish",
+      "resource": "cms.entries",
+      "action": "publish",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Publish, unpublish, or schedule CMS entries.",
+      "operationIds": ["cms.entries.publish", "cms.entries.unpublish", "cms.entries.schedule"],
+      "implementationStatus": "Create cms_publish_snapshot, update entry state, and enqueue integration events atomically. - Implemented."
+    },
+    {
+      "code": "cms.entry.rollback",
+      "resource": "cms.entries",
+      "action": "rollback",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Rollback CMS entries to a previous version.",
+      "operationIds": ["cms.entries.rollback"],
+      "implementationStatus": "Validate target version, restore body/fields/terms, and record rollback audit. - Implemented."
+    },
+    {
+      "code": "cms.page.read",
+      "resource": "cms.pages",
+      "action": "read",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Read CMS page management views.",
+      "operationIds": ["cms.pages.management.list", "cms.pages.management.retrieve"],
+      "implementationStatus": "Filter pages by tenant, organization, site, route path, and publish state. - Implemented."
+    },
+    {
+      "code": "cms.page.manage",
+      "resource": "cms.pages",
+      "action": "manage",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Create, update, delete, and compose CMS pages.",
+      "operationIds": [
+        "cms.pages.create",
+        "cms.pages.update",
+        "cms.pages.delete",
+        "cms.pages.blocks.replace"
+      ],
+      "implementationStatus": "Validate page route uniqueness and block schema compatibility before writes. - Implemented."
+    },
+    {
+      "code": "cms.page.publish",
+      "resource": "cms.pages",
+      "action": "publish",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Publish CMS pages.",
+      "operationIds": ["cms.pages.publish"],
+      "implementationStatus": "Render page snapshot, update publish state, and enqueue sitemap/cache events atomically. - Implemented."
+    },
+    {
+      "code": "cms.feed.read",
+      "resource": "cms.feeds",
+      "action": "read",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Read CMS feed definitions, rules, curated items, and snapshots.",
+      "operationIds": [
+        "cms.feeds.management.list",
+        "cms.feeds.management.retrieve",
+        "cms.feedRules.list",
+        "cms.feedItems.list",
+        "cms.feeds.snapshots.retrieve"
+      ],
+      "implementationStatus": "Return feed views scoped by site, channel, locale, and caller permissions. - Implemented."
+    },
+    {
+      "code": "cms.feed.manage",
+      "resource": "cms.feeds",
+      "action": "manage",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Manage feed definitions, rules, and curated items.",
+      "operationIds": [
+        "cms.feeds.create",
+        "cms.feeds.update",
+        "cms.feeds.delete",
+        "cms.feedRules.create",
+        "cms.feedRules.update",
+        "cms.feedRules.delete",
+        "cms.feedItems.upsert",
+        "cms.feedItems.delete"
+      ],
+      "implementationStatus": "Validate feed mode, rule compatibility, and curated item ordering before writes. - Implemented."
+    },
+    {
+      "code": "cms.feed.publish",
+      "resource": "cms.feeds",
+      "action": "publish",
+      "tenantScope": "tenant",
+      "dataScope": "site",
+      "description": "Publish feed snapshots for delivery.",
+      "operationIds": ["cms.feeds.publish"],
+      "implementationStatus": "Compose feed snapshot and enqueue RSS/cache/search projection events atomically. - Implemented."
+    },
+    {
+      "code": "cms.audit.read",
+      "resource": "cms.audit",
+      "action": "read",
+      "tenantScope": "tenant",
+      "dataScope": "organization",
+      "description": "Read CMS audit and outbox diagnostic records.",
+      "operationIds": ["cms.auditLogs.list", "cms.outboxEvents.list"],
+      "implementationStatus": "Restrict audit queries to authorized tenant and organization scopes. - Implemented."
+    },
+    {
+      "code": "cms.audit.manage",
+      "resource": "cms.audit",
+      "action": "manage",
+      "tenantScope": "tenant",
+      "dataScope": "organization",
+      "description": "Retry CMS outbox events and operational audit actions.",
+      "operationIds": ["cms.outboxEvents.retry"],
+      "implementationStatus": "Validate retry eligibility and append audit records for operator-triggered retries. - Implemented."
+    }
+  ]
+}

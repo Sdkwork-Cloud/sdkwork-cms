@@ -1,0 +1,31 @@
+[workspace]
+members = [
+    "crates/sdkwork-content-cms-service",
+    "crates/sdkwork-content-cms-repository-sqlx",
+    "crates/sdkwork-router-cms-open-api",
+    "crates/sdkwork-router-cms-app-api",
+    "crates/sdkwork-router-cms-backend-api",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2021"
+version = "0.1.0"
+license = "UNLICENSED"
+
+[workspace.dependencies]
+sdkwork-content-cms-service = { path = "crates/sdkwork-content-cms-service" }
+sdkwork-content-cms-repository-sqlx = { path = "crates/sdkwork-content-cms-repository-sqlx" }
+sdkwork-router-cms-open-api = { path = "crates/sdkwork-router-cms-open-api" }
+sdkwork-router-cms-app-api = { path = "crates/sdkwork-router-cms-app-api" }
+sdkwork-router-cms-backend-api = { path = "crates/sdkwork-router-cms-backend-api" }
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+uuid = { version = "1", features = ["v4", "v7"] }
+chrono = { version = "0.4", features = ["serde"] }
+thiserror = "1"
+tokio = { version = "1", features = ["full"] }
+async-trait = "0.1"
+sqlx = { version = "0.8", features = ["runtime-tokio", "tls-rustls", "postgres", "chrono", "uuid"] }
+tracing = "0.1"

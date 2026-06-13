@@ -1,0 +1,222 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.integration.registry",
+  "owner": "sdkwork-cms",
+  "domain": "content",
+  "capability": "cms",
+  "outboxTable": "cms_outbox_event",
+  "events": [
+    {
+      "name": "cms.entry.created",
+      "owner": "sdkwork-cms",
+      "producer": "sdkwork-content-cms-service",
+      "outboxTable": "cms_outbox_event",
+      "consumerBoundary": "cms-internal-and-webhook",
+      "downstreamTargets": ["audit", "webhook"],
+      "description": "Entry aggregate created in authoring state.",
+      "implementationStatus": "Enqueue after cms_entry and initial version are committed in one transaction. - Implemented."
+    },
+    {
+      "name": "cms.entry.updated",
+      "owner": "sdkwork-cms",
+      "producer": "sdkwork-content-cms-service",
+      "outboxTable": "cms_outbox_event",
+      "consumerBoundary": "cms-internal-search-cache-and-webhook",
+      "downstreamTargets": ["audit", "search", "cache", "webhook"],
+      "description": "Entry metadata, body, field values, media, or terms changed.",
+      "implementationStatus": "Enqueue after versioned entry writes and include changed field summary. - Implemented."
+    },
+    {
+      "name": "cms.entry.published",
+      "owner": "sdkwork-cms",
+      "producer": "sdkwork-content-cms-service",
+      "outboxTable": "cms_outbox_event",
+      "consumerBoundary": "search-cache-notification-webhook-and-projection",
+      "downstreamTargets": ["search", "cache", "notification", "webhook", "sitemap"],
+      "description": "Entry publish snapshot is visible through app/open delivery surfaces.",
+      "implementationStatus": "Enqueue after cms_publish_snapshot and publish-state update commit together. - Implemented."
+    },
+    {
+      "name": "cms.entry.unpublished",
+      "owner": "sdkwork-cms",
+      "producer": "sdkwork-content-cms-service",
+      "outboxTable": "cms_outbox_event",
+      "consumerBoundary": "search-cache-webhook-and-projection",
+      "downstreamTargets": ["search", "cache", "webhook", "sitemap"],
+      "description": "Entry publish visibility has been removed.",
+      "implementationStatus": "Enqueue after publish-state removal and invalidate delivery caches. - Implemented."
+    },
+    {
+      "name": "cms.entry.rolled_back",
+      "owner": "sdkwork-cms",
+      "producer": "sdkwork-content-cms-service",
+      "outboxTable": "cms_outbox_event",
+      "consumerBoundary": "audit-search-cache-and-webhook",
+      "downstreamTargets": ["audit", "search", "cache", "webhook"],
+      "description": "Entry content was restored from a previous version.",
+      "implementationStatus": "Include source version id and restored version id in the event payload. - Implemented."
+    },
+    {
+      "name": "cms.page.published",
+      "owner": "sdkwork-cms",
+      "producer": "sdkwork-content-cms-service",
+      "outboxTable": "cms_outbox_event",
+      "consumerBoundary": "cache-webhook-and-sitemap",
+      "downstreamTargets": ["cache", "webhook", "sitemap"],
+      "description": "Page blocks and route snapshot have been published.",
+      "implementationStatus": "Enqueue after page snapshot rendering and route uniqueness validation. - Implemented."
+    },
+    {
+      "name": "cms.feed.published",
+      "owner": "sdkwork-cms",
+      "producer": "sdkwork-content-cms-service",
+      "outboxTable": "cms_outbox_event",
+      "consumerBoundary": "cache-webhook-rss-and-search",
+      "downstreamTargets": ["cache", "webhook", "rss", "search"],
+      "description": "Feed composition snapshot has been published for delivery.",
+      "implementationStatus": "Enqueue after cms_feed_snapshot is created from curated/rule/hybrid feed inputs. - Implemented."
+    },
+    {
+      "name": "cms.search.sync_requested",
+      "owner": "sdkwork-cms",
+      "producer": "sdkwork-content-cms-service",
+      "outboxTable": "cms_outbox_event",
+      "consumerBoundary": "sdkwork-search",
+      "downstreamTargets": ["sdkwork-search"],
+      "description": "Request search indexing or reindexing for a CMS aggregate.",
+      "implementationStatus": "Translate committed CMS payloads into CmsSearchSyncPort requests without writing search tables. - Implemented."
+    },
+    {
+      "name": "cms.cache.invalidate_requested",
+      "owner": "sdkwork-cms",
+      "producer": "sdkwork-content-cms-service",
+      "outboxTable": "cms_outbox_event",
+      "consumerBoundary": "delivery-cache",
+      "downstreamTargets": ["cms-delivery-cache"],
+      "description": "Request invalidation of site, channel, entry, page, or feed delivery cache tags.",
+      "implementationStatus": "Build stable cache tags from tenant, site, channel, locale, and aggregate ids. - Implemented."
+    },
+    {
+      "name": "cms.notification.requested",
+      "owner": "sdkwork-cms",
+      "producer": "sdkwork-content-cms-service",
+      "outboxTable": "cms_outbox_event",
+      "consumerBoundary": "sdkwork-messaging",
+      "downstreamTargets": ["sdkwork-messaging"],
+      "description": "Request workflow notification delivery through Messaging.",
+      "implementationStatus": "Map workflow subscribers and event templates through CmsNotificationPort. - Implemented."
+    },
+    {
+      "name": "cms.webhook.delivery_requested",
+      "owner": "sdkwork-cms",
+      "producer": "sdkwork-content-cms-service",
+      "outboxTable": "cms_outbox_event",
+      "consumerBoundary": "webhook-provider",
+      "downstreamTargets": ["webhook-delivery-worker"],
+      "description": "Request external webhook delivery for CMS lifecycle events.",
+      "implementationStatus": "Resolve webhook endpoints outside CMS tables and enqueue signed delivery payloads. - Implemented."
+    },
+    {
+      "name": "cms.sitemap.projection_requested",
+      "owner": "sdkwork-cms",
+      "producer": "sdkwork-content-cms-service",
+      "outboxTable": "cms_outbox_event",
+      "consumerBoundary": "sitemap-projection",
+      "downstreamTargets": ["sitemap-projection-worker"],
+      "description": "Request sitemap projection rebuild for published entries or pages.",
+      "implementationStatus": "Use CmsSitemapProjectionPort with site id and publish snapshot metadata. - Implemented."
+    },
+    {
+      "name": "cms.rss.projection_requested",
+      "owner": "sdkwork-cms",
+      "producer": "sdkwork-content-cms-service",
+      "outboxTable": "cms_outbox_event",
+      "consumerBoundary": "rss-projection",
+      "downstreamTargets": ["rss-projection-worker"],
+      "description": "Request RSS projection rebuild for published feeds.",
+      "implementationStatus": "Use CmsSitemapProjectionPort RSS method with feed id and snapshot id. - Implemented."
+    }
+  ],
+  "dependencyPorts": [
+    {
+      "trait": "CmsIamAuthorizer",
+      "kind": "authorization",
+      "ownerWorkspace": "../sdkwork-appbase",
+      "purpose": "Resolve tenant, organization, principal, and permission checks.",
+      "triggeredBy": ["all protected backend-api operations"],
+      "implementationStatus": "Call before repository access and never trust tenant ids from request bodies. - Implemented."
+    },
+    {
+      "trait": "CmsDriveMediaPort",
+      "kind": "media-reference-validation",
+      "ownerWorkspace": "../sdkwork-drive",
+      "purpose": "Validate Drive node/object references before attaching media to entries.",
+      "triggeredBy": ["cms.entries.media.attach"],
+      "implementationStatus": "Validate media ownership and persist only Drive/MediaResource references. - Implemented."
+    },
+    {
+      "trait": "CmsSearchSyncPort",
+      "kind": "event-consumer",
+      "ownerWorkspace": "../sdkwork-search",
+      "purpose": "Request indexing for published or changed CMS aggregates.",
+      "consumerEvents": ["cms.search.sync_requested"],
+      "implementationStatus": "Convert outbox events into search sync requests through the Search SDK boundary. - Implemented."
+    },
+    {
+      "trait": "CmsCacheInvalidationPort",
+      "kind": "event-consumer",
+      "ownerWorkspace": "cms-runtime",
+      "purpose": "Invalidate delivery caches after publish-state changes.",
+      "consumerEvents": ["cms.cache.invalidate_requested"],
+      "implementationStatus": "Invalidate by cache tags, not by raw SQL table scans. - Implemented."
+    },
+    {
+      "trait": "CmsPreviewTokenPort",
+      "kind": "delivery-security",
+      "ownerWorkspace": "cms-runtime",
+      "purpose": "Validate preview tokens for draft delivery reads.",
+      "triggeredBy": ["cms.delivery.entries.resolve", "cms.delivery.entries.retrieve", "cms.delivery.pages.resolve"],
+      "implementationStatus": "Validate token scope against owner type, owner id, expiry, and tenant. - Implemented."
+    },
+    {
+      "trait": "CmsSchedulerPort",
+      "kind": "scheduler",
+      "ownerWorkspace": "scheduler-runtime",
+      "purpose": "Schedule publish and unpublish jobs.",
+      "triggeredBy": ["cms.entries.schedule"],
+      "implementationStatus": "Persist schedule intent and call scheduler after transaction commit. - Implemented."
+    },
+    {
+      "trait": "CmsNotificationPort",
+      "kind": "event-consumer",
+      "ownerWorkspace": "../sdkwork-messaging",
+      "purpose": "Send workflow notifications through Messaging.",
+      "consumerEvents": ["cms.notification.requested"],
+      "implementationStatus": "Resolve subscribers and templates through Messaging SDKs only. - Implemented."
+    },
+    {
+      "trait": "CmsWebhookPort",
+      "kind": "event-consumer",
+      "ownerWorkspace": "webhook-runtime",
+      "purpose": "Deliver external lifecycle webhooks.",
+      "consumerEvents": ["cms.webhook.delivery_requested"],
+      "implementationStatus": "Sign payloads and retry through webhook runtime, not CMS request handlers. - Implemented."
+    },
+    {
+      "trait": "CmsEngagementPort",
+      "kind": "read-composition",
+      "ownerWorkspace": "../sdkwork-comments",
+      "purpose": "Compose comments, likes, favorites, and engagement summaries into delivery views.",
+      "triggeredBy": ["cms.entries.list", "cms.entries.retrieve", "cms.feeds.items.list"],
+      "implementationStatus": "Fetch engagement summaries through dependency SDKs without copying engagement tables. - Implemented."
+    },
+    {
+      "trait": "CmsSitemapProjectionPort",
+      "kind": "event-consumer",
+      "ownerWorkspace": "projection-runtime",
+      "purpose": "Request sitemap and RSS projection rebuilds.",
+      "consumerEvents": ["cms.sitemap.projection_requested", "cms.rss.projection_requested"],
+      "implementationStatus": "Rebuild projections asynchronously from published snapshots. - Implemented."
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+schemaVersion: 1
+kind: sdkwork.sdkgen.input
+sdkFamily: sdkwork-cms-backend-sdk
+apiAuthority: sdkwork-cms.backend
+sdkOwner: sdkwork-cms
+inputSpec: sdkwork-cms-backend-api.openapi.json
+output: ../sdkwork-cms-backend-sdk-typescript/generated/server-openapi
+language: typescript
+sdkName: sdkwork-cms-backend-sdk
+packageName: "@sdkwork/cms-backend-sdk"
+standardProfile: sdkwork-v3
+sdkDependencies:
+  - workspace: ../sdkwork-appbase/sdks/sdkwork-appbase-backend-sdk
+    role: iam-admin-context
+    required: true
+    dependencyMode: consumer-sdk
+    apiPrefix: /backend/v3/api
+    generatedTransportImportPolicy: forbidden
+  - workspace: ../sdkwork-drive/sdks/sdkwork-drive-backend-sdk
+    role: media-governance
+    required: true
+    dependencyMode: consumer-sdk
+    apiPrefix: /backend/v3/api
+    generatedTransportImportPolicy: forbidden
+  - workspace: ../sdkwork-search/sdks/sdkwork-search-backend-sdk
+    role: search-rebuild-and-ranking
+    required: false
+    dependencyMode: consumer-sdk
+    apiPrefix: /backend/v3/api
+    generatedTransportImportPolicy: forbidden
+dependencyApiExports: []
+# TODO: Generate with ../sdkwork-sdk-generator/bin/sdkgen.js after OpenAPI review.
+

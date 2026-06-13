@@ -1,0 +1,265 @@
+{
+  "schemaVersion": 1,
+  "kind": "sdkwork.database.table-registry",
+  "domain": "content",
+  "capability": "cms",
+  "modulePrefix": "cms",
+  "owner": "sdkwork-cms",
+  "migration": "crates/sdkwork-content-cms-repository-sqlx/migrations/0001_cms_v1_foundation.sql",
+  "dependencyTables": {
+    "reuseByReferenceOnly": [
+      {
+        "workspace": "../sdkwork-appbase",
+        "tables": ["iam_tenant", "iam_user", "iam_organization", "iam_role", "iam_permission", "iam_policy", "iam_audit_event", "iam_security_event"],
+        "cmsColumns": ["tenant_id", "organization_id", "created_by", "updated_by", "author_user_id", "owner_user_id", "actor_user_id"],
+        "rule": "CMS stores IAM IDs and consumes IAM SDK/service contracts; CMS must not duplicate IAM fact tables."
+      },
+      {
+        "workspace": "../sdkwork-drive",
+        "tables": ["dr_drive_space", "dr_drive_node", "dr_drive_storage_object", "dr_drive_upload_session", "dr_drive_node_version"],
+        "cmsColumns": ["drive_space_id", "drive_node_id", "drive_uri", "media_resource_id", "media_snapshot_json"],
+        "rule": "CMS stores Drive/MediaResource references and snapshots only; file lifecycle stays in Drive."
+      },
+      {
+        "workspace": "../sdkwork-search",
+        "tables": ["search_index", "search_document", "search_ranking_profile", "search_recommendation_strategy", "search_query_suggestion", "search_embedding_job"],
+        "cmsColumns": ["ranking_profile_ref"],
+        "rule": "CMS emits search sync/ranking requests through outbox and SDK ports; search projections stay in Search."
+      },
+      {
+        "workspace": "../sdkwork-comments",
+        "tables": ["comments_*", "engagement_*"],
+        "cmsColumns": [],
+        "rule": "Public comments, likes, favorites, and engagement counters stay dependency-owned."
+      },
+      {
+        "workspace": "../sdkwork-messaging",
+        "tables": ["messaging_*"],
+        "cmsColumns": [],
+        "rule": "Workflow notifications are emitted through Messaging SDK or outbox events."
+      }
+    ]
+  },
+  "tables": [
+    {
+      "name": "cms_site",
+      "profile": "tenant_entity",
+      "purpose": "CMS site/workspace boundary for locale, domain, delivery, and publish settings.",
+      "ownedFacts": true,
+      "primaryQueries": ["backend site list", "site bootstrap", "site-scoped management"],
+      "keyColumns": ["id", "uuid", "tenant_id", "organization_id", "code", "default_locale", "default_channel_id", "status", "version"],
+      "jsonColumns": ["domain_config_json", "locale_config_json", "settings_json", "publish_config_json"],
+      "indexes": ["uk_cms_site_tenant_code", "idx_cms_site_tenant_status"]
+    },
+    {
+      "name": "cms_channel",
+      "profile": "dictionary_entity",
+      "purpose": "Delivery channel such as web, app, h5, mini_program, rss, or api.",
+      "ownedFacts": true,
+      "primaryQueries": ["site channel list", "delivery channel resolution"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "code", "channel_kind", "sort_order", "status", "version"],
+      "jsonColumns": ["delivery_config_json", "visibility_config_json"],
+      "indexes": ["uk_cms_channel_site_code", "idx_cms_channel_site_status"]
+    },
+    {
+      "name": "cms_content_type",
+      "profile": "dictionary_entity",
+      "purpose": "Content model definition for entries, pages, banners, notices, topics, and other content kinds.",
+      "ownedFacts": true,
+      "primaryQueries": ["site content model list", "entry validation", "schema editor load"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "code", "content_kind", "schema_version", "status", "version"],
+      "jsonColumns": ["workflow_config_json", "settings_json"],
+      "indexes": ["uk_cms_content_type_site_code", "idx_cms_content_type_site_status"]
+    },
+    {
+      "name": "cms_content_field",
+      "profile": "dictionary_entity",
+      "purpose": "Content model field definition with validation, options, search flags, sorting flags, and UI configuration.",
+      "ownedFacts": true,
+      "primaryQueries": ["content type field list", "entry dynamic field validation"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "content_type_id", "code", "field_kind", "required", "localized", "multiple", "searchable", "filterable", "sortable", "sort_order", "status", "version"],
+      "jsonColumns": ["validation_json", "options_json", "ui_json", "default_value_json"],
+      "indexes": ["uk_cms_content_field_code", "idx_cms_content_field_type_order"]
+    },
+    {
+      "name": "cms_taxonomy",
+      "profile": "dictionary_entity",
+      "purpose": "Taxonomy group such as category, tag, topic, or audience.",
+      "ownedFacts": true,
+      "primaryQueries": ["site taxonomy list", "term validation"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "code", "taxonomy_kind", "status", "version"],
+      "jsonColumns": ["settings_json"],
+      "indexes": ["uk_cms_taxonomy_site_code", "idx_cms_taxonomy_site_status"]
+    },
+    {
+      "name": "cms_taxonomy_term",
+      "profile": "tree_entity",
+      "purpose": "Taxonomy term tree with slug, path, level, sort, SEO, and lifecycle state.",
+      "ownedFacts": true,
+      "primaryQueries": ["taxonomy tree load", "entry term filter", "delivery term display"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "taxonomy_id", "parent_id", "code", "slug", "path", "level_no", "sort_order", "status", "version"],
+      "jsonColumns": ["seo_json"],
+      "indexes": ["uk_cms_taxonomy_term_code", "uk_cms_taxonomy_term_slug", "idx_cms_taxonomy_term_tree", "idx_cms_taxonomy_term_path"]
+    },
+    {
+      "name": "cms_entry",
+      "profile": "tenant_entity",
+      "purpose": "CMS content entry aggregate root with high-frequency list, route, status, publication, author, and scheduling fields.",
+      "ownedFacts": true,
+      "primaryQueries": ["backend entry list", "published entry delivery", "slug resolution", "schedule scanning"],
+      "keyColumns": ["id", "uuid", "tenant_id", "organization_id", "site_id", "content_type_id", "channel_id", "locale", "translation_group_id", "title", "slug", "author_user_id", "entry_status", "publication_status", "current_version_id", "published_version_id", "published_at", "scheduled_publish_at", "scheduled_unpublish_at", "version"],
+      "jsonColumns": ["seo_json", "extra_json"],
+      "indexes": ["uk_cms_entry_site_slug_locale", "idx_cms_entry_list", "idx_cms_entry_published", "idx_cms_entry_author", "idx_cms_entry_schedule", "idx_cms_entry_translation"]
+    },
+    {
+      "name": "cms_entry_body",
+      "profile": "core_entity",
+      "purpose": "Entry body projection for rich text, markdown, html, block tree, plain text, checksum, and reading metadata.",
+      "ownedFacts": true,
+      "primaryQueries": ["entry editor load", "entry delivery render", "version snapshot creation"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "entry_id", "locale", "body_format", "checksum", "word_count", "reading_time_seconds", "version"],
+      "jsonColumns": ["block_tree_json"],
+      "indexes": ["uk_cms_entry_body_entry_locale", "idx_cms_entry_body_entry"]
+    },
+    {
+      "name": "cms_entry_field_value",
+      "profile": "relation_entity",
+      "purpose": "Normalized dynamic field values used for filtering, sorting, search projection, and schema-driven editing.",
+      "ownedFacts": true,
+      "primaryQueries": ["dynamic field replace", "field filtering", "field search projection"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "entry_id", "field_id", "locale", "value_text", "value_number", "value_datetime", "value_bool", "sort_order", "version"],
+      "jsonColumns": ["value_json"],
+      "indexes": ["uk_cms_entry_field_value", "idx_cms_entry_field_value_field_text", "idx_cms_entry_field_value_field_number", "idx_cms_entry_field_value_field_datetime"]
+    },
+    {
+      "name": "cms_entry_version",
+      "profile": "snapshot",
+      "purpose": "Immutable entry version snapshot for history, publishing, rollback, diffing, and audit.",
+      "ownedFacts": true,
+      "primaryQueries": ["entry version list", "publish version render", "rollback source load"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "entry_id", "version_no", "version_kind", "title_snapshot", "checksum"],
+      "jsonColumns": ["entry_snapshot_json", "field_snapshot_json", "media_snapshot_json", "term_snapshot_json"],
+      "indexes": ["uk_cms_entry_version", "idx_cms_entry_version_entry"]
+    },
+    {
+      "name": "cms_entry_media",
+      "profile": "relation_entity",
+      "purpose": "Entry-to-media relation storing Drive/MediaResource references, role, alt text, caption, sort, and media snapshot.",
+      "ownedFacts": true,
+      "primaryQueries": ["entry media list", "entry delivery media render", "drive reference lookup"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "entry_id", "field_id", "media_role", "drive_space_id", "drive_node_id", "drive_uri", "media_resource_id", "sort_order", "status", "version"],
+      "jsonColumns": ["media_snapshot_json"],
+      "indexes": ["idx_cms_entry_media_entry_role", "idx_cms_entry_media_drive_node"]
+    },
+    {
+      "name": "cms_entry_term",
+      "profile": "relation_entity",
+      "purpose": "Entry-to-taxonomy term relation for categories, tags, topics, audiences, and feed rules.",
+      "ownedFacts": true,
+      "primaryQueries": ["entry term replace", "term filtered entry list", "feed rule candidate query"],
+      "keyColumns": ["id", "tenant_id", "site_id", "entry_id", "taxonomy_id", "term_id", "created_at", "created_by"],
+      "jsonColumns": [],
+      "indexes": ["uk_cms_entry_term", "idx_cms_entry_term_term"]
+    },
+    {
+      "name": "cms_page",
+      "profile": "tenant_entity",
+      "purpose": "CMS page route, SEO, template, status, and published snapshot pointer.",
+      "ownedFacts": true,
+      "primaryQueries": ["page list", "page path resolution", "page publish"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "channel_id", "locale", "parent_id", "path", "slug", "title", "page_kind", "template_code", "publication_status", "published_snapshot_id", "status", "version"],
+      "jsonColumns": ["seo_json", "settings_json"],
+      "indexes": ["uk_cms_page_route", "idx_cms_page_route", "idx_cms_page_parent"]
+    },
+    {
+      "name": "cms_page_block",
+      "profile": "relation_entity",
+      "purpose": "Page composition block with slot, block kind, references, config, visibility, sort, and tree position.",
+      "ownedFacts": true,
+      "primaryQueries": ["page editor block list", "page render", "referenced object impact analysis"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "page_id", "parent_block_id", "slot_code", "block_code", "block_kind", "ref_type", "ref_id", "sort_order", "status", "version"],
+      "jsonColumns": ["config_json", "visibility_json"],
+      "indexes": ["idx_cms_page_block_page_slot", "idx_cms_page_block_ref"]
+    },
+    {
+      "name": "cms_publish_snapshot",
+      "profile": "snapshot",
+      "purpose": "Unified published snapshot for entries, pages, feeds, and future publishable owners.",
+      "ownedFacts": true,
+      "primaryQueries": ["delivery snapshot read", "rollback audit", "cache invalidation"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "owner_type", "owner_id", "version_id", "channel_id", "locale", "snapshot_version", "checksum", "status", "published_at", "published_by"],
+      "jsonColumns": ["snapshot_payload_json", "cache_tags_json"],
+      "indexes": ["idx_cms_publish_snapshot_owner", "idx_cms_publish_snapshot_channel"]
+    },
+    {
+      "name": "cms_feed",
+      "profile": "tenant_entity",
+      "purpose": "Feed definition for curated, rule, hybrid, search-assisted, recommendation-assisted, rss, and channel feeds.",
+      "ownedFacts": true,
+      "primaryQueries": ["feed management list", "feed delivery resolution", "feed publish"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "channel_id", "code", "feed_kind", "locale", "default_page_size", "ranking_profile_ref", "published_snapshot_id", "status", "version"],
+      "jsonColumns": ["rule_config_json"],
+      "indexes": ["uk_cms_feed_site_code", "idx_cms_feed_site_status"]
+    },
+    {
+      "name": "cms_feed_rule",
+      "profile": "dictionary_entity",
+      "purpose": "Feed automation rule selecting entries by content type, taxonomy, term, query, condition JSON, sort JSON, and limit.",
+      "ownedFacts": true,
+      "primaryQueries": ["feed rule list", "feed candidate resolution"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "feed_id", "rule_kind", "content_type_id", "taxonomy_id", "taxonomy_term_id", "q", "limit_count", "enabled", "sort_order", "version"],
+      "jsonColumns": ["condition_json", "sort_json"],
+      "indexes": ["idx_cms_feed_rule_feed"]
+    },
+    {
+      "name": "cms_feed_item",
+      "profile": "relation_entity",
+      "purpose": "Manually curated feed item supporting entry/page/external targets, pinning, fixed position, operator title, media, and validity window.",
+      "ownedFacts": true,
+      "primaryQueries": ["feed item editor list", "feed publish merge", "curated feed delivery"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "feed_id", "entry_id", "page_id", "external_url", "item_kind", "position_no", "pinned", "starts_at", "ends_at", "sort_order", "status", "version"],
+      "jsonColumns": ["operator_media_json"],
+      "indexes": ["idx_cms_feed_item_feed_order", "idx_cms_feed_item_entry"]
+    },
+    {
+      "name": "cms_feed_snapshot",
+      "profile": "snapshot",
+      "purpose": "Published feed item snapshot for stable app/open delivery.",
+      "ownedFacts": true,
+      "primaryQueries": ["feed delivery read", "feed snapshot retrieve"],
+      "keyColumns": ["id", "uuid", "tenant_id", "site_id", "feed_id", "publish_snapshot_id", "snapshot_version", "item_count", "checksum", "status", "published_at", "published_by"],
+      "jsonColumns": ["items_json", "rule_summary_json"],
+      "indexes": ["idx_cms_feed_snapshot_feed"]
+    },
+    {
+      "name": "cms_audit_log",
+      "profile": "audit_log",
+      "purpose": "CMS business audit log for model, content, page, feed, publish, rollback, outbox, and operator actions.",
+      "ownedFacts": true,
+      "primaryQueries": ["operator audit list", "resource history"],
+      "keyColumns": ["id", "uuid", "tenant_id", "organization_id", "site_id", "actor_user_id", "action", "resource_type", "resource_id", "resource_uuid", "request_id", "trace_id", "created_at"],
+      "jsonColumns": ["before_json", "after_json", "metadata_json"],
+      "indexes": ["idx_cms_audit_log_resource", "idx_cms_audit_log_actor"]
+    },
+    {
+      "name": "cms_outbox_event",
+      "profile": "outbox_event",
+      "purpose": "Durable outbox event table for search sync, cache invalidation, notification, webhook, scheduler, sitemap/RSS projection, and future automation.",
+      "ownedFacts": true,
+      "primaryQueries": ["outbox dispatcher scan", "operator outbox list", "manual retry"],
+      "keyColumns": ["id", "uuid", "tenant_id", "organization_id", "site_id", "aggregate_type", "aggregate_id", "event_type", "event_version", "status", "attempt_count", "next_attempt_at", "published_at", "request_id", "trace_id", "created_at", "updated_at"],
+      "jsonColumns": ["payload_json", "headers_json"],
+      "indexes": ["idx_cms_outbox_event_pending", "idx_cms_outbox_event_aggregate"]
+    },
+    {
+      "name": "cms_idempotency_key",
+      "profile": "event_log",
+      "purpose": "Idempotent command record for create, publish, rollback, retry, import, and other repeatable commands.",
+      "ownedFacts": true,
+      "primaryQueries": ["idempotent command lookup", "expiry cleanup"],
+      "keyColumns": ["id", "uuid", "tenant_id", "organization_id", "principal_type", "principal_id", "idempotency_key", "method", "path", "payload_hash", "response_status", "resource_type", "resource_id", "status", "locked_until", "expires_at"],
+      "jsonColumns": ["response_body_json"],
+      "indexes": ["uk_cms_idempotency_key", "idx_cms_idempotency_expiry"]
+    }
+  ]
+}

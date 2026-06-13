@@ -1,0 +1,118 @@
+{
+  "schemaVersion": 3,
+  "kind": "sdkwork.app",
+  "app": {
+    "key": "sdkwork-cms",
+    "name": "SDKWork CMS",
+    "displayName": "SDKWork CMS",
+    "description": "Professional CMS authority for structured content, publishing, pages, and feeds.",
+    "officialWebsiteUrl": "https://sdkwork.com/apps/sdkwork-cms",
+    "appType": "SDK",
+    "identifiers": {
+      "packageName": "com.sdkwork.cms",
+      "bundleId": "com.sdkwork.cms",
+      "desktopAppId": "com.sdkwork.cms",
+      "containerImage": "sdkwork/cms"
+    }
+  },
+  "backend": {
+    "owner": "sdkwork-cms",
+    "domain": "content",
+    "capability": "cms",
+    "apiAuthorities": [
+      "sdkwork-cms.open",
+      "sdkwork-cms.app",
+      "sdkwork-cms.backend"
+    ]
+  },
+  "runtime": {
+    "family": "server",
+    "framework": "rust-service",
+    "defaultPlatform": "API",
+    "defaultArchitecture": "x64"
+  },
+  "media": {
+    "icons": {
+      "primary": {
+        "id": "cms-primary-icon",
+        "type": "ICON",
+        "purpose": "PRIMARY",
+        "url": "https://sdkwork.com/assets/apps/sdkwork-cms/icon.png",
+        "platform": "WEB",
+        "locale": "en-US",
+        "width": 1024,
+        "height": 1024,
+        "format": "PNG",
+        "enabled": true
+      },
+      "platform": []
+    },
+    "screenshots": [],
+    "previews": []
+  },
+  "publish": {
+    "status": "INTERNAL",
+    "platforms": ["API"],
+    "installPlatforms": ["API"],
+    "stores": []
+  },
+  "environments": {
+    "dev": {
+      "accessUrl": "http://127.0.0.1:18080"
+    },
+    "test": {
+      "accessUrl": "https://test.sdkwork.com/cms"
+    },
+    "prod": {
+      "accessUrl": "https://api.sdkwork.com/cms"
+    }
+  },
+  "artifacts": {
+    "installConfig": {
+      "defaultPackageId": "container-x64-server-oci",
+      "packages": [
+        {
+          "id": "container-x64-server-oci",
+          "name": "SDKWork CMS Server Container",
+          "sourceType": "CONTAINER_IMAGE",
+          "packageFormat": "DOCKER_IMAGE",
+          "platform": "API",
+          "architecture": "x64",
+          "url": "oci://registry.sdkwork.com/sdkwork/cms@sha256:TODO",
+          "checksumAlgorithm": "SHA-256",
+          "checksum": "TODO",
+          "sizeBytes": 0,
+          "enabled": false
+        }
+      ]
+    }
+  },
+  "release": {
+    "currentVersion": "0.1.0",
+    "latest": {
+      "DEV": "0.1.0"
+    },
+    "notes": [
+      {
+        "version": "0.1.0",
+        "channel": "DEV",
+        "current": true,
+        "packageIds": ["container-x64-server-oci"],
+        "notes": "Initial CMS contract skeleton."
+      }
+    ]
+  },
+  "security": {
+    "checksumRequired": true,
+    "signatureRequired": true,
+    "sbomRequired": true
+  },
+  "devApp": {
+    "enabled": true
+  },
+  "metadata": {
+    "status": "contract-skeleton",
+    "todo": "Replace placeholder media and artifact values before app registration."
+  }
+}
+

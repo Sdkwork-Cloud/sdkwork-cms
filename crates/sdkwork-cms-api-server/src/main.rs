@@ -34,7 +34,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_env_filter(EnvFilter::from_default_env().add_directive("info".parse()?))
         .init();
 
-    // Create database pool using sdkwork-pool
+    // Create database pool using sdkwork-database
     let pool = sdkwork_database_sqlx::create_pool_from_env("CMS")
         .await?
         .ok_or("SDKWORK_CMS_DATABASE_URL not set")?;

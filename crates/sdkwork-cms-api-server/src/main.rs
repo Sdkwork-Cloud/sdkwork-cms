@@ -35,7 +35,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .init();
 
     // Create database pool using sdkwork-pool
-    let pool = sdkwork_pool_sqlx::create_pool_from_env("CMS")
+    let pool = sdkwork_database_sqlx::create_pool_from_env("CMS")
         .await?
         .ok_or("SDKWORK_CMS_DATABASE_URL not set")?;
 

@@ -6,16 +6,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     println!("Attempting to connect to: {}", database_url);
 
-    let config = sdkwork_pool_config::DatabaseConfig {
-        engine: sdkwork_pool_config::DatabaseEngine::Postgres,
+    let config = sdkwork_database_config::DatabaseConfig {
+        engine: sdkwork_database_config::DatabaseEngine::Postgres,
         url: database_url,
         max_connections: 1,
         ..Default::default()
     };
 
-    match sdkwork_pool_sqlx::create_pool_from_config(config).await {
+    match sdkwork_database_sqlx::create_pool_from_config(config).await {
         Ok(pool) => {
-            println!("‚úÖ Connected to database successfully!");
+            println!("‚ú?Connected to database successfully!");
             
             // Check if tables exist
             let tables: Vec<(String,)> = sqlx::query_as(
@@ -34,7 +34,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
         Err(e) => {
-            println!("‚ùå Failed to connect: {}", e);
+            println!("‚ù?Failed to connect: {}", e);
             println!("\nPlease ensure:");
             println!("1. PostgreSQL is running on localhost:5432");
             println!("2. Database 'sdkwork_cms' exists");

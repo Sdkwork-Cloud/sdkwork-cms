@@ -22,7 +22,7 @@ impl CmsSqlxRepository {
             .duration_since(UNIX_EPOCH)
             .expect("clock went backwards");
         let millis = duration.as_millis() as i64;
-        let random_part = (uuid::Uuid::new_v4().as_u128() & 0xFFF) as i64;
+        let random_part = (uuid::Uuid::new_v4().as_u128() & 0x3FFFFF) as i64;
         (millis << 22) | (random_part & 0x3FFFFF)
     }
 
@@ -35,13 +35,27 @@ impl CmsSqlxRepository {
     }
 
     pub async fn run_migrations(&self) -> CmsRepositoryResult<()> {
-        let migration_sql =
-            include_str!("../../migrations/0001_cms_v1_foundation.sql");
-        sqlx::raw_sql(migration_sql)
-            .execute(&self.pool)
-            .await
-            .map_err(|e| CmsRepositoryError::Database(e.to_string()))?;
-        Ok(())
+        let migration_sql = include_str!("../../migrations/0001_cms_v1_foundation.sql");
+        
+        // Execute the entire migration SQL as one statement
+        // PostgreSQL will handle the IF NOT EXISTS clauses
+        match sqlx::raw_sql(migration_sql).execute(&self.pool).await {
+            Ok(_) => {
+                tracing::info!("Migrations completed successfully");
+                Ok(())
+            }
+            Err(e) => {
+                let err_msg = e.to_string();
+                // If the error is about already existing objects, that's OK
+                if err_msg.contains("already exists") || err_msg.contains("duplicate") {
+                    tracing::info!("Migrations already applied (objects exist)");
+                    Ok(())
+                } else {
+                    tracing::error!("Migration failed: {}", err_msg);
+                    Err(CmsRepositoryError::Database(err_msg))
+                }
+            }
+        }
     }
 }
 

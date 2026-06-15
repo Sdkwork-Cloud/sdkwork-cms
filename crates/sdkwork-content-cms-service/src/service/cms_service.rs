@@ -140,4 +140,8 @@ impl CmsService {
     pub fn sitemap_projection_port(&self) -> Option<&(dyn CmsSitemapProjectionPort + Send + Sync)> {
         self.sitemap_projection_port.as_ref().map(|p| p.as_ref())
     }
+
+    pub fn engagement_port(&self) -> Option<&(dyn CmsEngagementPort + Send + Sync)> {
+        self.engagement_port.as_ref().map(|p| p.as_ref())
+    }
 }

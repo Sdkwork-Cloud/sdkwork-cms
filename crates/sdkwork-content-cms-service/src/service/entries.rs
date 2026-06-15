@@ -114,7 +114,21 @@ impl CmsService {
         command: EntryFieldsCommand,
     ) -> CmsResult<CmsEntry> {
         ctx.require_permission("cms.entry.update")?;
-        self.repository().replace_entry_fields(ctx, command).await
+        let entry = self.repository().replace_entry_fields(ctx, command).await?;
+        let _ = self.event_publisher().enqueue(
+            ctx,
+            CmsOutboxEventDraft {
+                aggregate_type: "entry".to_string(),
+                aggregate_id: entry.id,
+                event_type: CmsEventType::EntryUpdated,
+                payload_json: serde_json::to_string(&serde_json::json!({
+                    "entry_id": entry.id,
+                    "change": "fields",
+                }))
+                .unwrap_or_default(),
+            },
+        ).await;
+        Ok(entry)
     }
 
     pub async fn list_entry_media(

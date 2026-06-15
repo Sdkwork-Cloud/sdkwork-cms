@@ -2,6 +2,12 @@ use super::value_objects::{CmsId, CmsJson};
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CmsEventType {
+    SiteCreated,
+    SiteUpdated,
+    ChannelCreated,
+    ChannelUpdated,
+    ContentTypeCreated,
+    ContentTypeUpdated,
     EntryCreated,
     EntryUpdated,
     EntryPublished,

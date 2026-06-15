@@ -25,7 +25,7 @@ impl CmsService {
             CmsOutboxEventDraft {
                 aggregate_type: "site".to_string(),
                 aggregate_id: site.id,
-                event_type: CmsEventType::EntryCreated,
+                event_type: CmsEventType::SiteCreated,
                 payload_json: serde_json::to_string(&serde_json::json!({
                     "site_id": site.id,
                     "code": site.code,

@@ -119,6 +119,12 @@ impl CmsSqlxRepository {
         let uuid = self.generate_uuid();
         let now = self.current_timestamp();
         let event_type_str = match event.event_type {
+            CmsEventType::SiteCreated => "cms.site.created",
+            CmsEventType::SiteUpdated => "cms.site.updated",
+            CmsEventType::ChannelCreated => "cms.channel.created",
+            CmsEventType::ChannelUpdated => "cms.channel.updated",
+            CmsEventType::ContentTypeCreated => "cms.content_type.created",
+            CmsEventType::ContentTypeUpdated => "cms.content_type.updated",
             CmsEventType::EntryCreated => "cms.entry.created",
             CmsEventType::EntryUpdated => "cms.entry.updated",
             CmsEventType::EntryPublished => "cms.entry.published",

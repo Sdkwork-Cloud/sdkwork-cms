@@ -38,7 +38,7 @@ impl CmsService {
                 ctx,
                 ListSitesQuery {
                     cursor: None,
-                    limit: 1,
+                    limit: 1000,
                 },
             )
             .await?;
@@ -90,7 +90,7 @@ impl CmsService {
                     publication_status: Some(20),
                     author_user_id: None,
                     cursor: None,
-                    limit: 1,
+                    limit: 100,
                 },
             )
             .await?;
@@ -163,7 +163,7 @@ impl CmsService {
                     locale: query.locale,
                     status: None,
                     cursor: None,
-                    limit: 1,
+                    limit: 100,
                 },
             )
             .await?;

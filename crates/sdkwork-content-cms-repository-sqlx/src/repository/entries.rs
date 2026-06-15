@@ -252,7 +252,83 @@ impl CmsSqlxRepository {
         ctx: &CmsRequestContext,
         command: EntryFieldsCommand,
     ) -> CmsResult<CmsEntry> {
-        let _ = command.fields_json;
+        let now = self.current_timestamp();
+
+        let mut tx = self.pool().begin().await
+            .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
+
+        // Delete existing field values for this entry and locale
+        sqlx::query(
+            "DELETE FROM cms_entry_field_value WHERE tenant_id = $1 AND entry_id = $2 AND locale = $3"
+        )
+        .bind(ctx.tenant_id)
+        .bind(command.entry_id)
+        .bind(&command.locale)
+        .execute(&mut *tx)
+        .await
+        .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
+
+        // Parse and insert new field values
+        let fields: serde_json::Value = serde_json::from_str(&command.fields_json)
+            .map_err(|e| sdkwork_content_cms_service::error::CmsError::validation(
+                format!("invalid fields_json: {}", e)
+            ))?;
+
+        if let Some(fields_obj) = fields.as_object() {
+            for (field_code, value) in fields_obj {
+                let row_id = self.generate_id();
+                let row_uuid = self.generate_uuid();
+
+                // Look up the field_id from cms_content_field by code
+                let field_id: Option<i64> = sqlx::query_scalar(
+                    "SELECT id FROM cms_content_field WHERE code = $1 AND content_type_id = (SELECT content_type_id FROM cms_entry WHERE id = $2 AND tenant_id = $3) AND tenant_id = $3 AND deleted_at IS NULL"
+                )
+                .bind(field_code)
+                .bind(command.entry_id)
+                .bind(ctx.tenant_id)
+                .fetch_optional(&mut *tx)
+                .await
+                .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
+
+                let field_id = match field_id {
+                    Some(id) => id,
+                    None => continue, // Skip unknown field codes
+                };
+
+                let (value_text, value_number, value_boolean, value_datetime, value_json): (Option<String>, Option<f64>, Option<bool>, Option<String>, String) = match value {
+                    serde_json::Value::String(s) => (Some(s.clone()), None, None, None, serde_json::Value::Null.to_string()),
+                    serde_json::Value::Number(n) => (None, n.as_f64(), None, None, serde_json::Value::Null.to_string()),
+                    serde_json::Value::Bool(b) => (None, None, Some(*b), None, serde_json::Value::Null.to_string()),
+                    serde_json::Value::Null => (None, None, None, None, serde_json::Value::Null.to_string()),
+                    other => (None, None, None, None, other.to_string()),
+                };
+
+                sqlx::query(
+                    "INSERT INTO cms_entry_field_value (id, uuid, tenant_id, organization_id, site_id, entry_id, field_id, locale, value_text, value_number, value_boolean, value_datetime, value_json, created_at, updated_at) 
+                     VALUES ($1, $2, $3, $4, (SELECT site_id FROM cms_entry WHERE id = $5 AND tenant_id = $3), $5, $6, $7, $8, $9, $10, $11, $12, $13, $13)"
+                )
+                .bind(row_id)
+                .bind(&row_uuid)
+                .bind(ctx.tenant_id)
+                .bind(ctx.organization_id)
+                .bind(command.entry_id)
+                .bind(field_id)
+                .bind(&command.locale)
+                .bind(&value_text)
+                .bind(value_number)
+                .bind(value_boolean)
+                .bind(&value_datetime)
+                .bind(&value_json)
+                .bind(&now)
+                .execute(&mut *tx)
+                .await
+                .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
+            }
+        }
+
+        tx.commit().await
+            .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
+
         self.retrieve_entry(ctx, command.entry_id).await
     }
 
@@ -373,10 +449,13 @@ impl CmsSqlxRepository {
     ) -> CmsResult<CmsEntry> {
         let now = self.current_timestamp();
 
+        let mut tx = self.pool().begin().await
+            .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
+
         sqlx::query("DELETE FROM cms_entry_term WHERE tenant_id = $1 AND entry_id = $2")
             .bind(ctx.tenant_id)
             .bind(command.entry_id)
-            .execute(self.pool())
+            .execute(&mut *tx)
             .await
             .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
 
@@ -395,10 +474,13 @@ impl CmsSqlxRepository {
             .bind(term_id)
             .bind(&now)
             .bind(ctx.user_id)
-            .execute(self.pool())
+            .execute(&mut *tx)
             .await
             .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
         }
+
+        tx.commit().await
+            .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
 
         self.retrieve_entry(ctx, command.entry_id).await
     }
@@ -448,6 +530,9 @@ impl CmsSqlxRepository {
 
         let entry = self.retrieve_entry(ctx, command.owner_id).await?;
 
+        let mut tx = self.pool().begin().await
+            .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
+
         let row = sqlx::query_as::<_, crate::db::rows::CmsPublishSnapshotRow>(
             "INSERT INTO cms_publish_snapshot (id, uuid, tenant_id, organization_id, site_id, owner_type, owner_id, channel_id, locale, snapshot_payload_json, status, published_at, published_by, created_at) 
              VALUES ($1, $2, $3, $4, $5, 'entry', $6, $7, $8, $9, 1, $10, $11, $10)
@@ -464,7 +549,7 @@ impl CmsSqlxRepository {
         .bind("{}")
         .bind(&now)
         .bind(ctx.user_id)
-        .fetch_one(self.pool())
+        .fetch_one(&mut *tx)
         .await
         .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
 
@@ -475,9 +560,12 @@ impl CmsSqlxRepository {
         .bind(command.owner_id)
         .bind(&now)
         .bind(ctx.user_id)
-        .execute(self.pool())
+        .execute(&mut *tx)
         .await
         .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
+
+        tx.commit().await
+            .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
 
         Ok(crate::mapper::row_mapper::map_publish_snapshot_row(row))
     }
@@ -492,6 +580,9 @@ impl CmsSqlxRepository {
         let snapshot_uuid = self.generate_uuid();
 
         let entry = self.retrieve_entry(ctx, command.owner_id).await?;
+
+        let mut tx = self.pool().begin().await
+            .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
 
         let row = sqlx::query_as::<_, crate::db::rows::CmsPublishSnapshotRow>(
             "INSERT INTO cms_publish_snapshot (id, uuid, tenant_id, organization_id, site_id, owner_type, owner_id, channel_id, locale, snapshot_payload_json, status, published_at, published_by, created_at) 
@@ -508,7 +599,7 @@ impl CmsSqlxRepository {
         .bind(command.locale.as_deref().unwrap_or("default"))
         .bind(&now)
         .bind(ctx.user_id)
-        .fetch_one(self.pool())
+        .fetch_one(&mut *tx)
         .await
         .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
 
@@ -519,9 +610,12 @@ impl CmsSqlxRepository {
         .bind(command.owner_id)
         .bind(&now)
         .bind(ctx.user_id)
-        .execute(self.pool())
+        .execute(&mut *tx)
         .await
         .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
+
+        tx.commit().await
+            .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
 
         Ok(crate::mapper::row_mapper::map_publish_snapshot_row(row))
     }
@@ -537,6 +631,9 @@ impl CmsSqlxRepository {
 
         let entry = self.retrieve_entry(ctx, command.owner_id).await?;
 
+        let mut tx = self.pool().begin().await
+            .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
+
         let row = sqlx::query_as::<_, crate::db::rows::CmsPublishSnapshotRow>(
             "INSERT INTO cms_publish_snapshot (id, uuid, tenant_id, organization_id, site_id, owner_type, owner_id, snapshot_payload_json, status, published_at, published_by, created_at) 
              VALUES ($1, $2, $3, $4, $5, 'entry', $6, '{}', 1, $7, $8, $7)
@@ -550,7 +647,7 @@ impl CmsSqlxRepository {
         .bind(command.owner_id)
         .bind(&now)
         .bind(ctx.user_id)
-        .fetch_one(self.pool())
+        .fetch_one(&mut *tx)
         .await
         .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
 
@@ -561,9 +658,12 @@ impl CmsSqlxRepository {
         .bind(command.owner_id)
         .bind(&now)
         .bind(ctx.user_id)
-        .execute(self.pool())
+        .execute(&mut *tx)
         .await
         .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
+
+        tx.commit().await
+            .map_err(|e| sdkwork_content_cms_service::error::CmsError::internal(e.to_string()))?;
 
         Ok(crate::mapper::row_mapper::map_publish_snapshot_row(row))
     }

@@ -47,7 +47,7 @@ impl CmsSqlxRepository {
 
         let row = sqlx::query_as::<_, crate::db::rows::CmsSiteRow>(
             "INSERT INTO cms_site (id, uuid, tenant_id, organization_id, code, name, default_locale, settings_json, status, created_at, updated_at, created_by, updated_by, version) 
-             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, 1, $9, $9, $10, $10, 0) 
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8::jsonb, 1, $9, $9, $10, $10, 0) 
              RETURNING id, uuid, tenant_id, organization_id, code, name, default_locale, settings_json, status, version"
         )
         .bind(id)
@@ -109,7 +109,7 @@ impl CmsSqlxRepository {
                 code = COALESCE($4, code),
                 name = COALESCE($5, name),
                 default_locale = COALESCE($6, default_locale),
-                settings_json = COALESCE($7, settings_json),
+                settings_json = COALESCE($7::jsonb, settings_json),
                 updated_at = $8,
                 updated_by = $9,
                 version = version + 1

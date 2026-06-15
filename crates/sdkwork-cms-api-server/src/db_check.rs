@@ -1,17 +1,19 @@
-use sqlx::postgres::PgPoolOptions;
-
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let database_url = std::env::var("DATABASE_URL")
+    let database_url = std::env::var("SDKWORK_CMS_DATABASE_URL")
+        .or_else(|_| std::env::var("DATABASE_URL"))
         .unwrap_or_else(|_| "postgres://postgres:postgres@localhost:5432/sdkwork_cms".to_string());
 
     println!("Attempting to connect to: {}", database_url);
 
-    match PgPoolOptions::new()
-        .max_connections(1)
-        .connect(&database_url)
-        .await
-    {
+    let config = sdkwork_pool_config::DatabaseConfig {
+        engine: sdkwork_pool_config::DatabaseEngine::Postgres,
+        url: database_url,
+        max_connections: 1,
+        ..Default::default()
+    };
+
+    match sdkwork_pool_sqlx::create_pool_from_config(config).await {
         Ok(pool) => {
             println!("✅ Connected to database successfully!");
             
@@ -19,7 +21,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
             let tables: Vec<(String,)> = sqlx::query_as(
                 "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public' ORDER BY table_name"
             )
-            .fetch_all(&pool)
+            .fetch_all(pool.as_postgres().unwrap())
             .await?;
             
             println!("\nExisting tables:");

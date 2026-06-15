@@ -8,7 +8,6 @@ use axum::{
     Router,
 };
 use serde::{Deserialize, Serialize};
-use sqlx::postgres::PgPoolOptions;
 use tower_http::cors::CorsLayer;
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::EnvFilter;
@@ -35,17 +34,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_env_filter(EnvFilter::from_default_env().add_directive("info".parse()?))
         .init();
 
-    let database_url = std::env::var("DATABASE_URL")
-        .unwrap_or_else(|_| "postgresql://sdkwork_ai_dev:sdkworkdev123@[::1]:5432/sdkwork_ai_dev?sslmode=disable".to_string());
+    // Create database pool using sdkwork-pool
+    let pool = sdkwork_pool_sqlx::create_pool_from_env("CMS")
+        .await?
+        .ok_or("SDKWORK_CMS_DATABASE_URL not set")?;
 
-    tracing::info!("Connecting to database...");
-    let pool = PgPoolOptions::new()
-        .max_connections(10)
-        .connect(&database_url)
-        .await?;
+    // Extract PostgreSQL pool
+    let pg_pool = pool.as_postgres()
+        .ok_or("Expected PostgreSQL pool for CMS service")?
+        .clone();
 
     tracing::info!("Running migrations...");
-    let repository = CmsSqlxRepository::new(pool);
+    let repository = CmsSqlxRepository::new(pg_pool);
     repository.run_migrations().await?;
 
     let repository: Arc<dyn CmsRepository + Send + Sync> = Arc::new(repository);

@@ -14,6 +14,8 @@ sdkwork-content-cms-repository-sqlx.workspace = true
 sdkwork-router-cms-backend-api.workspace = true
 sdkwork-router-cms-app-api.workspace = true
 sdkwork-router-cms-open-api.workspace = true
+sdkwork-pool-config = { path = "../../../sdkwork-pool/crates/sdkwork-pool-config" }
+sdkwork-pool-sqlx = { path = "../../../sdkwork-pool/crates/sdkwork-pool-sqlx" }
 
 axum.workspace = true
 tokio.workspace = true

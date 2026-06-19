@@ -29,7 +29,11 @@
     "family": "server",
     "framework": "rust-service",
     "defaultPlatform": "API",
-    "defaultArchitecture": "x64"
+    "defaultArchitecture": "x64",
+    "supportedDeploymentProfiles": [
+      "cloud"
+    ],
+    "defaultDeploymentProfile": "cloud"
   },
   "media": {
     "icons": {
@@ -52,8 +56,12 @@
   },
   "publish": {
     "status": "INTERNAL",
-    "platforms": ["API"],
-    "installPlatforms": ["API"],
+    "platforms": [
+      "API"
+    ],
+    "installPlatforms": [
+      "API"
+    ],
     "stores": []
   },
   "environments": {
@@ -69,10 +77,10 @@
   },
   "artifacts": {
     "installConfig": {
-      "defaultPackageId": "container-x64-server-oci",
+      "defaultPackageId": "container-x64-cloud-container-oci",
       "packages": [
         {
-          "id": "container-x64-server-oci",
+          "id": "container-x64-cloud-container-oci",
           "name": "SDKWork CMS Server Container",
           "sourceType": "CONTAINER_IMAGE",
           "packageFormat": "DOCKER_IMAGE",
@@ -82,7 +90,9 @@
           "checksumAlgorithm": "SHA-256",
           "checksum": "TODO",
           "sizeBytes": 0,
-          "enabled": false
+          "enabled": false,
+          "deploymentProfile": "cloud",
+          "runtimeTarget": "container"
         }
       ]
     }
@@ -97,7 +107,9 @@
         "version": "0.1.0",
         "channel": "DEV",
         "current": true,
-        "packageIds": ["container-x64-server-oci"],
+        "packageIds": [
+          "container-x64-cloud-container-oci"
+        ],
         "notes": "Initial CMS contract skeleton."
       }
     ]
@@ -115,4 +127,3 @@
     "todo": "Replace placeholder media and artifact values before app registration."
   }
 }
-

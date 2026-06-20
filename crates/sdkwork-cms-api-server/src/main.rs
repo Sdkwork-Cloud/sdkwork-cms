@@ -16,7 +16,7 @@ use sdkwork_content_cms_service::context::{CmsLoginScope, CmsRequestContext};
 use sdkwork_content_cms_service::domain::*;
 use sdkwork_content_cms_service::ports::{CmsEventPublisher, CmsIamAuthorizer, CmsRepository};
 use sdkwork_content_cms_service::service::CmsService;
-use sdkwork_content_cms_repository_sqlx::CmsSqlxRepository;
+use sdkwork_content_cms_repository_sqlx::{connect_and_bootstrap_cms_database_from_env, CmsSqlxRepository};
 
 mod handlers;
 
@@ -34,19 +34,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .with_env_filter(EnvFilter::from_default_env().add_directive("info".parse()?))
         .init();
 
-    // Create database pool using sdkwork-database
-    let pool = sdkwork_database_sqlx::create_pool_from_env("CMS")
-        .await?
-        .ok_or("SDKWORK_CMS_DATABASE_URL not set")?;
+    // Create database pool and apply application-root database/ lifecycle.
+    let database_host = connect_and_bootstrap_cms_database_from_env()
+        .await
+        .map_err(|error| format!("CMS database bootstrap failed: {error}"))?;
 
-    // Extract PostgreSQL pool
-    let pg_pool = pool.as_postgres()
+    let pg_pool = database_host
+        .pool()
+        .as_postgres()
         .ok_or("Expected PostgreSQL pool for CMS service")?
         .clone();
 
-    tracing::info!("Running migrations...");
     let repository = CmsSqlxRepository::new(pg_pool);
-    repository.run_migrations().await?;
 
     let repository: Arc<dyn CmsRepository + Send + Sync> = Arc::new(repository);
     let authorizer: Arc<dyn CmsIamAuthorizer + Send + Sync> = Arc::new(MockAuthorizer);

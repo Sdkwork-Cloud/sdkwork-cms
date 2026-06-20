@@ -1,0 +1,76 @@
+schema_version: 1
+kind: sdkwork.database.schema
+module_id: cms
+contract_version: 1.0.0
+owner_team: cms-platform
+compliance_level: L2
+engines:
+  - postgres
+table_prefix: cms_
+tables:
+  - name: cms_site
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_channel
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_content_type
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_content_field
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_taxonomy
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_taxonomy_term
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_entry
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_entry_body
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_entry_field_value
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_entry_version
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_entry_media
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_entry_term
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_page
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_page_block
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_publish_snapshot
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_feed
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_feed_rule
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_feed_item
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_feed_snapshot
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_audit_log
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_outbox_event
+    lifecycle_status: active
+    owner: cms-platform
+  - name: cms_idempotency_key
+    lifecycle_status: active
+    owner: cms-platform

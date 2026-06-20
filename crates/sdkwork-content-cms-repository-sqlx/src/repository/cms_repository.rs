@@ -34,28 +34,15 @@ impl CmsSqlxRepository {
         chrono::Utc::now().to_rfc3339()
     }
 
+    #[deprecated(
+        since = "0.2.0",
+        note = "Use sdkwork_cms_database_host::bootstrap_cms_database via connect_and_bootstrap_cms_database_from_env instead"
+    )]
     pub async fn run_migrations(&self) -> CmsRepositoryResult<()> {
-        let migration_sql = include_str!("../../migrations/0001_cms_v1_foundation.sql");
-        
-        // Execute the entire migration SQL as one statement
-        // PostgreSQL will handle the IF NOT EXISTS clauses
-        match sqlx::raw_sql(migration_sql).execute(&self.pool).await {
-            Ok(_) => {
-                tracing::info!("Migrations completed successfully");
-                Ok(())
-            }
-            Err(e) => {
-                let err_msg = e.to_string();
-                // If the error is about already existing objects, that's OK
-                if err_msg.contains("already exists") || err_msg.contains("duplicate") {
-                    tracing::info!("Migrations already applied (objects exist)");
-                    Ok(())
-                } else {
-                    tracing::error!("Migration failed: {}", err_msg);
-                    Err(CmsRepositoryError::Database(err_msg))
-                }
-            }
-        }
+        Err(CmsRepositoryError::Database(
+            "run_migrations is deprecated; use application-root database/ lifecycle bootstrap"
+                .to_string(),
+        ))
     }
 }
 

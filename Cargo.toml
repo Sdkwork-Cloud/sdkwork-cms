@@ -1,5 +1,6 @@
 [workspace]
 members = [
+    "crates/sdkwork-cms-database-host",
     "crates/sdkwork-content-cms-service",
     "crates/sdkwork-content-cms-repository-sqlx",
     "crates/sdkwork-router-cms-open-api",
@@ -20,6 +21,16 @@ sdkwork-content-cms-repository-sqlx = { path = "crates/sdkwork-content-cms-repos
 sdkwork-router-cms-open-api = { path = "crates/sdkwork-router-cms-open-api" }
 sdkwork-router-cms-app-api = { path = "crates/sdkwork-router-cms-app-api" }
 sdkwork-router-cms-backend-api = { path = "crates/sdkwork-router-cms-backend-api" }
+sdkwork-cms-database-host = { path = "crates/sdkwork-cms-database-host" }
+
+sdkwork-database-config = { path = "../sdkwork-database/crates/sdkwork-database-config", package = "sdkwork-database-config" }
+sdkwork-database-lifecycle = { path = "../sdkwork-database/crates/sdkwork-database-lifecycle", package = "sdkwork-database-lifecycle" }
+sdkwork-database-spi = { path = "../sdkwork-database/crates/sdkwork-database-spi", package = "sdkwork-database-spi" }
+sdkwork-database-sqlx = { path = "../sdkwork-database/crates/sdkwork-database-sqlx", package = "sdkwork-database-sqlx" }
+sdkwork_database_config = { path = "../sdkwork-database/crates/sdkwork-database-config", package = "sdkwork-database-config" }
+sdkwork_database_lifecycle = { path = "../sdkwork-database/crates/sdkwork-database-lifecycle", package = "sdkwork-database-lifecycle" }
+sdkwork_database_spi = { path = "../sdkwork-database/crates/sdkwork-database-spi", package = "sdkwork-database-spi" }
+sdkwork_database_sqlx = { path = "../sdkwork-database/crates/sdkwork-database-sqlx", package = "sdkwork-database-sqlx" }
 
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"

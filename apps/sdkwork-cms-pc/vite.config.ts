@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
     define: {
       'process.env.SDKWORK_ACCESS_TOKEN': JSON.stringify(env.SDKWORK_ACCESS_TOKEN ?? ''),
     },
-      plugins: [react()],
+          plugins: [react()],
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -23,4 +23,5 @@ export default defineConfig(({ mode }) => {
       },
     },
   },
+  };
 });

@@ -23,6 +23,9 @@
       "sdkwork-cms.open",
       "sdkwork-cms.app",
       "sdkwork-cms.backend"
+    ],
+    "accessTokenPermissionScope": [
+      "iam.users.read"
     ]
   },
   "runtime": {

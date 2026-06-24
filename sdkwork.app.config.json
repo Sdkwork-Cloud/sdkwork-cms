@@ -36,7 +36,8 @@
     "defaultPlatform": "API",
     "defaultArchitecture": "x64",
     "supportedDeploymentProfiles": [
-      "cloud"
+      "cloud",
+      "standalone"
     ],
     "defaultDeploymentProfile": "cloud"
   },

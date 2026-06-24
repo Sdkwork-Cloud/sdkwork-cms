@@ -38,3 +38,10 @@ CMS depends on:
 - Search for search indexes, ranking, recommendations, embeddings, suggestions, and query analytics.
 - Messaging for notifications.
 - Comments/Engagement for public reader interactions.
+
+## Documentation Canon
+
+- [docs/README.md](docs/README.md)
+- [docs/product/prd/PRD.md](docs/product/prd/PRD.md)
+- [docs/architecture/tech/TECH_ARCHITECTURE.md](docs/architecture/tech/TECH_ARCHITECTURE.md)
+

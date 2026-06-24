@@ -29,3 +29,9 @@ This repository is the SDKWork CMS application root.
 
 CMS consumes IAM, Drive, Search, Messaging, Comments, and Engagement through their owning SDKs or service contracts. Do not copy dependency-owned tables, OpenAPI operations, generated SDK code, or route handlers into this application authority.
 
+## Documentation Canon
+
+- [docs/README.md](docs/README.md)
+- [docs/product/prd/PRD.md](docs/product/prd/PRD.md)
+- [docs/architecture/tech/TECH_ARCHITECTURE.md](docs/architecture/tech/TECH_ARCHITECTURE.md)
+

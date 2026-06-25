@@ -13,12 +13,12 @@
   "sdkFamily": "sdkwork-cms-app-sdk",
   "sdkDependencies": [
     {
-      "workspace": "sdkwork-appbase-app-sdk",
+      "workspace": "sdkwork-iam-app-sdk",
       "role": "iam-login-context",
       "required": true,
       "dependencyMode": "consumer-sdk",
       "apiPrefix": "/app/v3/api",
-      "apiAuthority": "sdkwork-appbase-app-api",
+      "apiAuthority": "sdkwork-iam-app-api",
       "generatedTransportImportPolicy": "forbidden"
     },
     {

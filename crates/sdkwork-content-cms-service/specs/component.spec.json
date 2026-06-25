@@ -27,7 +27,7 @@
     "routeManifest": null,
     "sdkClients": [],
     "sdkDependencies": [
-      { "workspace": "sdkwork-appbase-app-sdk", "role": "iam-context", "required": true, "dependencyMode": "consumer-sdk", "apiPrefix": "/app/v3/api", "apiAuthority": "sdkwork-appbase-app-api", "generatedTransportImportPolicy": "forbidden" },
+      { "workspace": "sdkwork-iam-app-sdk", "role": "iam-context", "required": true, "dependencyMode": "consumer-sdk", "apiPrefix": "/app/v3/api", "apiAuthority": "sdkwork-iam-app-api", "generatedTransportImportPolicy": "forbidden" },
       { "workspace": "../sdkwork-drive/sdks/sdkwork-drive-app-sdk", "role": "media-upload-reference", "required": true, "dependencyMode": "consumer-sdk", "apiPrefix": "/app/v3/api", "generatedTransportImportPolicy": "forbidden" },
       { "workspace": "../sdkwork-search/sdks/sdkwork-search-sdk", "role": "search-sync", "required": false, "dependencyMode": "consumer-sdk", "apiPrefix": "/search/v3/api", "generatedTransportImportPolicy": "forbidden" },
       { "workspace": "../sdkwork-messaging/sdks/sdkwork-messaging-backend-sdk", "role": "workflow-notification", "required": false, "dependencyMode": "consumer-sdk", "apiPrefix": "/backend/v3/api", "generatedTransportImportPolicy": "forbidden" },

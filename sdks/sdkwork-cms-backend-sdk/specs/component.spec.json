@@ -29,7 +29,7 @@
     "routeManifest": null,
     "sdkClients": ["CmsBackendClient"],
     "sdkDependencies": [
-      { "workspace": "sdkwork-appbase-backend-sdk", "role": "iam-admin-context", "required": true, "dependencyMode": "consumer-sdk", "apiPrefix": "/backend/v3/api", "apiAuthority": "sdkwork-appbase-backend-api", "generatedTransportImportPolicy": "forbidden" },
+      { "workspace": "sdkwork-iam-backend-sdk", "role": "iam-admin-context", "required": true, "dependencyMode": "consumer-sdk", "apiPrefix": "/backend/v3/api", "apiAuthority": "sdkwork-iam-backend-api", "generatedTransportImportPolicy": "forbidden" },
       { "workspace": "../sdkwork-drive/sdks/sdkwork-drive-backend-sdk", "role": "media-governance", "required": true, "dependencyMode": "consumer-sdk", "apiPrefix": "/backend/v3/api", "generatedTransportImportPolicy": "forbidden" },
       { "workspace": "../sdkwork-search/sdks/sdkwork-search-backend-sdk", "role": "search-rebuild-and-ranking", "required": false, "dependencyMode": "consumer-sdk", "apiPrefix": "/backend/v3/api", "generatedTransportImportPolicy": "forbidden" }
     ],

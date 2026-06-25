@@ -29,7 +29,7 @@
     "routeManifest": null,
     "sdkClients": ["CmsAppClient"],
     "sdkDependencies": [
-      { "workspace": "sdkwork-appbase-app-sdk", "role": "iam-login-context", "required": true, "dependencyMode": "consumer-sdk", "apiPrefix": "/app/v3/api", "apiAuthority": "sdkwork-appbase-app-api", "generatedTransportImportPolicy": "forbidden" },
+      { "workspace": "sdkwork-iam-app-sdk", "role": "iam-login-context", "required": true, "dependencyMode": "consumer-sdk", "apiPrefix": "/app/v3/api", "apiAuthority": "sdkwork-iam-app-api", "generatedTransportImportPolicy": "forbidden" },
       { "workspace": "../sdkwork-drive/sdks/sdkwork-drive-app-sdk", "role": "media-upload", "required": true, "dependencyMode": "consumer-sdk", "apiPrefix": "/app/v3/api", "generatedTransportImportPolicy": "forbidden" }
     ],
     "dependencyApiExports": [],

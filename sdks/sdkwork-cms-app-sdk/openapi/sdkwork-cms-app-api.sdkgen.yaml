@@ -10,7 +10,7 @@ sdkName: sdkwork-cms-app-sdk
 packageName: "@sdkwork/cms-app-sdk"
 standardProfile: sdkwork-v3
 sdkDependencies:
-  - workspace: ../sdkwork-appbase/sdks/sdkwork-appbase-app-sdk
+  - workspace: ../sdkwork-iam/sdks/sdkwork-iam-app-sdk
     role: iam-login-context
     required: true
     dependencyMode: consumer-sdk

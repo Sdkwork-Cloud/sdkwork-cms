@@ -1,0 +1,40 @@
+{
+  "kind": "sdkwork.gateway.assembly",
+  "schemaVersion": 1,
+  "applicationCode": "cms",
+  "packageName": "sdkwork-cms-gateway-assembly",
+  "crateDir": "crates/sdkwork-cms-gateway-assembly",
+  "generatedAt": "2026-06-25T13:08:05.519Z",
+  "routeCrates": [
+    {
+      "packageName": "sdkwork-routes-cms-app-api",
+      "memberDir": "crates/sdkwork-routes-cms-app-api",
+      "libName": "sdkwork_routes_cms_app_api",
+      "surface": "app-api",
+      "pathPrefix": null,
+      "mountOrder": 0,
+      "hasGatewayMount": true,
+      "hasGatewayRouteManifest": false
+    },
+    {
+      "packageName": "sdkwork-routes-cms-backend-api",
+      "memberDir": "crates/sdkwork-routes-cms-backend-api",
+      "libName": "sdkwork_routes_cms_backend_api",
+      "surface": "backend-api",
+      "pathPrefix": null,
+      "mountOrder": 1,
+      "hasGatewayMount": true,
+      "hasGatewayRouteManifest": false
+    },
+    {
+      "packageName": "sdkwork-routes-cms-open-api",
+      "memberDir": "crates/sdkwork-routes-cms-open-api",
+      "libName": "sdkwork_routes_cms_open_api",
+      "surface": "open-api",
+      "pathPrefix": null,
+      "mountOrder": 2,
+      "hasGatewayMount": true,
+      "hasGatewayRouteManifest": true
+    }
+  ]
+}

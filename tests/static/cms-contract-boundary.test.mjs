@@ -171,17 +171,17 @@ test("Rust route crates keep SDKWork CMS naming and prefix boundaries", () => {
   for (const crateName of [
     "sdkwork-content-cms-service",
     "sdkwork-content-cms-repository-sqlx",
-    "sdkwork-router-cms-open-api",
-    "sdkwork-router-cms-app-api",
-    "sdkwork-router-cms-backend-api",
+    "sdkwork-routes-cms-open-api",
+    "sdkwork-routes-cms-app-api",
+    "sdkwork-routes-cms-backend-api",
   ]) {
     assert.ok(cargo.includes(`"crates/${crateName}"`), `${crateName} must be a workspace member`);
   }
 
   const routePrefixes = [
-    ["crates/sdkwork-router-cms-open-api/src/paths.rs", 'pub const PREFIX: &str = "/cms/v3/api";'],
-    ["crates/sdkwork-router-cms-app-api/src/paths.rs", 'pub const PREFIX: &str = "/app/v3/api/cms";'],
-    ["crates/sdkwork-router-cms-backend-api/src/paths.rs", 'pub const PREFIX: &str = "/backend/v3/api/cms";'],
+    ["crates/sdkwork-routes-cms-open-api/src/paths.rs", 'pub const PREFIX: &str = "/cms/v3/api";'],
+    ["crates/sdkwork-routes-cms-app-api/src/paths.rs", 'pub const PREFIX: &str = "/app/v3/api/cms";'],
+    ["crates/sdkwork-routes-cms-backend-api/src/paths.rs", 'pub const PREFIX: &str = "/backend/v3/api/cms";'],
   ];
 
   for (const [path, expected] of routePrefixes) {
@@ -191,9 +191,9 @@ test("Rust route crates keep SDKWork CMS naming and prefix boundaries", () => {
 
 test("OpenAPI operationIds are declared by their Rust route manifests", () => {
   const manifests = {
-    "sdkwork-cms.open": read("crates/sdkwork-router-cms-open-api/src/manifest.rs"),
-    "sdkwork-cms.app": read("crates/sdkwork-router-cms-app-api/src/manifest.rs"),
-    "sdkwork-cms.backend": read("crates/sdkwork-router-cms-backend-api/src/manifest.rs"),
+    "sdkwork-cms.open": read("crates/sdkwork-routes-cms-open-api/src/manifest.rs"),
+    "sdkwork-cms.app": read("crates/sdkwork-routes-cms-app-api/src/manifest.rs"),
+    "sdkwork-cms.backend": read("crates/sdkwork-routes-cms-backend-api/src/manifest.rs"),
   };
 
   for (const api of apiAuthorities) {
@@ -469,17 +469,17 @@ test("Route crates expose focused handler and DTO skeleton modules for every API
   const operationRegistry = readJson("docs/api/cms-v1-operation-registry.json");
   const routeCrates = [
     {
-      root: "crates/sdkwork-router-cms-open-api",
+      root: "crates/sdkwork-routes-cms-open-api",
       surface: "open-api",
       handlerModules: ["entries", "pages", "feeds"],
     },
     {
-      root: "crates/sdkwork-router-cms-app-api",
+      root: "crates/sdkwork-routes-cms-app-api",
       surface: "app-api",
       handlerModules: ["delivery"],
     },
     {
-      root: "crates/sdkwork-router-cms-backend-api",
+      root: "crates/sdkwork-routes-cms-backend-api",
       surface: "backend-api",
       handlerModules: [
         "sites",

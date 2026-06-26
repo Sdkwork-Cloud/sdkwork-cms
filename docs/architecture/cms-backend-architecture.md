@@ -21,9 +21,9 @@ This keeps the product recognizable as CMS while preserving `content` as the can
 | `apis/backend-api/content` | CMS API authority | Backend-admin/operator management OpenAPI contracts |
 | `crates/sdkwork-content-cms-service` | CMS service | Domain models, commands, results, ports, and service method implementations |
 | `crates/sdkwork-content-cms-repository-sqlx` | CMS repository | SQLx migrations, schema constants, query plans, row mapping, and repository implementations |
-| `crates/sdkwork-router-cms-open-api` | Open route crate | Open API path constants, manifest, handler/mapping implementations |
-| `crates/sdkwork-router-cms-app-api` | App route crate | App API path constants, manifest, handler/mapping implementations |
-| `crates/sdkwork-router-cms-backend-api` | Backend route crate | Backend API path constants, manifest, handler/mapping implementations |
+| `crates/sdkwork-routes-cms-open-api` | Open route crate | Open API path constants, manifest, handler/mapping implementations |
+| `crates/sdkwork-routes-cms-app-api` | App route crate | App API path constants, manifest, handler/mapping implementations |
+| `crates/sdkwork-routes-cms-backend-api` | Backend route crate | Backend API path constants, manifest, handler/mapping implementations |
 | `sdks/sdkwork-cms-sdk` | Open SDK family | Owner-only SDK generation metadata for CMS Open API |
 | `sdks/sdkwork-cms-app-sdk` | App SDK family | Owner-only SDK generation metadata for CMS App API |
 | `sdks/sdkwork-cms-backend-sdk` | Backend SDK family | Owner-only SDK generation metadata for CMS Backend API |
@@ -97,9 +97,9 @@ Route crates expose focused handler and DTO skeleton modules:
 
 | Crate | Handler modules | DTO modules |
 | --- | --- | --- |
-| `sdkwork-router-cms-open-api` | `entries`, `pages`, `feeds` | `dto/request.rs`, `dto/response.rs` |
-| `sdkwork-router-cms-app-api` | `delivery` | `dto/request.rs`, `dto/response.rs` |
-| `sdkwork-router-cms-backend-api` | `sites`, `content_modeling`, `taxonomy`, `entries`, `pages`, `feeds`, `governance` | `dto/request.rs`, `dto/response.rs` |
+| `sdkwork-routes-cms-open-api` | `entries`, `pages`, `feeds` | `dto/request.rs`, `dto/response.rs` |
+| `sdkwork-routes-cms-app-api` | `delivery` | `dto/request.rs`, `dto/response.rs` |
+| `sdkwork-routes-cms-backend-api` | `sites`, `content_modeling`, `taxonomy`, `entries`, `pages`, `feeds`, `governance` | `dto/request.rs`, `dto/response.rs` |
 
 ## Implementation Status
 

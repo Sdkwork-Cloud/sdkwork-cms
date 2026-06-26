@@ -17,8 +17,10 @@ use sdkwork_content_cms_service::domain::*;
 use sdkwork_content_cms_service::ports::{CmsEventPublisher, CmsIamAuthorizer, CmsRepository};
 use sdkwork_content_cms_service::service::CmsService;
 use sdkwork_content_cms_repository_sqlx::{connect_and_bootstrap_cms_database_from_env, CmsSqlxRepository};
+use sdkwork_web_bootstrap::{service_router, ServiceRouterConfig};
 
 mod handlers;
+mod readiness;
 
 #[derive(Clone)]
 struct AppState {
@@ -45,6 +47,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .ok_or("Expected PostgreSQL pool for CMS service")?
         .clone();
 
+    let readiness_pool = pg_pool.clone();
     let repository = CmsSqlxRepository::new(pg_pool);
 
     let repository: Arc<dyn CmsRepository + Send + Sync> = Arc::new(repository);
@@ -104,11 +107,16 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/cms/v3/api/entries/resolve", get(handlers::open_resolve_entry))
         .route("/cms/v3/api/pages/resolve", get(handlers::open_resolve_page))
         .route("/cms/v3/api/feeds/{feed_code}/items", get(handlers::open_list_feed_items))
-        // Health check
-        .route("/health", get(health_check))
         .layer(CorsLayer::permissive())
         .layer(TraceLayer::new_for_http())
         .with_state(state);
+
+    let app = service_router(
+        app,
+        ServiceRouterConfig::default().with_readiness_check(Arc::new(
+            readiness::CmsPostgresReadinessCheck::new(readiness_pool),
+        )),
+    );
 
     let port = std::env::var("PORT").unwrap_or_else(|_| "8080".to_string());
     let addr = format!("0.0.0.0:{}", port);
@@ -118,14 +126,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     axum::serve(listener, app).await?;
 
     Ok(())
-}
-
-async fn health_check() -> Json<serde_json::Value> {
-    Json(serde_json::json!({
-        "status": "ok",
-        "service": "sdkwork-cms",
-        "version": "0.1.0"
-    }))
 }
 
 // Mock implementations for testing

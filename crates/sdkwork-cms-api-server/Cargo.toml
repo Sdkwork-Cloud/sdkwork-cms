@@ -9,11 +9,12 @@ name = "cms-server"
 path = "src/main.rs"
 
 [dependencies]
+sdkwork_cms_gateway_assembly = { package = "sdkwork-cms-gateway-assembly", path = "../sdkwork-cms-gateway-assembly" }
 sdkwork-content-cms-service.workspace = true
 sdkwork-content-cms-repository-sqlx.workspace = true
-sdkwork-router-cms-backend-api.workspace = true
-sdkwork-router-cms-app-api.workspace = true
-sdkwork-router-cms-open-api.workspace = true
+sdkwork-routes-cms-backend-api.workspace = true
+sdkwork-routes-cms-app-api.workspace = true
+sdkwork-routes-cms-open-api.workspace = true
 
 axum.workspace = true
 tokio.workspace = true
@@ -27,3 +28,8 @@ tower-http.workspace = true
 uuid.workspace = true
 async-trait.workspace = true
 dotenvy = "0.15"
+sdkwork-web-bootstrap = { workspace = true }
+
+[[bin]]
+name = "sdkwork-cms-standalone-gateway"
+path = "src/main.rs"

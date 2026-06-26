@@ -1,0 +1,18 @@
+[package]
+name = "sdkwork-routes-cms-open-api"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+sdkwork-content-cms-service.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+sdkwork-web-core = { path = "../../../sdkwork-web-framework/crates/sdkwork-web-core" }
+axum = { version = "0.8", default-features = false, features = ["json"] }
+sdkwork-iam-web-adapter = { path = "../../../sdkwork-iam/crates/sdkwork-iam-web-adapter" }
+sdkwork-web-axum = { path = "../../../sdkwork-web-framework/crates/sdkwork-web-axum" }
+sdkwork-web-bootstrap = { workspace = true }
+
+[dev-dependencies]
+sdkwork-web-core = { path = "../../../sdkwork-web-framework/crates/sdkwork-web-core" }

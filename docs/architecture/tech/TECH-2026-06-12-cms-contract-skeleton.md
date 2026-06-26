@@ -70,9 +70,9 @@
 **Files:**
 - Create: `crates/sdkwork-content-cms-service/**`
 - Create: `crates/sdkwork-content-cms-repository-sqlx/**`
-- Create: `crates/sdkwork-router-cms-open-api/**`
-- Create: `crates/sdkwork-router-cms-app-api/**`
-- Create: `crates/sdkwork-router-cms-backend-api/**`
+- Create: `crates/sdkwork-routes-cms-open-api/**`
+- Create: `crates/sdkwork-routes-cms-app-api/**`
+- Create: `crates/sdkwork-routes-cms-backend-api/**`
 
 - [x] Define domain structs, commands, result types, service ports, and service method signatures.
 - [x] Define repository implementation placeholders.

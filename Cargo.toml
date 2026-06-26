@@ -1,11 +1,12 @@
 [workspace]
 members = [
+    "crates/sdkwork-cms-gateway-assembly",
     "crates/sdkwork-cms-database-host",
     "crates/sdkwork-content-cms-service",
     "crates/sdkwork-content-cms-repository-sqlx",
-    "crates/sdkwork-router-cms-open-api",
-    "crates/sdkwork-router-cms-app-api",
-    "crates/sdkwork-router-cms-backend-api",
+    "crates/sdkwork-routes-cms-open-api",
+    "crates/sdkwork-routes-cms-app-api",
+    "crates/sdkwork-routes-cms-backend-api",
     "crates/sdkwork-cms-api-server",
 ]
 resolver = "2"
@@ -18,9 +19,9 @@ license = "UNLICENSED"
 [workspace.dependencies]
 sdkwork-content-cms-service = { path = "crates/sdkwork-content-cms-service" }
 sdkwork-content-cms-repository-sqlx = { path = "crates/sdkwork-content-cms-repository-sqlx" }
-sdkwork-router-cms-open-api = { path = "crates/sdkwork-router-cms-open-api" }
-sdkwork-router-cms-app-api = { path = "crates/sdkwork-router-cms-app-api" }
-sdkwork-router-cms-backend-api = { path = "crates/sdkwork-router-cms-backend-api" }
+sdkwork-routes-cms-open-api = { path = "crates/sdkwork-routes-cms-open-api" }
+sdkwork-routes-cms-app-api = { path = "crates/sdkwork-routes-cms-app-api" }
+sdkwork-routes-cms-backend-api = { path = "crates/sdkwork-routes-cms-backend-api" }
 sdkwork-cms-database-host = { path = "crates/sdkwork-cms-database-host" }
 
 sdkwork-database-config = { path = "../sdkwork-database/crates/sdkwork-database-config", package = "sdkwork-database-config" }
@@ -41,7 +42,8 @@ tokio = { version = "1", features = ["full"] }
 async-trait = "0.1"
 sqlx = { version = "0.8", features = ["runtime-tokio", "tls-rustls", "postgres", "chrono", "uuid"] }
 tracing = "0.1"
-axum = "0.7"
-tower = "0.4"
-tower-http = { version = "0.5", features = ["cors", "trace"] }
+axum = "0.8"
+tower = "0.5"
+tower-http = { version = "0.6", features = ["cors", "trace"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+sdkwork-web-bootstrap = { path = "../sdkwork-web-framework/crates/sdkwork-web-bootstrap" }

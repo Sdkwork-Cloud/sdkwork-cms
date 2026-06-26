@@ -15,7 +15,7 @@ Remove old per-module stub files that duplicate what's already implemented inlin
 
 ### 1a. Open API — Remove dead handler/DTO/mapper stubs
 
-The main `crates/sdkwork-router-cms-open-api/src/handlers.rs` already contains full inline implementations for `list_entries`, `retrieve_entry`, `resolve_entry`, `resolve_page`, and `list_feed_items` with inline DTOs and mappers. The following files are dead code:
+The main `crates/sdkwork-routes-cms-open-api/src/handlers.rs` already contains full inline implementations for `list_entries`, `retrieve_entry`, `resolve_entry`, `resolve_page`, and `list_feed_items` with inline DTOs and mappers. The following files are dead code:
 
 | File | Action | Reason |
 |------|--------|--------|
@@ -33,7 +33,7 @@ The main `crates/sdkwork-router-cms-open-api/src/handlers.rs` already contains f
 
 ### 1b. App API — Remove dead handler/DTO/mapper stubs
 
-The main `crates/sdkwork-router-cms-app-api/src/handlers.rs` already contains full inline implementations. The following are dead code:
+The main `crates/sdkwork-routes-cms-app-api/src/handlers.rs` already contains full inline implementations. The following are dead code:
 
 | File | Action | Reason |
 |------|--------|--------|

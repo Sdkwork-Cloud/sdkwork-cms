@@ -1,21 +1,20 @@
 [package]
-name = "sdkwork-cms-api-server"
+name = "sdkwork-cms-standalone-gateway"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 
 [[bin]]
-name = "cms-server"
+name = "sdkwork-cms-standalone-gateway"
 path = "src/main.rs"
+
+[lib]
+path = "src/lib.rs"
 
 [dependencies]
 sdkwork_cms_gateway_assembly = { package = "sdkwork-cms-gateway-assembly", path = "../sdkwork-cms-gateway-assembly" }
 sdkwork-content-cms-service.workspace = true
 sdkwork-content-cms-repository-sqlx.workspace = true
-sdkwork-routes-cms-backend-api.workspace = true
-sdkwork-routes-cms-app-api.workspace = true
-sdkwork-routes-cms-open-api.workspace = true
-
 axum.workspace = true
 tokio.workspace = true
 serde.workspace = true
@@ -30,6 +29,3 @@ async-trait.workspace = true
 dotenvy = "0.15"
 sdkwork-web-bootstrap = { workspace = true }
 
-[[bin]]
-name = "sdkwork-cms-standalone-gateway"
-path = "src/main.rs"

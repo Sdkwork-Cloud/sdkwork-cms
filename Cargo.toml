@@ -7,7 +7,7 @@ members = [
     "crates/sdkwork-routes-cms-open-api",
     "crates/sdkwork-routes-cms-app-api",
     "crates/sdkwork-routes-cms-backend-api",
-    "crates/sdkwork-cms-api-server",
+    "crates/sdkwork-cms-standalone-gateway",
 ]
 resolver = "2"
 

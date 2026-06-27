@@ -11,8 +11,8 @@ fn test_context(permissions: Vec<&str>) -> CmsRequestContext {
     CmsRequestContext {
         request_id: "test-req-001".to_string(),
         trace_id: Some("test-trace-001".to_string()),
-        tenant_id: 100,
-        organization_id: 200,
+        tenant_id: 100_001,
+        organization_id: 0,
         user_id: 1,
         session_id: Some("session-001".to_string()),
         permissions: permissions.into_iter().map(|s| s.to_string()).collect(),
@@ -48,8 +48,8 @@ impl CmsRepository for MockRepository {
         Ok(CmsSite {
             id: 1,
             uuid: "test-uuid".to_string(),
-            tenant_id: 100,
-            organization_id: 200,
+            tenant_id: 100_001,
+            organization_id: 0,
             code: "test-site".to_string(),
             name: "Test Site".to_string(),
             default_locale: "en".to_string(),
@@ -64,8 +64,8 @@ impl CmsRepository for MockRepository {
         Ok(CmsSite {
             id: site_id,
             uuid: "test-uuid".to_string(),
-            tenant_id: 100,
-            organization_id: 200,
+            tenant_id: 100_001,
+            organization_id: 0,
             code: "test-site".to_string(),
             name: "Test Site".to_string(),
             default_locale: "en".to_string(),
@@ -80,8 +80,8 @@ impl CmsRepository for MockRepository {
         Ok(CmsSite {
             id: site_id,
             uuid: "test-uuid".to_string(),
-            tenant_id: 100,
-            organization_id: 200,
+            tenant_id: 100_001,
+            organization_id: 0,
             code: "updated-site".to_string(),
             name: "Updated Site".to_string(),
             default_locale: "en".to_string(),

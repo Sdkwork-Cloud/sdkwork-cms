@@ -11,3 +11,7 @@ coverage/
 .sdkwork/secrets/
 *.local.*
 
+
+# SDKWork local runtime state
+.runtime/
+**/.runtime/

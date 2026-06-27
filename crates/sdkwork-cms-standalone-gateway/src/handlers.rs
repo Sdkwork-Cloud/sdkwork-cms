@@ -15,8 +15,8 @@ fn mock_ctx() -> CmsRequestContext {
     CmsRequestContext {
         request_id: uuid::Uuid::new_v4().to_string(),
         trace_id: Some(uuid::Uuid::new_v4().to_string()),
-        tenant_id: 100,
-        organization_id: 200,
+        tenant_id: 100_001,
+        organization_id: 0,
         user_id: 1,
         session_id: Some("mock-session".to_string()),
         permissions: vec![

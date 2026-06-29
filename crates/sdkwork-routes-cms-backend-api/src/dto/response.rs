@@ -20,11 +20,9 @@ pub struct ProblemDetail {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub request_id: Option<String>,
+    #[serde(rename = "traceId")]
+    pub trace_id: Option<String>,
 }
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct PaginatedResponse<T: Serialize> {
     pub items: Vec<T>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_cursor: Option<String>,
@@ -282,69 +280,69 @@ impl<T: Serialize> ApiResponse<T> {
 }
 
 impl ProblemDetail {
-    pub fn not_found(resource: &str, request_id: Option<String>) -> Self {
+    pub fn not_found(resource: &str, trace_id: Option<String>) -> Self {
         Self {
             problem_type: "https://sdkwork.com/errors/not-found".to_string(),
             title: "Not Found".to_string(),
             status: 404,
             detail: format!("{} not found", resource),
             instance: None,
-            request_id,
+            trace_id,
         }
     }
 
-    pub fn permission_denied(permission: &str, request_id: Option<String>) -> Self {
+    pub fn permission_denied(permission: &str, trace_id: Option<String>) -> Self {
         Self {
             problem_type: "https://sdkwork.com/errors/permission-denied".to_string(),
             title: "Permission Denied".to_string(),
             status: 403,
             detail: format!("Missing required permission: {}", permission),
             instance: None,
-            request_id,
+            trace_id,
         }
     }
 
-    pub fn validation(message: &str, request_id: Option<String>) -> Self {
+    pub fn validation(message: &str, trace_id: Option<String>) -> Self {
         Self {
             problem_type: "https://sdkwork.com/errors/validation".to_string(),
             title: "Validation Error".to_string(),
             status: 400,
             detail: message.to_string(),
             instance: None,
-            request_id,
+            trace_id,
         }
     }
 
-    pub fn conflict(message: &str, request_id: Option<String>) -> Self {
+    pub fn conflict(message: &str, trace_id: Option<String>) -> Self {
         Self {
             problem_type: "https://sdkwork.com/errors/conflict".to_string(),
             title: "Conflict".to_string(),
             status: 409,
             detail: message.to_string(),
             instance: None,
-            request_id,
+            trace_id,
         }
     }
 
-    pub fn optimistic_lock_conflict(resource: &str, resource_id: i64, expected_version: i64, request_id: Option<String>) -> Self {
+    pub fn optimistic_lock_conflict(resource: &str, resource_id: i64, expected_version: i64, trace_id: Option<String>) -> Self {
         Self {
             problem_type: "https://sdkwork.com/errors/optimistic-lock-conflict".to_string(),
             title: "Optimistic Lock Conflict".to_string(),
             status: 409,
             detail: format!("{} id={} version conflict, expected version {}", resource, resource_id, expected_version),
             instance: None,
-            request_id,
+            trace_id,
         }
     }
 
-    pub fn internal(message: &str, request_id: Option<String>) -> Self {
+    pub fn internal(message: &str, trace_id: Option<String>) -> Self {
         Self {
             problem_type: "https://sdkwork.com/errors/internal".to_string(),
             title: "Internal Server Error".to_string(),
             status: 500,
             detail: message.to_string(),
             instance: None,
-            request_id,
+            trace_id,
         }
     }
 }

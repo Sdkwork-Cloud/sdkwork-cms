@@ -17,7 +17,7 @@ pub async fn list_pages(
             let response = res_mapper::map_page_to_paginated_response(page, res_mapper::map_page_to_response);
             ApiResponse::success(response, Some(ctx.request_id.clone()))
         }
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -29,7 +29,7 @@ pub async fn create_page(
     let command = req_mapper::map_page_create_request_to_command(req);
     match service.create_page(ctx, command).await {
         Ok(page) => ApiResponse::success(res_mapper::map_page_to_response(page), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -40,7 +40,7 @@ pub async fn retrieve_page(
 ) -> ApiResponse<PageResponse> {
     match service.retrieve_page(ctx, page_id).await {
         Ok(page) => ApiResponse::success(res_mapper::map_page_to_response(page), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -53,7 +53,7 @@ pub async fn update_page(
     let command = req_mapper::map_page_update_request_to_command(page_id, req);
     match service.update_page(ctx, page_id, command).await {
         Ok(page) => ApiResponse::success(res_mapper::map_page_to_response(page), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -64,7 +64,7 @@ pub async fn delete_page(
 ) -> ApiResponse<CommandResponse> {
     match service.delete_page(ctx, page_id).await {
         Ok(result) => ApiResponse::success(res_mapper::map_command_result_to_response(result), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -77,7 +77,7 @@ pub async fn replace_page_blocks(
     let command = req_mapper::map_page_blocks_request_to_command(page_id, req);
     match service.replace_page_blocks(ctx, command).await {
         Ok(page) => ApiResponse::success(res_mapper::map_page_to_response(page), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -90,6 +90,6 @@ pub async fn publish_page(
     let command = req_mapper::map_publish_request_to_command("page", page_id, req);
     match service.publish_page(ctx, command).await {
         Ok(snapshot) => ApiResponse::success(res_mapper::map_publish_snapshot_to_response(snapshot), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }

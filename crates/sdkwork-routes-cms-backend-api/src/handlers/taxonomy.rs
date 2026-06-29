@@ -18,7 +18,7 @@ pub async fn list_taxonomies(
             let response = res_mapper::map_page_to_paginated_response(page, res_mapper::map_taxonomy_to_response);
             ApiResponse::success(response, Some(ctx.request_id.clone()))
         }
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -31,7 +31,7 @@ pub async fn create_taxonomy(
     let command = req_mapper::map_taxonomy_create_request_to_command(site_id, req);
     match service.create_taxonomy(ctx, command).await {
         Ok(taxonomy) => ApiResponse::success(res_mapper::map_taxonomy_to_response(taxonomy), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -44,7 +44,7 @@ pub async fn update_taxonomy(
     let command = req_mapper::map_taxonomy_update_request_to_command(req);
     match service.update_taxonomy(ctx, taxonomy_id, command).await {
         Ok(taxonomy) => ApiResponse::success(res_mapper::map_taxonomy_to_response(taxonomy), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -55,7 +55,7 @@ pub async fn delete_taxonomy(
 ) -> ApiResponse<CommandResponse> {
     match service.delete_taxonomy(ctx, taxonomy_id).await {
         Ok(result) => ApiResponse::success(res_mapper::map_command_result_to_response(result), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -75,7 +75,7 @@ pub async fn list_taxonomy_terms(
             let response = res_mapper::map_page_to_paginated_response(page, res_mapper::map_taxonomy_term_to_response);
             ApiResponse::success(response, Some(ctx.request_id.clone()))
         }
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -88,7 +88,7 @@ pub async fn create_taxonomy_term(
     let command = req_mapper::map_taxonomy_term_create_request_to_command(taxonomy_id, req);
     match service.create_taxonomy_term(ctx, command).await {
         Ok(term) => ApiResponse::success(res_mapper::map_taxonomy_term_to_response(term), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -101,7 +101,7 @@ pub async fn update_taxonomy_term(
     let command = req_mapper::map_taxonomy_term_update_request_to_command(req);
     match service.update_taxonomy_term(ctx, term_id, command).await {
         Ok(term) => ApiResponse::success(res_mapper::map_taxonomy_term_to_response(term), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -112,6 +112,6 @@ pub async fn delete_taxonomy_term(
 ) -> ApiResponse<CommandResponse> {
     match service.delete_taxonomy_term(ctx, term_id).await {
         Ok(result) => ApiResponse::success(res_mapper::map_command_result_to_response(result), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }

@@ -17,7 +17,7 @@ pub async fn list_entries(
             let response = res_mapper::map_page_to_paginated_response(page, res_mapper::map_entry_to_response);
             ApiResponse::success(response, Some(ctx.request_id.clone()))
         }
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -29,7 +29,7 @@ pub async fn create_entry(
     let command = req_mapper::map_entry_create_request_to_command(req);
     match service.create_entry(ctx, command).await {
         Ok(entry) => ApiResponse::success(res_mapper::map_entry_to_response(entry), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -40,7 +40,7 @@ pub async fn retrieve_entry(
 ) -> ApiResponse<EntryResponse> {
     match service.retrieve_entry(ctx, entry_id).await {
         Ok(entry) => ApiResponse::success(res_mapper::map_entry_to_response(entry), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -53,7 +53,7 @@ pub async fn update_entry(
     let command = req_mapper::map_entry_update_request_to_command(entry_id, req);
     match service.update_entry(ctx, entry_id, command).await {
         Ok(entry) => ApiResponse::success(res_mapper::map_entry_to_response(entry), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -64,7 +64,7 @@ pub async fn delete_entry(
 ) -> ApiResponse<CommandResponse> {
     match service.delete_entry(ctx, entry_id).await {
         Ok(result) => ApiResponse::success(res_mapper::map_command_result_to_response(result), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -77,7 +77,7 @@ pub async fn replace_entry_body(
     let command = req_mapper::map_entry_body_request_to_command(entry_id, req);
     match service.replace_entry_body(ctx, command).await {
         Ok(entry) => ApiResponse::success(res_mapper::map_entry_to_response(entry), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -90,7 +90,7 @@ pub async fn replace_entry_fields(
     let command = req_mapper::map_entry_fields_request_to_command(entry_id, req);
     match service.replace_entry_fields(ctx, command).await {
         Ok(entry) => ApiResponse::success(res_mapper::map_entry_to_response(entry), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -110,7 +110,7 @@ pub async fn list_entry_media(
             let response = res_mapper::map_page_to_paginated_response(page, res_mapper::map_media_ref_to_response);
             ApiResponse::success(response, Some(ctx.request_id.clone()))
         }
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -123,7 +123,7 @@ pub async fn attach_entry_media(
     let command = req_mapper::map_entry_media_attach_request_to_command(entry_id, req);
     match service.attach_entry_media(ctx, command).await {
         Ok(media) => ApiResponse::success(res_mapper::map_media_ref_to_response(media), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -134,7 +134,7 @@ pub async fn delete_entry_media(
 ) -> ApiResponse<CommandResponse> {
     match service.delete_entry_media(ctx, media_id).await {
         Ok(result) => ApiResponse::success(res_mapper::map_command_result_to_response(result), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -147,7 +147,7 @@ pub async fn replace_entry_terms(
     let command = req_mapper::map_entry_terms_request_to_command(entry_id, req);
     match service.replace_entry_terms(ctx, command).await {
         Ok(entry) => ApiResponse::success(res_mapper::map_entry_to_response(entry), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -167,7 +167,7 @@ pub async fn list_entry_versions(
             let response = res_mapper::map_page_to_paginated_response(page, res_mapper::map_entry_version_to_response);
             ApiResponse::success(response, Some(ctx.request_id.clone()))
         }
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -180,7 +180,7 @@ pub async fn publish_entry(
     let command = req_mapper::map_publish_request_to_command("entry", entry_id, req);
     match service.publish_entry(ctx, command).await {
         Ok(snapshot) => ApiResponse::success(res_mapper::map_publish_snapshot_to_response(snapshot), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -193,7 +193,7 @@ pub async fn unpublish_entry(
     let command = req_mapper::map_publish_request_to_command("entry", entry_id, req);
     match service.unpublish_entry(ctx, command).await {
         Ok(snapshot) => ApiResponse::success(res_mapper::map_publish_snapshot_to_response(snapshot), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -206,7 +206,7 @@ pub async fn rollback_entry(
     let command = req_mapper::map_rollback_request_to_command("entry", entry_id, req);
     match service.rollback_entry(ctx, command).await {
         Ok(snapshot) => ApiResponse::success(res_mapper::map_publish_snapshot_to_response(snapshot), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }
 
@@ -219,6 +219,6 @@ pub async fn schedule_entry(
     let command = req_mapper::map_schedule_request_to_command(entry_id, req);
     match service.schedule_entry(ctx, command).await {
         Ok(entry) => ApiResponse::success(res_mapper::map_entry_to_response(entry), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, Some(ctx.request_id.clone())), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
     }
 }

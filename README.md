@@ -1,4 +1,5 @@
 # SDKWork CMS
+repository-kind: application
 
 SDKWork CMS is the content management application authority for structured content, page composition, publishing snapshots, and curated/rule-based feeds.
 

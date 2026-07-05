@@ -1,4 +1,5 @@
 {
+  "schemaVersion": 1,
   "workspace": "sdkwork-cms-sdk",
   "title": "SDKWork CMS Open API SDK",
   "apiVersion": "0.1.0",
@@ -10,15 +11,18 @@
   },
   "sdkOwner": "sdkwork-cms",
   "apiAuthority": "sdkwork-cms.open",
-  "sdkFamily": "sdkwork-cms-sdk",
-  "sdkDependencies": [],
-  "dependencyApiExports": [],
   "discoverySurface": {
     "sdkTarget": "typescript",
     "apiPrefix": "/cms/v3/api",
     "schemaUrl": "/cms/v3/openapi.json",
-    "generatedProtocols": ["http-openapi"],
+    "generatedProtocols": [
+      "http-openapi"
+    ],
     "manualTransports": []
-  }
+  },
+  "sdkDependencies": [],
+  "sdkFamily": "sdkwork-cms-sdk",
+  "sdkName": "sdkwork-cms-sdk",
+  "packageName": "@sdkwork/cms-sdk",
+  "transportPackageName": "sdkwork-cms-sdk-generated-typescript"
 }
-

@@ -1,4 +1,5 @@
 {
+  "schemaVersion": 1,
   "workspace": "sdkwork-cms-backend-sdk",
   "title": "SDKWork CMS Backend API SDK",
   "apiVersion": "0.1.0",
@@ -10,7 +11,15 @@
   },
   "sdkOwner": "sdkwork-cms",
   "apiAuthority": "sdkwork-cms.backend",
-  "sdkFamily": "sdkwork-cms-backend-sdk",
+  "discoverySurface": {
+    "sdkTarget": "typescript",
+    "apiPrefix": "/backend/v3/api/cms",
+    "schemaUrl": "/backend/v3/api/cms/openapi.json",
+    "generatedProtocols": [
+      "http-openapi"
+    ],
+    "manualTransports": []
+  },
   "sdkDependencies": [
     {
       "workspace": "sdkwork-iam-backend-sdk",
@@ -38,12 +47,8 @@
       "generatedTransportImportPolicy": "forbidden"
     }
   ],
-  "dependencyApiExports": [],
-  "discoverySurface": {
-    "sdkTarget": "typescript",
-    "apiPrefix": "/backend/v3/api/cms",
-    "schemaUrl": "/backend/v3/api/cms/openapi.json",
-    "generatedProtocols": ["http-openapi"],
-    "manualTransports": []
-  }
+  "sdkFamily": "sdkwork-cms-backend-sdk",
+  "sdkName": "sdkwork-cms-backend-sdk",
+  "packageName": "@sdkwork/cms-backend-sdk",
+  "transportPackageName": "sdkwork-cms-backend-sdk-generated-typescript"
 }

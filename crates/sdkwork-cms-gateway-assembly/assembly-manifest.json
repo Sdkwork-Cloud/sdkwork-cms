@@ -4,7 +4,7 @@
   "applicationCode": "cms",
   "packageName": "sdkwork-cms-gateway-assembly",
   "crateDir": "crates/sdkwork-cms-gateway-assembly",
-  "generatedAt": "2026-06-25T13:08:05.519Z",
+  "generatedAt": "2026-07-08T01:33:37.244Z",
   "routeCrates": [
     {
       "packageName": "sdkwork-routes-cms-app-api",

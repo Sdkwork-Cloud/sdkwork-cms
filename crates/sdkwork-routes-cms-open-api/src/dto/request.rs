@@ -8,7 +8,7 @@ pub struct DeliveryListEntriesRequest {
     pub content_type_code: Option<String>,
     pub term_code: Option<String>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -39,17 +39,17 @@ pub struct DeliveryListFeedItemsRequest {
     pub channel_code: Option<String>,
     pub locale: Option<String>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct PaginationParams {
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 impl PaginationParams {
     pub fn effective_limit(&self) -> u32 {
-        self.limit.unwrap_or(20).min(100)
+        self.page_size.unwrap_or(20).min(100)
     }
 }

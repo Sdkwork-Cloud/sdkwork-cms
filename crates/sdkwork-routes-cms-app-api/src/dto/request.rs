@@ -38,5 +38,5 @@ pub struct DeliveryListFeedItemsRequest {
     pub channel_code: Option<String>,
     pub locale: Option<String>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }

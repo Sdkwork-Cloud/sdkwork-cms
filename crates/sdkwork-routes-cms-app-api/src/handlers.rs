@@ -36,7 +36,7 @@ pub struct DeliveryFeedItemsParams {
     pub channel_code: Option<String>,
     pub locale: Option<String>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -275,7 +275,7 @@ pub async fn list_feed_items(
         channel_code: params.channel_code,
         locale: params.locale,
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     };
     match service.delivery_list_feed_items(ctx, query).await {
         Ok(page) => ApiResponse::success(PaginatedResponse {

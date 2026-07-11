@@ -51,7 +51,7 @@ fn mock_ctx() -> CmsRequestContext {
 #[derive(Deserialize)]
 pub struct PaginationParams {
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Deserialize)]
@@ -270,7 +270,7 @@ pub struct DeliveryFeedItemsParams {
     pub channel_code: Option<String>,
     pub locale: Option<String>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 // ============ Backend API Handlers ============
@@ -282,7 +282,7 @@ pub async fn list_sites(
     let ctx = mock_ctx();
     let query = ListSitesQuery {
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     };
     match state.service.list_sites(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({
@@ -404,7 +404,7 @@ pub async fn list_channels(
     let query = ListBySiteQuery {
         site_id,
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     };
     match state.service.list_channels(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({
@@ -481,7 +481,7 @@ pub async fn list_content_types(
     Query(params): Query<PaginationParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = ListBySiteQuery { site_id, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = ListBySiteQuery { site_id, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.list_content_types(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({
             "ok": true,
@@ -550,7 +550,7 @@ pub async fn list_content_fields(
     Query(params): Query<PaginationParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = ListContentFieldsQuery { content_type_id, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = ListContentFieldsQuery { content_type_id, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.list_content_fields(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({
             "ok": true,
@@ -608,7 +608,7 @@ pub async fn list_taxonomies(
     Query(params): Query<PaginationParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = ListBySiteQuery { site_id, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = ListBySiteQuery { site_id, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.list_taxonomies(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({
             "ok": true,
@@ -666,7 +666,7 @@ pub async fn list_taxonomy_terms(
     Query(params): Query<PaginationParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = ListTaxonomyTermsQuery { taxonomy_id, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = ListTaxonomyTermsQuery { taxonomy_id, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.list_taxonomy_terms(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({
             "ok": true,
@@ -724,7 +724,7 @@ pub async fn list_entries(
     let query = ListEntriesQuery {
         site_id: None, content_type_id: None, channel_id: None, locale: None,
         entry_status: None, publication_status: None, author_user_id: None,
-        cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100),
+        cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100),
     };
     match state.service.list_entries(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({
@@ -840,7 +840,7 @@ pub async fn list_entry_media(
     Query(params): Query<PaginationParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = ListEntryMediaQuery { entry_id, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = ListEntryMediaQuery { entry_id, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.list_entry_media(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({"ok": true, "data": {"items": page.items.iter().map(|m| serde_json::json!({"id": m.id.to_string(), "role": m.role})).collect::<Vec<_>>()}})),
         Err(e) => Json(serde_json::json!({"ok": false, "error": {"detail": e.to_string()}})),
@@ -883,7 +883,7 @@ pub async fn list_entry_versions(
     Query(params): Query<PaginationParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = ListEntryVersionsQuery { entry_id, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = ListEntryVersionsQuery { entry_id, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.list_entry_versions(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({"ok": true, "data": {"items": page.items.iter().map(|v| serde_json::json!({"id": v.id.to_string(), "entryId": v.entry_id.to_string(), "versionNo": v.version_no.to_string(), "versionKind": v.version_kind})).collect::<Vec<_>>()}})),
         Err(e) => Json(serde_json::json!({"ok": false, "error": {"detail": e.to_string()}})),
@@ -949,7 +949,7 @@ pub async fn list_pages(
     Query(params): Query<PaginationParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = ListPagesQuery { site_id: None, channel_id: None, locale: None, status: None, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = ListPagesQuery { site_id: None, channel_id: None, locale: None, status: None, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.list_pages(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({"ok": true, "data": {"items": page.items.iter().map(|p| serde_json::json!({"id": p.id.to_string(), "siteId": p.site_id.to_string(), "path": p.path, "title": p.title, "locale": p.locale})).collect::<Vec<_>>()}})),
         Err(e) => Json(serde_json::json!({"ok": false, "error": {"detail": e.to_string()}})),
@@ -1032,7 +1032,7 @@ pub async fn list_feeds(
     Query(params): Query<PaginationParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = ListFeedsQuery { site_id: None, channel_id: None, locale: None, status: None, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = ListFeedsQuery { site_id: None, channel_id: None, locale: None, status: None, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.list_feeds(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({"ok": true, "data": {"items": page.items.iter().map(|f| serde_json::json!({"id": f.id.to_string(), "code": f.code, "name": f.name, "feedKind": f.feed_kind, "locale": f.locale})).collect::<Vec<_>>()}})),
         Err(e) => Json(serde_json::json!({"ok": false, "error": {"detail": e.to_string()}})),
@@ -1092,7 +1092,7 @@ pub async fn list_feed_rules(
     Query(params): Query<PaginationParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = ListFeedRulesQuery { feed_id, enabled: None, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = ListFeedRulesQuery { feed_id, enabled: None, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.list_feed_rules(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({"ok": true, "data": {"items": page.items.iter().map(|r| serde_json::json!({"id": r.id.to_string(), "feedId": r.feed_id.to_string(), "ruleKind": r.rule_kind, "enabled": r.enabled})).collect::<Vec<_>>()}})),
         Err(e) => Json(serde_json::json!({"ok": false, "error": {"detail": e.to_string()}})),
@@ -1114,7 +1114,7 @@ pub async fn list_feed_items(
     Query(params): Query<PaginationParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = ListFeedItemsQuery { feed_id, status: None, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = ListFeedItemsQuery { feed_id, status: None, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.list_feed_items(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({"ok": true, "data": {"items": page.items.iter().map(|i| serde_json::json!({"id": i.id.to_string(), "feedId": i.feed_id.to_string(), "entryId": i.entry_id.map(|id| id.to_string()), "itemKind": i.item_kind, "pinned": i.pinned})).collect::<Vec<_>>()}})),
         Err(e) => Json(serde_json::json!({"ok": false, "error": {"detail": e.to_string()}})),
@@ -1152,7 +1152,7 @@ pub async fn list_audit_logs(
     Query(params): Query<PaginationParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = ListAuditLogsQuery { site_id: None, resource_type: None, resource_id: None, actor_user_id: None, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = ListAuditLogsQuery { site_id: None, resource_type: None, resource_id: None, actor_user_id: None, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.list_audit_logs(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({"ok": true, "data": {"items": page.items.iter().map(|l| serde_json::json!({"id": l.id.to_string(), "action": l.action, "resourceType": l.resource_type, "resourceId": l.resource_id.map(|id| id.to_string()), "actorUserId": l.actor_user_id.to_string(), "createdAt": l.created_at})).collect::<Vec<_>>()}})),
         Err(e) => Json(serde_json::json!({"ok": false, "error": {"detail": e.to_string()}})),
@@ -1164,7 +1164,7 @@ pub async fn list_outbox_events(
     Query(params): Query<PaginationParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = ListOutboxEventsQuery { aggregate_type: None, aggregate_id: None, status: None, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = ListOutboxEventsQuery { aggregate_type: None, aggregate_id: None, status: None, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.list_outbox_events(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({"ok": true, "data": {"items": page.items.iter().map(|e| serde_json::json!({"id": e.id.to_string(), "aggregateType": e.aggregate_type, "aggregateId": e.aggregate_id.to_string(), "eventType": e.event_type, "status": e.status})).collect::<Vec<_>>()}})),
         Err(e) => Json(serde_json::json!({"ok": false, "error": {"detail": e.to_string()}})),
@@ -1234,7 +1234,7 @@ pub async fn delivery_list_feed_items(
     Query(params): Query<DeliveryFeedItemsParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = DeliveryFeedItemsQuery { site_code, feed_code, channel_code: params.channel_code, locale: params.locale, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = DeliveryFeedItemsQuery { site_code, feed_code, channel_code: params.channel_code, locale: params.locale, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.delivery_list_feed_items(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({"ok": true, "data": {"items": page.items.iter().map(|i| serde_json::json!({"id": i.id.to_string(), "feedId": i.feed_id.to_string(), "entryId": i.entry_id.map(|id| id.to_string()), "itemKind": i.item_kind})).collect::<Vec<_>>()}})),
         Err(e) => Json(serde_json::json!({"ok": false, "error": {"detail": e.to_string()}})),
@@ -1248,7 +1248,7 @@ pub async fn open_list_entries(
     Query(params): Query<PaginationParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = DeliveryListEntriesQuery { site_code: "default".to_string(), channel_code: None, locale: None, content_type_code: None, term_code: None, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = DeliveryListEntriesQuery { site_code: "default".to_string(), channel_code: None, locale: None, content_type_code: None, term_code: None, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.delivery_list_entries(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({"ok": true, "data": {"items": page.items.iter().map(|e| serde_json::json!({"id": e.id.to_string(), "title": e.title, "slug": e.slug, "locale": e.locale})).collect::<Vec<_>>()}})),
         Err(e) => Json(serde_json::json!({"ok": false, "error": {"detail": e.to_string()}})),
@@ -1297,7 +1297,7 @@ pub async fn open_list_feed_items(
     Query(params): Query<DeliveryFeedItemsParams>,
 ) -> Json<serde_json::Value> {
     let ctx = mock_ctx();
-    let query = DeliveryFeedItemsQuery { site_code: "default".to_string(), feed_code, channel_code: params.channel_code, locale: params.locale, cursor: params.cursor, limit: params.limit.unwrap_or(20).min(100) };
+    let query = DeliveryFeedItemsQuery { site_code: "default".to_string(), feed_code, channel_code: params.channel_code, locale: params.locale, cursor: params.cursor, limit: params.page_size.unwrap_or(20).min(100) };
     match state.service.delivery_list_feed_items(&ctx, query).await {
         Ok(page) => Json(serde_json::json!({"ok": true, "data": {"items": page.items.iter().map(|i| serde_json::json!({"id": i.id.to_string(), "feedId": i.feed_id.to_string(), "itemKind": i.item_kind})).collect::<Vec<_>>()}})),
         Err(e) => Json(serde_json::json!({"ok": false, "error": {"detail": e.to_string()}})),

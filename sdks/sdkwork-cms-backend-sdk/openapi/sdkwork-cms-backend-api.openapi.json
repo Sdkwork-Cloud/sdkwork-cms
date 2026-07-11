@@ -3030,7 +3030,7 @@
         }
       },
       "Limit": {
-        "name": "limit",
+        "name": "page_size",
         "in": "query",
         "required": false,
         "schema": {

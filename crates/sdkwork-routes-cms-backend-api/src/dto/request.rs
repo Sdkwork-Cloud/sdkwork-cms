@@ -354,13 +354,13 @@ pub struct FeedItemsUpsertRequest {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ListSitesQueryParams {
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ListBySiteQueryParams {
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -373,7 +373,7 @@ pub struct ListEntriesQueryParams {
     pub publication_status: Option<i32>,
     pub author_user_id: Option<i64>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -383,7 +383,7 @@ pub struct ListPagesQueryParams {
     pub locale: Option<String>,
     pub status: Option<i32>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -393,21 +393,21 @@ pub struct ListFeedsQueryParams {
     pub locale: Option<String>,
     pub status: Option<i32>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ListFeedRulesQueryParams {
     pub enabled: Option<bool>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct ListFeedItemsQueryParams {
     pub status: Option<i32>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -417,7 +417,7 @@ pub struct ListAuditLogsQueryParams {
     pub resource_id: Option<i64>,
     pub actor_user_id: Option<i64>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -426,7 +426,7 @@ pub struct ListOutboxEventsQueryParams {
     pub aggregate_id: Option<i64>,
     pub status: Option<i32>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]

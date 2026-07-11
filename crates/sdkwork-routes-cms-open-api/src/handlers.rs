@@ -12,7 +12,7 @@ pub struct OpenApiListEntriesParams {
     pub content_type_code: Option<String>,
     pub term_code: Option<String>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -37,7 +37,7 @@ pub struct OpenApiFeedItemsParams {
     pub channel_code: Option<String>,
     pub locale: Option<String>,
     pub cursor: Option<String>,
-    pub limit: Option<u32>,
+    pub page_size: Option<u32>,
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -159,7 +159,7 @@ pub async fn list_entries(
         content_type_code: params.content_type_code,
         term_code: params.term_code,
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     };
     match service.delivery_list_entries(ctx, query).await {
         Ok(page) => ApiResponse::success(PaginatedResponse {
@@ -233,7 +233,7 @@ pub async fn list_feed_items(
         channel_code: params.channel_code,
         locale: params.locale,
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     };
     match service.delivery_list_feed_items(ctx, query).await {
         Ok(page) => ApiResponse::success(PaginatedResponse {

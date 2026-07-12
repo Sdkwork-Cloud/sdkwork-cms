@@ -17,9 +17,9 @@ version = "0.1.0"
 license = "UNLICENSED"
 
 [workspace.dependencies]
-sdkwork-web-axum = { path = "../../../sdkwork-web-framework/crates/sdkwork-web-axum" }
-sdkwork-iam-web-adapter = { path = "../../../sdkwork-iam/crates/sdkwork-iam-web-adapter" }
-sdkwork-web-core = { path = "../../../sdkwork-web-framework/crates/sdkwork-web-core" }
+sdkwork-web-axum = { path = "../sdkwork-web-framework/crates/sdkwork-web-axum" }
+sdkwork-iam-web-adapter = { path = "../sdkwork-iam/crates/sdkwork-iam-web-adapter" }
+sdkwork-web-core = { path = "../sdkwork-web-framework/crates/sdkwork-web-core" }
 sdkwork-content-cms-service = { path = "crates/sdkwork-content-cms-service" }
 sdkwork-content-cms-repository-sqlx = { path = "crates/sdkwork-content-cms-repository-sqlx" }
 sdkwork-routes-cms-open-api = { path = "crates/sdkwork-routes-cms-open-api" }

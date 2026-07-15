@@ -8,7 +8,6 @@ use axum::{
     Router,
 };
 use serde::{Deserialize, Serialize};
-use tower_http::cors::CorsLayer;
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::EnvFilter;
 
@@ -107,7 +106,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/cms/v3/api/entries/resolve", get(handlers::open_resolve_entry))
         .route("/cms/v3/api/pages/resolve", get(handlers::open_resolve_page))
         .route("/cms/v3/api/feeds/{feed_code}/items", get(handlers::open_list_feed_items))
-        .layer(CorsLayer::permissive())
+        .layer(sdkwork_web_bootstrap::application_cors_layer_from_env(
+            &["SDKWORK_CMS_ENVIRONMENT"],
+            &["SDKWORK_CMS_CORS_ALLOWED_ORIGINS", "SDKWORK_CORS_ALLOWED_ORIGINS"],
+        ))
         .layer(TraceLayer::new_for_http())
         .with_state(state);
 

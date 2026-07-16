@@ -69,7 +69,7 @@
           "$ref": "#/components/requestBodies/CmsSiteCommand"
         },
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/components/responses/CmsSiteOk"
           },
           "400": {
@@ -195,8 +195,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "$ref": "#/components/responses/CmsCommandOk"
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "$ref": "#/components/responses/Problem"
@@ -275,7 +275,7 @@
           "$ref": "#/components/requestBodies/CmsChannelCommand"
         },
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/components/responses/CmsChannelOk"
           },
           "400": {
@@ -359,8 +359,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "$ref": "#/components/responses/CmsCommandOk"
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "$ref": "#/components/responses/Problem"
@@ -439,7 +439,7 @@
           "$ref": "#/components/requestBodies/CmsContentTypeCommand"
         },
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/components/responses/CmsContentTypeOk"
           },
           "400": {
@@ -562,8 +562,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "$ref": "#/components/responses/CmsCommandOk"
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "$ref": "#/components/responses/Problem"
@@ -642,7 +642,7 @@
           "$ref": "#/components/requestBodies/CmsContentFieldCommand"
         },
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/components/responses/CmsContentFieldOk"
           },
           "400": {
@@ -726,8 +726,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "$ref": "#/components/responses/CmsCommandOk"
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "$ref": "#/components/responses/Problem"
@@ -806,7 +806,7 @@
           "$ref": "#/components/requestBodies/CmsTaxonomyCommand"
         },
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/components/responses/CmsTaxonomyOk"
           },
           "400": {
@@ -890,8 +890,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "$ref": "#/components/responses/CmsCommandOk"
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "$ref": "#/components/responses/Problem"
@@ -970,7 +970,7 @@
           "$ref": "#/components/requestBodies/CmsTaxonomyTermCommand"
         },
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/components/responses/CmsTaxonomyTermOk"
           },
           "400": {
@@ -1054,8 +1054,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "$ref": "#/components/responses/CmsCommandOk"
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "$ref": "#/components/responses/Problem"
@@ -1144,7 +1144,7 @@
           "$ref": "#/components/requestBodies/CmsEntryCommand"
         },
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/components/responses/CmsEntryOk"
           },
           "400": {
@@ -1270,8 +1270,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "$ref": "#/components/responses/CmsCommandOk"
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "$ref": "#/components/responses/Problem"
@@ -1348,7 +1348,7 @@
           "cms"
         ],
         "summary": "Replace CMS entry field values",
-        "operationId": "cms.entries.fields.replace",
+        "operationId": "cms.entries.fields.update",
         "parameters": [
           {
             "$ref": "#/components/parameters/EntryId"
@@ -1428,7 +1428,7 @@
           "cms"
         ],
         "summary": "Attach Drive-backed media to CMS entry",
-        "operationId": "cms.entries.media.attach",
+        "operationId": "cms.entries.media.create",
         "parameters": [
           {
             "$ref": "#/components/parameters/EntryId"
@@ -1438,7 +1438,7 @@
           "$ref": "#/components/requestBodies/CmsEntryMediaCommand"
         },
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/components/responses/CmsMediaOk"
           },
           "400": {
@@ -1483,8 +1483,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "$ref": "#/components/responses/CmsCommandOk"
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "$ref": "#/components/responses/Problem"
@@ -1517,7 +1517,7 @@
           "cms"
         ],
         "summary": "Replace CMS entry taxonomy terms",
-        "operationId": "cms.entries.terms.replace",
+        "operationId": "cms.entries.terms.update",
         "parameters": [
           {
             "$ref": "#/components/parameters/EntryId"
@@ -1835,7 +1835,7 @@
           "$ref": "#/components/requestBodies/CmsPageCommand"
         },
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/components/responses/CmsPageOk"
           },
           "400": {
@@ -1958,8 +1958,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "$ref": "#/components/responses/CmsCommandOk"
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "$ref": "#/components/responses/Problem"
@@ -1992,7 +1992,7 @@
           "cms"
         ],
         "summary": "Replace CMS page blocks",
-        "operationId": "cms.pages.blocks.replace",
+        "operationId": "cms.pages.blocks.update",
         "parameters": [
           {
             "$ref": "#/components/parameters/PageId"
@@ -2135,7 +2135,7 @@
           "$ref": "#/components/requestBodies/CmsFeedCommand"
         },
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/components/responses/CmsFeedOk"
           },
           "400": {
@@ -2258,8 +2258,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "$ref": "#/components/responses/CmsCommandOk"
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "$ref": "#/components/responses/Problem"
@@ -2338,7 +2338,7 @@
           "$ref": "#/components/requestBodies/CmsFeedRuleCommand"
         },
         "responses": {
-          "200": {
+          "201": {
             "$ref": "#/components/responses/CmsFeedRuleOk"
           },
           "400": {
@@ -2422,8 +2422,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "$ref": "#/components/responses/CmsCommandOk"
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "$ref": "#/components/responses/Problem"
@@ -2498,7 +2498,7 @@
           "cms"
         ],
         "summary": "Upsert CMS feed items",
-        "operationId": "cms.feedItems.upsert",
+        "operationId": "cms.feedItems.update",
         "parameters": [
           {
             "$ref": "#/components/parameters/FeedId"
@@ -2550,8 +2550,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "$ref": "#/components/responses/CmsCommandOk"
+          "204": {
+            "description": "Deleted"
           },
           "400": {
             "$ref": "#/components/responses/Problem"

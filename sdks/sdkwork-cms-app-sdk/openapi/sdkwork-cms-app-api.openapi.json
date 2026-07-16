@@ -69,7 +69,7 @@
           "cms"
         ],
         "summary": "Resolve a published CMS entry by slug for app delivery",
-        "operationId": "cms.delivery.entries.resolve",
+        "operationId": "cms.delivery.entries.retrieve",
         "parameters": [
           {
             "name": "siteCode",
@@ -179,7 +179,7 @@
           "cms"
         ],
         "summary": "Resolve a CMS page by path for app delivery",
-        "operationId": "cms.delivery.pages.resolve",
+        "operationId": "cms.delivery.pages.retrieve",
         "parameters": [
           {
             "name": "siteCode",

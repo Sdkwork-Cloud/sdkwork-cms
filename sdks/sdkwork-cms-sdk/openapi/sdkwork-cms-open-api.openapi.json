@@ -125,7 +125,7 @@
           "cms"
         ],
         "summary": "Resolve a published CMS entry by slug",
-        "operationId": "cms.entries.resolve",
+        "operationId": "cms.entries.retrieve",
         "parameters": [
           {
             "$ref": "#/components/parameters/SiteCode"
@@ -179,7 +179,7 @@
           "cms"
         ],
         "summary": "Resolve a published CMS page by path",
-        "operationId": "cms.pages.resolve",
+        "operationId": "cms.pages.retrieve",
         "parameters": [
           {
             "$ref": "#/components/parameters/SiteCode"

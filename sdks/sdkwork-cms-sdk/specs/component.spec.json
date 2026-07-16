@@ -12,7 +12,7 @@
     "surface": "open-api",
     "languages": ["typescript"],
     "generated": false,
-    "manifests": [".sdkwork-assembly.json"]
+    "manifests": ["sdk-manifest.json"]
   },
   "canonicalSpecs": [
     { "file": "COMPONENT_SPEC.md", "path": "../../../sdkwork-specs/COMPONENT_SPEC.md", "purpose": "Component-local contract and discovery rules." },
@@ -35,7 +35,7 @@
     "configKeys": ["CMS_OPEN_API_BASE_URL"]
   },
   "verification": {
-    "commands": ["powershell -NoProfile -Command \"Get-Content sdks/sdkwork-cms-sdk/.sdkwork-assembly.json -Raw | ConvertFrom-Json | Out-Null\""]
+    "commands": ["powershell -NoProfile -Command \"Get-Content sdks/sdkwork-cms-sdk/sdk-manifest.json -Raw | ConvertFrom-Json | Out-Null\""]
   }
 }
 

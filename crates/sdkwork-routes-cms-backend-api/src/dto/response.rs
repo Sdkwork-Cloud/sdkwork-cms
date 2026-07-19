@@ -23,6 +23,9 @@ pub struct ProblemDetail {
     #[serde(rename = "traceId")]
     pub trace_id: Option<String>,
 }
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct PaginatedResponse<T> {
     pub items: Vec<T>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_cursor: Option<String>,
@@ -324,12 +327,20 @@ impl ProblemDetail {
         }
     }
 
-    pub fn optimistic_lock_conflict(resource: &str, resource_id: i64, expected_version: i64, trace_id: Option<String>) -> Self {
+    pub fn optimistic_lock_conflict(
+        resource: &str,
+        resource_id: i64,
+        expected_version: i64,
+        trace_id: Option<String>,
+    ) -> Self {
         Self {
             problem_type: "https://sdkwork.com/errors/optimistic-lock-conflict".to_string(),
             title: "Optimistic Lock Conflict".to_string(),
             status: 409,
-            detail: format!("{} id={} version conflict, expected version {}", resource, resource_id, expected_version),
+            detail: format!(
+                "{} id={} version conflict, expected version {}",
+                resource, resource_id, expected_version
+            ),
             instance: None,
             trace_id,
         }

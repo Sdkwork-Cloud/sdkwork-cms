@@ -20,7 +20,9 @@ pub fn build_anonymous_context(
     }
 }
 
-pub fn map_bootstrap_query(req: &DeliveryBootstrapRequest) -> sdkwork_content_cms_service::domain::DeliveryBootstrapQuery {
+pub fn map_bootstrap_query(
+    req: &DeliveryBootstrapRequest,
+) -> sdkwork_content_cms_service::domain::DeliveryBootstrapQuery {
     sdkwork_content_cms_service::domain::DeliveryBootstrapQuery {
         site_code: req.site_code.clone(),
         channel_code: req.channel_code.clone(),
@@ -28,7 +30,9 @@ pub fn map_bootstrap_query(req: &DeliveryBootstrapRequest) -> sdkwork_content_cm
     }
 }
 
-pub fn map_resolve_entry_query(req: &DeliveryResolveEntryRequest) -> sdkwork_content_cms_service::domain::DeliveryResolveEntryQuery {
+pub fn map_resolve_entry_query(
+    req: &DeliveryResolveEntryRequest,
+) -> sdkwork_content_cms_service::domain::DeliveryResolveEntryQuery {
     sdkwork_content_cms_service::domain::DeliveryResolveEntryQuery {
         site_code: req.site_code.clone(),
         channel_code: req.channel_code.clone(),
@@ -38,14 +42,18 @@ pub fn map_resolve_entry_query(req: &DeliveryResolveEntryRequest) -> sdkwork_con
     }
 }
 
-pub fn map_retrieve_entry_query(req: &DeliveryRetrieveEntryRequest) -> sdkwork_content_cms_service::domain::DeliveryRetrieveEntryQuery {
+pub fn map_retrieve_entry_query(
+    req: &DeliveryRetrieveEntryRequest,
+) -> sdkwork_content_cms_service::domain::DeliveryRetrieveEntryQuery {
     sdkwork_content_cms_service::domain::DeliveryRetrieveEntryQuery {
         entry_id: req.entry_id,
         preview_token: req.preview_token.clone(),
     }
 }
 
-pub fn map_resolve_page_query(req: &DeliveryResolvePageRequest) -> sdkwork_content_cms_service::domain::DeliveryResolvePageQuery {
+pub fn map_resolve_page_query(
+    req: &DeliveryResolvePageRequest,
+) -> sdkwork_content_cms_service::domain::DeliveryResolvePageQuery {
     sdkwork_content_cms_service::domain::DeliveryResolvePageQuery {
         site_code: req.site_code.clone(),
         channel_code: req.channel_code.clone(),
@@ -55,13 +63,15 @@ pub fn map_resolve_page_query(req: &DeliveryResolvePageRequest) -> sdkwork_conte
     }
 }
 
-pub fn map_feed_items_query(req: &DeliveryListFeedItemsRequest) -> sdkwork_content_cms_service::domain::DeliveryFeedItemsQuery {
+pub fn map_feed_items_query(
+    req: &DeliveryListFeedItemsRequest,
+) -> sdkwork_content_cms_service::domain::DeliveryFeedItemsQuery {
     sdkwork_content_cms_service::domain::DeliveryFeedItemsQuery {
         site_code: req.site_code.clone(),
         feed_code: req.feed_code.clone(),
         channel_code: req.channel_code.clone(),
         locale: req.locale.clone(),
         cursor: req.cursor.clone(),
-        limit: req.limit.unwrap_or(20).min(100),
+        limit: req.page_size.unwrap_or(20).min(100),
     }
 }

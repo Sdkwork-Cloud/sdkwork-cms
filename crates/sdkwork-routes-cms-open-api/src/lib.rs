@@ -8,6 +8,9 @@ pub mod paths;
 pub mod routes;
 pub mod web_bootstrap;
 
+use manifest::RouteManifest;
+use sdkwork_web_core::HttpRouteManifest;
+
 pub use http_route_manifest::open_route_manifest;
 pub use manifest::cms_open_api_manifest;
 pub use routes::build_sdkwork_cms_open_api_router;

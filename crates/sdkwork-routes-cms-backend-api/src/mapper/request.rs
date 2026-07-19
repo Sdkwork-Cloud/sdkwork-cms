@@ -1,5 +1,5 @@
-use sdkwork_content_cms_service::domain::*;
 use crate::dto::request::*;
+use sdkwork_content_cms_service::domain::*;
 
 pub fn map_site_create_request_to_command(req: SiteCreateRequest) -> SiteCommand {
     SiteCommand {
@@ -23,7 +23,10 @@ pub fn map_site_update_request_to_command(req: SiteUpdateRequest) -> SiteCommand
     }
 }
 
-pub fn map_channel_create_request_to_command(site_id: CmsId, req: ChannelCreateRequest) -> ChannelCommand {
+pub fn map_channel_create_request_to_command(
+    site_id: CmsId,
+    req: ChannelCreateRequest,
+) -> ChannelCommand {
     ChannelCommand {
         site_id,
         code: Some(req.code),
@@ -45,7 +48,10 @@ pub fn map_channel_update_request_to_command(req: ChannelUpdateRequest) -> Chann
     }
 }
 
-pub fn map_content_type_create_request_to_command(site_id: CmsId, req: ContentTypeCreateRequest) -> ContentTypeCommand {
+pub fn map_content_type_create_request_to_command(
+    site_id: CmsId,
+    req: ContentTypeCreateRequest,
+) -> ContentTypeCommand {
     ContentTypeCommand {
         site_id,
         code: Some(req.code),
@@ -56,7 +62,9 @@ pub fn map_content_type_create_request_to_command(site_id: CmsId, req: ContentTy
     }
 }
 
-pub fn map_content_type_update_request_to_command(req: ContentTypeUpdateRequest) -> ContentTypeCommand {
+pub fn map_content_type_update_request_to_command(
+    req: ContentTypeUpdateRequest,
+) -> ContentTypeCommand {
     ContentTypeCommand {
         site_id: 0,
         code: req.code,
@@ -67,7 +75,10 @@ pub fn map_content_type_update_request_to_command(req: ContentTypeUpdateRequest)
     }
 }
 
-pub fn map_content_field_create_request_to_command(content_type_id: CmsId, req: ContentFieldCreateRequest) -> ContentFieldCommand {
+pub fn map_content_field_create_request_to_command(
+    content_type_id: CmsId,
+    req: ContentFieldCreateRequest,
+) -> ContentFieldCommand {
     ContentFieldCommand {
         content_type_id,
         code: Some(req.code),
@@ -80,7 +91,9 @@ pub fn map_content_field_create_request_to_command(content_type_id: CmsId, req: 
     }
 }
 
-pub fn map_content_field_update_request_to_command(req: ContentFieldUpdateRequest) -> ContentFieldCommand {
+pub fn map_content_field_update_request_to_command(
+    req: ContentFieldUpdateRequest,
+) -> ContentFieldCommand {
     ContentFieldCommand {
         content_type_id: 0,
         code: req.code,
@@ -93,7 +106,10 @@ pub fn map_content_field_update_request_to_command(req: ContentFieldUpdateReques
     }
 }
 
-pub fn map_taxonomy_create_request_to_command(site_id: CmsId, req: TaxonomyCreateRequest) -> TaxonomyCommand {
+pub fn map_taxonomy_create_request_to_command(
+    site_id: CmsId,
+    req: TaxonomyCreateRequest,
+) -> TaxonomyCommand {
     TaxonomyCommand {
         site_id,
         code: Some(req.code),
@@ -115,7 +131,10 @@ pub fn map_taxonomy_update_request_to_command(req: TaxonomyUpdateRequest) -> Tax
     }
 }
 
-pub fn map_taxonomy_term_create_request_to_command(taxonomy_id: CmsId, req: TaxonomyTermCreateRequest) -> TaxonomyTermCommand {
+pub fn map_taxonomy_term_create_request_to_command(
+    taxonomy_id: CmsId,
+    req: TaxonomyTermCreateRequest,
+) -> TaxonomyTermCommand {
     TaxonomyTermCommand {
         taxonomy_id,
         parent_id: req.parent_id,
@@ -126,7 +145,9 @@ pub fn map_taxonomy_term_create_request_to_command(taxonomy_id: CmsId, req: Taxo
     }
 }
 
-pub fn map_taxonomy_term_update_request_to_command(req: TaxonomyTermUpdateRequest) -> TaxonomyTermCommand {
+pub fn map_taxonomy_term_update_request_to_command(
+    req: TaxonomyTermUpdateRequest,
+) -> TaxonomyTermCommand {
     TaxonomyTermCommand {
         taxonomy_id: 0,
         parent_id: req.parent_id,
@@ -151,7 +172,10 @@ pub fn map_entry_create_request_to_command(req: EntryCreateRequest) -> EntryComm
     }
 }
 
-pub fn map_entry_update_request_to_command(_entry_id: CmsId, req: EntryUpdateRequest) -> EntryCommand {
+pub fn map_entry_update_request_to_command(
+    _entry_id: CmsId,
+    req: EntryUpdateRequest,
+) -> EntryCommand {
     EntryCommand {
         site_id: 0,
         content_type_id: 0,
@@ -165,7 +189,10 @@ pub fn map_entry_update_request_to_command(_entry_id: CmsId, req: EntryUpdateReq
     }
 }
 
-pub fn map_entry_body_request_to_command(entry_id: CmsId, req: EntryBodyRequest) -> EntryBodyCommand {
+pub fn map_entry_body_request_to_command(
+    entry_id: CmsId,
+    req: EntryBodyRequest,
+) -> EntryBodyCommand {
     EntryBodyCommand {
         entry_id,
         locale: req.locale,
@@ -177,7 +204,10 @@ pub fn map_entry_body_request_to_command(entry_id: CmsId, req: EntryBodyRequest)
     }
 }
 
-pub fn map_entry_fields_request_to_command(entry_id: CmsId, req: EntryFieldsRequest) -> EntryFieldsCommand {
+pub fn map_entry_fields_request_to_command(
+    entry_id: CmsId,
+    req: EntryFieldsRequest,
+) -> EntryFieldsCommand {
     EntryFieldsCommand {
         entry_id,
         locale: req.locale,
@@ -186,7 +216,10 @@ pub fn map_entry_fields_request_to_command(entry_id: CmsId, req: EntryFieldsRequ
     }
 }
 
-pub fn map_entry_media_attach_request_to_command(entry_id: CmsId, req: EntryMediaAttachRequest) -> EntryMediaCommand {
+pub fn map_entry_media_attach_request_to_command(
+    entry_id: CmsId,
+    req: EntryMediaAttachRequest,
+) -> EntryMediaCommand {
     EntryMediaCommand {
         entry_id,
         field_id: req.field_id,
@@ -201,7 +234,10 @@ pub fn map_entry_media_attach_request_to_command(entry_id: CmsId, req: EntryMedi
     }
 }
 
-pub fn map_entry_terms_request_to_command(entry_id: CmsId, req: EntryTermsRequest) -> ReplaceEntryTermsCommand {
+pub fn map_entry_terms_request_to_command(
+    entry_id: CmsId,
+    req: EntryTermsRequest,
+) -> ReplaceEntryTermsCommand {
     ReplaceEntryTermsCommand {
         entry_id,
         term_ids: req.term_ids,
@@ -209,7 +245,11 @@ pub fn map_entry_terms_request_to_command(entry_id: CmsId, req: EntryTermsReques
     }
 }
 
-pub fn map_publish_request_to_command(owner_type: &str, owner_id: CmsId, req: PublishRequest) -> PublishCommand {
+pub fn map_publish_request_to_command(
+    owner_type: &str,
+    owner_id: CmsId,
+    req: PublishRequest,
+) -> PublishCommand {
     PublishCommand {
         owner_type: owner_type.to_string(),
         owner_id,
@@ -220,7 +260,11 @@ pub fn map_publish_request_to_command(owner_type: &str, owner_id: CmsId, req: Pu
     }
 }
 
-pub fn map_rollback_request_to_command(owner_type: &str, owner_id: CmsId, req: RollbackRequest) -> RollbackCommand {
+pub fn map_rollback_request_to_command(
+    owner_type: &str,
+    owner_id: CmsId,
+    req: RollbackRequest,
+) -> RollbackCommand {
     RollbackCommand {
         owner_type: owner_type.to_string(),
         owner_id,
@@ -267,7 +311,10 @@ pub fn map_page_update_request_to_command(_page_id: CmsId, req: PageUpdateReques
     }
 }
 
-pub fn map_page_blocks_request_to_command(page_id: CmsId, req: PageBlocksRequest) -> PageBlocksCommand {
+pub fn map_page_blocks_request_to_command(
+    page_id: CmsId,
+    req: PageBlocksRequest,
+) -> PageBlocksCommand {
     PageBlocksCommand {
         page_id,
         blocks_json: req.blocks_json,
@@ -301,7 +348,10 @@ pub fn map_feed_update_request_to_command(_feed_id: CmsId, req: FeedUpdateReques
     }
 }
 
-pub fn map_feed_rule_create_request_to_command(feed_id: CmsId, req: FeedRuleCreateRequest) -> FeedRuleCommand {
+pub fn map_feed_rule_create_request_to_command(
+    feed_id: CmsId,
+    req: FeedRuleCreateRequest,
+) -> FeedRuleCommand {
     FeedRuleCommand {
         feed_id,
         rule_kind: req.rule_kind,
@@ -325,7 +375,10 @@ pub fn map_feed_rule_update_request_to_command(req: FeedRuleUpdateRequest) -> Fe
     }
 }
 
-pub fn map_feed_items_upsert_request_to_command(feed_id: CmsId, req: FeedItemsUpsertRequest) -> FeedItemsCommand {
+pub fn map_feed_items_upsert_request_to_command(
+    feed_id: CmsId,
+    req: FeedItemsUpsertRequest,
+) -> FeedItemsCommand {
     FeedItemsCommand {
         feed_id,
         items_json: req.items_json,
@@ -336,15 +389,18 @@ pub fn map_feed_items_upsert_request_to_command(feed_id: CmsId, req: FeedItemsUp
 pub fn map_list_sites_params_to_query(params: ListSitesQueryParams) -> ListSitesQuery {
     ListSitesQuery {
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     }
 }
 
-pub fn map_list_by_site_params_to_query(site_id: CmsId, params: ListBySiteQueryParams) -> ListBySiteQuery {
+pub fn map_list_by_site_params_to_query(
+    site_id: CmsId,
+    params: ListBySiteQueryParams,
+) -> ListBySiteQuery {
     ListBySiteQuery {
         site_id,
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     }
 }
 
@@ -358,7 +414,7 @@ pub fn map_list_entries_params_to_query(params: ListEntriesQueryParams) -> ListE
         publication_status: params.publication_status,
         author_user_id: params.author_user_id,
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     }
 }
 
@@ -369,7 +425,7 @@ pub fn map_list_pages_params_to_query(params: ListPagesQueryParams) -> ListPages
         locale: params.locale,
         status: params.status,
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     }
 }
 
@@ -380,25 +436,31 @@ pub fn map_list_feeds_params_to_query(params: ListFeedsQueryParams) -> ListFeeds
         locale: params.locale,
         status: params.status,
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     }
 }
 
-pub fn map_list_feed_rules_params_to_query(feed_id: CmsId, params: ListFeedRulesQueryParams) -> ListFeedRulesQuery {
+pub fn map_list_feed_rules_params_to_query(
+    feed_id: CmsId,
+    params: ListFeedRulesQueryParams,
+) -> ListFeedRulesQuery {
     ListFeedRulesQuery {
         feed_id,
         enabled: params.enabled,
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     }
 }
 
-pub fn map_list_feed_items_params_to_query(feed_id: CmsId, params: ListFeedItemsQueryParams) -> ListFeedItemsQuery {
+pub fn map_list_feed_items_params_to_query(
+    feed_id: CmsId,
+    params: ListFeedItemsQueryParams,
+) -> ListFeedItemsQuery {
     ListFeedItemsQuery {
         feed_id,
         status: params.status,
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     }
 }
 
@@ -409,16 +471,18 @@ pub fn map_list_audit_logs_params_to_query(params: ListAuditLogsQueryParams) -> 
         resource_id: params.resource_id,
         actor_user_id: params.actor_user_id,
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     }
 }
 
-pub fn map_list_outbox_events_params_to_query(params: ListOutboxEventsQueryParams) -> ListOutboxEventsQuery {
+pub fn map_list_outbox_events_params_to_query(
+    params: ListOutboxEventsQueryParams,
+) -> ListOutboxEventsQuery {
     ListOutboxEventsQuery {
         aggregate_type: params.aggregate_type,
         aggregate_id: params.aggregate_id,
         status: params.status,
         cursor: params.cursor,
-        limit: params.limit.unwrap_or(20).min(100),
+        limit: params.page_size.unwrap_or(20).min(100),
     }
 }

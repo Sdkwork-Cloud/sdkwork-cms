@@ -8,6 +8,8 @@ pub mod mapper;
 pub mod paths;
 pub mod routes;
 
+use manifest::RouteManifest;
+
 pub use manifest::cms_backend_api_manifest;
 pub use routes::build_sdkwork_cms_backend_api_router;
 

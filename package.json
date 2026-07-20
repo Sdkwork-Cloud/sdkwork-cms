@@ -3,7 +3,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "stop": "node ../sdkwork-specs/tools/stop-sdkwork-workspace-processes.mjs --workspace .",    "db:materialize:contract": "node ../sdkwork-specs/tools/materialize-database-contract-from-baseline.mjs --root . --baseline database/ddl/baseline/postgres/0001_cms_baseline.sql --module-id cms --owner cms-platform --prefixes cms_ --engines postgres",
+    "stop": "pnpm exec sdkwork-app stop",
+    "build": "pnpm exec sdkwork-app build",
+    "db:materialize:contract": "node ../sdkwork-specs/tools/materialize-database-contract-from-baseline.mjs --root . --baseline database/ddl/baseline/postgres/0001_cms_baseline.sql --module-id cms --owner cms-platform --prefixes cms_ --engines postgres",
     "db:validate": "node ../sdkwork-specs/tools/check-database-framework-standard.mjs --root .",
     "db:plan": "cargo run --manifest-path ../sdkwork-database/Cargo.toml -p sdkwork-database-cli -- --app-root . plan",
     "db:init": "cargo run --manifest-path ../sdkwork-database/Cargo.toml -p sdkwork-database-cli -- --app-root . init",
@@ -13,14 +15,23 @@
     "db:drift": "cargo run --manifest-path ../sdkwork-database/Cargo.toml -p sdkwork-database-cli -- --app-root . drift",
     "db:drift:check": "cargo run --manifest-path ../sdkwork-database/Cargo.toml -p sdkwork-database-cli -- --app-root . drift-check",
     "db:bootstrap": "cargo run --manifest-path ../sdkwork-database/Cargo.toml -p sdkwork-database-cli -- --app-root . bootstrap",
-    "test": "node ../sdkwork-specs/tools/check-database-framework-standard.mjs --root .",
+    "test": "pnpm exec sdkwork-app test",
+    "check": "pnpm exec sdkwork-app check",
+    "verify": "pnpm exec sdkwork-app verify",
+    "clean": "pnpm exec sdkwork-app clean",
     "topology:validate": "node ../sdkwork-app-topology/scripts/sdkwork-topology.mjs validate --root . --spec specs/topology.spec.json",
     "topology:plan": "node ../sdkwork-app-topology/scripts/sdkwork-topology.mjs plan --root . --spec specs/topology.spec.json",
-    "gateway:package:cloud": "node ../sdkwork-app-topology/scripts/gateway-cloud-bundle.mjs bundle --root .",
-    "gateway:validate:cloud": "node ../sdkwork-app-topology/scripts/gateway-cloud-bundle.mjs validate --root .",
-    "gateway:assembly:materialize": "node scripts/gateway/assembly-materialize.mjs",
-    "gateway:assembly:validate": "node scripts/gateway/assembly-validate.mjs",
-    "check:app-composition": "node ../sdkwork-specs/tools/verify-repo.mjs --root ."
+    "api:assembly:materialize": "node scripts/gateway/assembly-materialize.mjs",
+    "api:assembly:validate": "node scripts/gateway/assembly-validate.mjs",
+    "check:app-composition": "node ../sdkwork-specs/tools/verify-repo.mjs --root .",
+    "_sdkwork:build": "pnpm --dir apps/sdkwork-cms-pc build && pnpm --dir apps/sdkwork-cms-h5 build",
+    "_sdkwork:test": "node ../sdkwork-specs/tools/check-database-framework-standard.mjs --root .",
+    "_sdkwork:check": "pnpm db:validate && pnpm topology:validate && pnpm api:assembly:validate && pnpm --dir apps/sdkwork-cms-pc typecheck && pnpm --dir apps/sdkwork-cms-h5 typecheck && pnpm check:app-composition",
+    "_sdkwork:verify": "pnpm check && pnpm test && pnpm build",
+    "_sdkwork:clean": "node -e \"import('node:fs').then(fs => { for (const target of ['apps/sdkwork-cms-pc/dist', 'apps/sdkwork-cms-h5/dist']) fs.rmSync(target, { recursive: true, force: true }); })\"",
+    "dev": "pnpm dev:standalone",
+    "dev:standalone": "pnpm exec sdkwork-app dev --deployment-profile standalone",
+    "dev:cloud": "pnpm exec sdkwork-app dev --deployment-profile cloud"
   },
   "exports": {
     ".": {
@@ -28,5 +39,8 @@
       "import": "./src/index.ts",
       "default": "./src/index.ts"
     }
+  },
+  "devDependencies": {
+    "@sdkwork/app-topology": "workspace:*"
   }
 }

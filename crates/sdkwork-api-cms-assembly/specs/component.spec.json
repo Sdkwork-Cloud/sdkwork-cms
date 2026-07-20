@@ -6,7 +6,7 @@
     "displayName": "SDKWork cms API Assembly",
     "version": "0.1.0",
     "type": "rust-api-assembly",
-    "root": "sdkwork-cms/crates/sdkwork-api-cms-assembly",
+    "root": "crates/sdkwork-api-cms-assembly",
     "domain": "application",
     "capability": "api-assembly",
     "surface": "api-assembly",
@@ -52,7 +52,8 @@
     "dependencyApiExports": [],
     "dependencyApiSurfaces": [],
     "events": [],
-    "configKeys": []
+    "configKeys": [],
+    "layerRole": "runtime-composition"
   },
   "verification": {
     "commands": [

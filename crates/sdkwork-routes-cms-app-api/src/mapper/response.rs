@@ -24,7 +24,11 @@ pub fn map_channel_to_response(channel: &CmsChannel) -> DeliveryChannelResponse 
 pub fn map_bootstrap_to_response(bootstrap: &CmsDeliveryBootstrap) -> DeliveryBootstrapResponse {
     DeliveryBootstrapResponse {
         site: map_site_to_response(&bootstrap.site),
-        channels: bootstrap.channels.iter().map(|c| map_channel_to_response(c)).collect(),
+        channels: bootstrap
+            .channels
+            .iter()
+            .map(|c| map_channel_to_response(c))
+            .collect(),
     }
 }
 
@@ -68,9 +72,15 @@ pub fn map_feed_item_to_response(item: &CmsFeedItem) -> DeliveryFeedItemResponse
     }
 }
 
-pub fn map_feed_items_page_to_response(page: &CmsFeedItemPage) -> DeliveryListResponse<DeliveryFeedItemResponse> {
+pub fn map_feed_items_page_to_response(
+    page: &CmsFeedItemPage,
+) -> DeliveryListResponse<DeliveryFeedItemResponse> {
     DeliveryListResponse {
-        items: page.items.iter().map(|i| map_feed_item_to_response(i)).collect(),
+        items: page
+            .items
+            .iter()
+            .map(|i| map_feed_item_to_response(i))
+            .collect(),
         next_cursor: page.next_cursor.clone(),
         total: None,
     }

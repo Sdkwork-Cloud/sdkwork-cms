@@ -14,10 +14,16 @@ pub async fn list_audit_logs(
     let query = req_mapper::map_list_audit_logs_params_to_query(params);
     match service.list_audit_logs(ctx, query).await {
         Ok(page) => {
-            let response = res_mapper::map_page_to_paginated_response(page, res_mapper::map_audit_log_to_response);
+            let response = res_mapper::map_page_to_paginated_response(
+                page,
+                res_mapper::map_audit_log_to_response,
+            );
             ApiResponse::success(response, Some(ctx.request_id.clone()))
         }
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(
+            problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()),
+            Some(ctx.request_id.clone()),
+        ),
     }
 }
 
@@ -29,10 +35,16 @@ pub async fn list_outbox_events(
     let query = req_mapper::map_list_outbox_events_params_to_query(params);
     match service.list_outbox_events(ctx, query).await {
         Ok(page) => {
-            let response = res_mapper::map_page_to_paginated_response(page, res_mapper::map_outbox_event_to_response);
+            let response = res_mapper::map_page_to_paginated_response(
+                page,
+                res_mapper::map_outbox_event_to_response,
+            );
             ApiResponse::success(response, Some(ctx.request_id.clone()))
         }
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
+        Err(err) => ApiResponse::error(
+            problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()),
+            Some(ctx.request_id.clone()),
+        ),
     }
 }
 
@@ -47,7 +59,13 @@ pub async fn retry_outbox_event(
         reason: None,
     };
     match service.retry_outbox_event(ctx, command).await {
-        Ok(result) => ApiResponse::success(res_mapper::map_command_result_to_response(result), Some(ctx.request_id.clone())),
-        Err(err) => ApiResponse::error(problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()), Some(ctx.request_id.clone())),
+        Ok(result) => ApiResponse::success(
+            res_mapper::map_command_result_to_response(result),
+            Some(ctx.request_id.clone()),
+        ),
+        Err(err) => ApiResponse::error(
+            problem::map_cms_error_to_problem(&err, ctx.trace_id.clone()),
+            Some(ctx.request_id.clone()),
+        ),
     }
 }

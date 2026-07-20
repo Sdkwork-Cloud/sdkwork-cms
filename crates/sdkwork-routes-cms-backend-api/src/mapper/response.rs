@@ -1,5 +1,5 @@
-use sdkwork_content_cms_service::domain::*;
 use crate::dto::response::*;
+use sdkwork_content_cms_service::domain::*;
 
 fn id_to_string(id: i64) -> String {
     id.to_string()
@@ -245,7 +245,10 @@ pub fn map_outbox_event_to_response(event: CmsOutboxEvent) -> OutboxEventRespons
     }
 }
 
-pub fn map_page_to_paginated_response<T, R: serde::Serialize>(page: CmsPage<T>, map_fn: fn(T) -> R) -> PaginatedResponse<R> {
+pub fn map_page_to_paginated_response<T, R: serde::Serialize>(
+    page: CmsPage<T>,
+    map_fn: fn(T) -> R,
+) -> PaginatedResponse<R> {
     PaginatedResponse {
         items: page.items.into_iter().map(map_fn).collect(),
         next_cursor: page.next_cursor,

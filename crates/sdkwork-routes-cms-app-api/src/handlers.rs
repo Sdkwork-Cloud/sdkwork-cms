@@ -202,7 +202,11 @@ pub async fn retrieve_bootstrap(
     match service.delivery_bootstrap(ctx, query).await {
         Ok(bootstrap) => ApiResponse::success(DeliveryBootstrapResponse {
             site: map_delivery_site(&bootstrap.site),
-            channels: bootstrap.channels.iter().map(map_delivery_channel).collect(),
+            channels: bootstrap
+                .channels
+                .iter()
+                .map(map_delivery_channel)
+                .collect(),
         }),
         Err(err) => ApiResponse::error_detail(&err.to_string()),
     }

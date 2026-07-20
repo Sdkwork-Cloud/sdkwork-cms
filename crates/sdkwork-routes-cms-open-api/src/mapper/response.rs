@@ -42,17 +42,29 @@ pub fn map_feed_item_to_response(item: &CmsFeedItem) -> DeliveryFeedItemResponse
     }
 }
 
-pub fn map_entries_page_to_response(page: &CmsEntryPage) -> DeliveryListResponse<DeliveryEntryResponse> {
+pub fn map_entries_page_to_response(
+    page: &CmsEntryPage,
+) -> DeliveryListResponse<DeliveryEntryResponse> {
     DeliveryListResponse {
-        items: page.items.iter().map(|e| map_entry_to_response(e)).collect(),
+        items: page
+            .items
+            .iter()
+            .map(|e| map_entry_to_response(e))
+            .collect(),
         next_cursor: page.next_cursor.clone(),
         total: None,
     }
 }
 
-pub fn map_feed_items_page_to_response(page: &CmsFeedItemPage) -> DeliveryListResponse<DeliveryFeedItemResponse> {
+pub fn map_feed_items_page_to_response(
+    page: &CmsFeedItemPage,
+) -> DeliveryListResponse<DeliveryFeedItemResponse> {
     DeliveryListResponse {
-        items: page.items.iter().map(|i| map_feed_item_to_response(i)).collect(),
+        items: page
+            .items
+            .iter()
+            .map(|i| map_feed_item_to_response(i))
+            .collect(),
         next_cursor: page.next_cursor.clone(),
         total: None,
     }

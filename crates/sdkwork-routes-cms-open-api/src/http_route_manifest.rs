@@ -3,12 +3,7 @@ use sdkwork_web_core::{HttpMethod, HttpRoute, HttpRouteManifest};
 use crate::paths;
 
 const HTTP_ROUTES: &[HttpRoute] = &[
-    HttpRoute::api_key(
-        HttpMethod::Get,
-        paths::ENTRIES,
-        "cms",
-        "cms.entries.list",
-    ),
+    HttpRoute::api_key(HttpMethod::Get, paths::ENTRIES, "cms", "cms.entries.list"),
     HttpRoute::api_key(
         HttpMethod::Get,
         paths::ENTRY_BY_ID,

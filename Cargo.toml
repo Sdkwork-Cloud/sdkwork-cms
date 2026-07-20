@@ -1,7 +1,7 @@
 [workspace]
 members = [
     "crates/sdkwork-api-cms-assembly",
-    "crates/sdkwork-api-cms-assembly",
+    "crates/sdkwork-cms-http-handlers",
     "crates/sdkwork-cms-database-host",
     "crates/sdkwork-content-cms-service",
     "crates/sdkwork-content-cms-repository-sqlx",
@@ -27,6 +27,7 @@ sdkwork-routes-cms-open-api = { path = "crates/sdkwork-routes-cms-open-api" }
 sdkwork-routes-cms-app-api = { path = "crates/sdkwork-routes-cms-app-api" }
 sdkwork-routes-cms-backend-api = { path = "crates/sdkwork-routes-cms-backend-api" }
 sdkwork-cms-database-host = { path = "crates/sdkwork-cms-database-host" }
+sdkwork-cms-http-handlers = { path = "crates/sdkwork-cms-http-handlers" }
 
 sdkwork-database-config = { path = "../sdkwork-database/crates/sdkwork-database-config", package = "sdkwork-database-config" }
 sdkwork-database-lifecycle = { path = "../sdkwork-database/crates/sdkwork-database-lifecycle", package = "sdkwork-database-lifecycle" }

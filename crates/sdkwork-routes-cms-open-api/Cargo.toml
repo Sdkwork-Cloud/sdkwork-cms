@@ -5,6 +5,7 @@ edition.workspace = true
 license.workspace = true
 
 [dependencies]
+sdkwork-cms-http-handlers.workspace = true
 sdkwork-content-cms-service.workspace = true
 serde.workspace = true
 serde_json.workspace = true

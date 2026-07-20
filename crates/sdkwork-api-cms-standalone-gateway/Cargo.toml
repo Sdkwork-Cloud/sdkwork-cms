@@ -13,19 +13,10 @@ path = "src/lib.rs"
 
 [dependencies]
 sdkwork_api_cms_assembly = { package = "sdkwork-api-cms-assembly", path = "../sdkwork-api-cms-assembly" }
-sdkwork-content-cms-service.workspace = true
-sdkwork-content-cms-repository-sqlx.workspace = true
 axum.workspace = true
 tokio.workspace = true
-serde.workspace = true
-serde_json.workspace = true
 sqlx.workspace = true
 tracing.workspace = true
 tracing-subscriber.workspace = true
-tower.workspace = true
 tower-http.workspace = true
-uuid.workspace = true
-async-trait.workspace = true
-dotenvy = "0.15"
 sdkwork-web-bootstrap = { workspace = true }
-

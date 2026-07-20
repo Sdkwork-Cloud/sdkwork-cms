@@ -1,5 +1,5 @@
-use sdkwork_content_cms_service::error::CmsError;
 use crate::dto::response::ProblemDetail;
+use sdkwork_content_cms_service::error::CmsError;
 
 pub fn map_cms_error_to_problem(err: &CmsError, trace_id: Option<String>) -> ProblemDetail {
     match err {
@@ -27,7 +27,12 @@ pub fn map_cms_error_to_problem(err: &CmsError, trace_id: Option<String>) -> Pro
             resource,
             resource_id,
             expected_version,
-        } => ProblemDetail::optimistic_lock_conflict(resource, *resource_id, *expected_version, trace_id),
+        } => ProblemDetail::optimistic_lock_conflict(
+            resource,
+            *resource_id,
+            *expected_version,
+            trace_id,
+        ),
         CmsError::PreconditionFailed(msg) => ProblemDetail {
             problem_type: "https://sdkwork.com/errors/precondition-failed".to_string(),
             title: "Precondition Failed".to_string(),

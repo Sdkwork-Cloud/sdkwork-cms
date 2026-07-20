@@ -72,7 +72,7 @@
   },
   "components": {
     "applicationServer": {
-      "crate": "sdkwork-cms-standalone-gateway",
+      "crate": "sdkwork-api-cms-standalone-gateway",
       "binary": "cms-server"
     }
   },
@@ -82,7 +82,7 @@
         "processes": [
           {
             "id": "application.public-ingress",
-            "crate": "sdkwork-cms-standalone-gateway",
+            "crate": "sdkwork-api-cms-standalone-gateway",
             "binary": "cms-server",
             "required": true,
             "role": "api-standalone-gateway"
@@ -103,7 +103,7 @@
         "processes": [
           {
             "id": "application.public-ingress",
-            "crate": "sdkwork-cms-standalone-gateway",
+            "crate": "sdkwork-api-cms-standalone-gateway",
             "binary": "cms-server",
             "required": true,
             "role": "api-standalone-gateway"
@@ -118,7 +118,7 @@
         "processes": [
           {
             "id": "application.public-ingress",
-            "crate": "sdkwork-cms-standalone-gateway",
+            "crate": "sdkwork-api-cms-standalone-gateway",
             "binary": "cms-server",
             "required": true,
             "role": "api-standalone-gateway"

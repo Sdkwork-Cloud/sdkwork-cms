@@ -1,18 +1,18 @@
 [package]
-name = "sdkwork-cms-standalone-gateway"
+name = "sdkwork-api-cms-standalone-gateway"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
 
 [[bin]]
-name = "sdkwork-cms-standalone-gateway"
+name = "sdkwork-api-cms-standalone-gateway"
 path = "src/main.rs"
 
 [lib]
 path = "src/lib.rs"
 
 [dependencies]
-sdkwork_cms_gateway_assembly = { package = "sdkwork-cms-gateway-assembly", path = "../sdkwork-cms-gateway-assembly" }
+sdkwork_api_cms_assembly = { package = "sdkwork-api-cms-assembly", path = "../sdkwork-api-cms-assembly" }
 sdkwork-content-cms-service.workspace = true
 sdkwork-content-cms-repository-sqlx.workspace = true
 axum.workspace = true

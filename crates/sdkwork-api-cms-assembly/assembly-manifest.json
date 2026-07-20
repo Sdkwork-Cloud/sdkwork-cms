@@ -1,0 +1,43 @@
+{
+  "kind": "sdkwork.api.assembly",
+  "schemaVersion": 1,
+  "applicationCode": "cms",
+  "apiMode": "served",
+  "packageName": "sdkwork-api-cms-assembly",
+  "crateDir": "crates/sdkwork-api-cms-assembly",
+  "routeCrates": [
+    {
+      "packageName": "sdkwork-routes-cms-app-api",
+      "memberDir": "crates/sdkwork-routes-cms-app-api",
+      "libName": "sdkwork_routes_cms_app_api",
+      "surface": "app-api",
+      "pathPrefix": null,
+      "mountOrder": 0,
+      "componentRef": "crates/sdkwork-routes-cms-app-api/specs/component.spec.json",
+      "routeManifestRef": "crates/sdkwork-routes-cms-app-api/src/manifest.rs#cms_app_api_manifest",
+      "sourceRef": "crates/sdkwork-routes-cms-app-api/Cargo.toml"
+    },
+    {
+      "packageName": "sdkwork-routes-cms-backend-api",
+      "memberDir": "crates/sdkwork-routes-cms-backend-api",
+      "libName": "sdkwork_routes_cms_backend_api",
+      "surface": "backend-api",
+      "pathPrefix": null,
+      "mountOrder": 1,
+      "componentRef": "crates/sdkwork-routes-cms-backend-api/specs/component.spec.json",
+      "routeManifestRef": "crates/sdkwork-routes-cms-backend-api/src/manifest.rs#cms_backend_api_manifest",
+      "sourceRef": "crates/sdkwork-routes-cms-backend-api/Cargo.toml"
+    },
+    {
+      "packageName": "sdkwork-routes-cms-open-api",
+      "memberDir": "crates/sdkwork-routes-cms-open-api",
+      "libName": "sdkwork_routes_cms_open_api",
+      "surface": "open-api",
+      "pathPrefix": null,
+      "mountOrder": 2,
+      "componentRef": "crates/sdkwork-routes-cms-open-api/specs/component.spec.json",
+      "routeManifestRef": "crates/sdkwork-routes-cms-open-api/src/manifest.rs#cms_open_api_manifest",
+      "sourceRef": "crates/sdkwork-routes-cms-open-api/Cargo.toml"
+    }
+  ]
+}

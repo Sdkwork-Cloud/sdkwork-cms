@@ -1,4 +1,4 @@
-[workspace]
+﻿[workspace]
 members = [
     "crates/sdkwork-api-cms-assembly",
     "crates/sdkwork-cms-http-handlers",
@@ -15,7 +15,7 @@ resolver = "2"
 [workspace.package]
 edition = "2021"
 version = "0.1.0"
-license = "UNLICENSED"
+license = "AGPL-3.0-or-later"
 
 [workspace.dependencies]
 sdkwork-web-axum = { path = "../sdkwork-web-framework/crates/sdkwork-web-axum" }
